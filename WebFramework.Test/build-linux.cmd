@@ -1,0 +1,1 @@
+dotnet build WebFramework.Test.csproj --runtime linux-x64 --configuration Release --output "./build-linux"
