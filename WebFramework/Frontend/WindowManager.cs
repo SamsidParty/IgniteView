@@ -172,6 +172,7 @@ namespace WebFramework
             }
             set
             {
+                Environment.SetEnvironmentVariable("WEBVIEW2_DEFAULT_BACKGROUND_COLOR", "FF" + value.HexValue);
                 TBC = value;
                 EditTitlebarColor();
             }

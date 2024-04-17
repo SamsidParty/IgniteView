@@ -24,6 +24,15 @@ namespace WebFramework
         }
         internal Color Internal;
 
+        public string HexValue
+        {
+            get
+            {
+                var c = Value;
+                return $"{c.R:X2}{c.G:X2}{c.B:X2}";
+            }
+        }
+
         public DynamicColor() { }
 
         public DynamicColor(Color c)

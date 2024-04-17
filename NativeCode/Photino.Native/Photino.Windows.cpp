@@ -44,7 +44,7 @@ struct ShowMessageParams
 };
 
 
-void Photino::Register(HINSTANCE hInstance)
+void Photino::Register(HINSTANCE hInstance, char colr, char colg, char colb)
 {
 	InitDarkModeSupport();
 
@@ -60,7 +60,7 @@ void Photino::Register(HINSTANCE hInstance)
 	wcx.hInstance = hInstance;
 	wcx.hIcon = LoadIcon(hInstance, IDI_APPLICATION);
 	wcx.hCursor = LoadCursor(nullptr, IDC_ARROW);
-	wcx.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+	wcx.hbrBackground = CreateSolidBrush(RGB(colr, colg, colb));
 	wcx.lpszMenuName = nullptr;
 	wcx.lpszClassName = CLASS_NAME;
 	wcx.hIconSm = LoadIcon(hInstance, IDI_APPLICATION);

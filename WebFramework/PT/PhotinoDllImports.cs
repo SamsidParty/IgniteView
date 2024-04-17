@@ -10,7 +10,7 @@ namespace PhotinoNET
     {
         const string DllName = "Photino.Native";
         //REGISTER
-        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl, SetLastError = true)] static extern IntPtr Photino_register_win32(IntPtr hInstance);
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl, SetLastError = true)] static extern IntPtr Photino_register_win32(IntPtr hInstance, byte r, byte g, byte b);
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl, SetLastError = true)] static extern IntPtr Photino_register_mac();
 
 

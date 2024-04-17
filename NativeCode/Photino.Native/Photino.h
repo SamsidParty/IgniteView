@@ -117,6 +117,10 @@ struct PhotinoInitParams
 	bool SmoothScrollingEnabled;
     bool IgnoreCertificateErrorsEnabled;
 	int Size;
+
+	char InitialColorRed;
+	char InitialColorGreen;
+	char InitialColorBlue;
 };
 
 class Photino
@@ -206,7 +210,7 @@ public:
 	bool _contextMenuEnabled;
 
 #ifdef _WIN32
-	static void Register(HINSTANCE hInstance);
+	static void Register(HINSTANCE hInstance, char colr, char colg, char colb);
 	static void SetWebView2RuntimePath(AutoString pathToWebView2);
 	HWND getHwnd();
 	void RefitContent();

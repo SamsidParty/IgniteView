@@ -56,6 +56,11 @@ namespace WebFramework
 
         }
 
+        public override async Task WindowReady()
+        {
+            await base.WindowReady();
+        }
+
         void Update(PhotinoWindow w)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

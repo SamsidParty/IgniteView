@@ -10,9 +10,9 @@
 extern "C"
 {
 #ifdef _WIN32
-	EXPORTED void Photino_register_win32(HINSTANCE hInstance)
+	EXPORTED void Photino_register_win32(HINSTANCE hInstance, char colr, char colg, char colb)
 	{
-		Photino::Register(hInstance);
+		Photino::Register(hInstance, colr, colg, colb);
 	}
 
 	EXPORTED HWND Photino_getHwnd_win32(Photino* instance)

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using WebFramework;
 
 namespace PhotinoNET;
 
@@ -1430,7 +1431,10 @@ public partial class PhotinoWindow
 #endif
 
             if (IsWindowsPlatform)
-                Invoke(() => Photino_register_win32(_nativeType));
+            {
+                var initalColor = WindowManager.Options.TitlebarColor.Value;
+                Invoke(() => Photino_register_win32(_nativeType, initalColor.R, initalColor.G, initalColor.B));
+            }
             else if (IsMacOsPlatform)
                 Invoke(() => Photino_register_mac());
         }
