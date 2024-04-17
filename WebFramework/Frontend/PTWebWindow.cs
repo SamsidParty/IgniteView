@@ -12,6 +12,9 @@ namespace WebFramework
     public class PTWebWindow : WebWindow
     {
 
+        [DllImport("dwmapi.dll")]
+        public static extern int DwmSetWindowAttribute(IntPtr hwnd, int dwAttribute, int[] pvAttribute, int cbAttribute);
+
         public PhotinoWindow Native;
 
         public override async Task Init()
@@ -58,7 +61,7 @@ namespace WebFramework
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 var hwnd = w.WindowHandle;
-                PhotinoWindow.DwmSetWindowAttribute(hwnd, 35, new int[] { WindowManager.Options._WinTBC }, 4);
+                DwmSetWindowAttribute(hwnd, 35, new int[] { WindowManager.Options._WinTBC }, 4);
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
                 MacHelper.Init();
