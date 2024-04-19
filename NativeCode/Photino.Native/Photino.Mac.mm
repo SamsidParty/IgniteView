@@ -1,5 +1,6 @@
 
 #ifdef __APPLE__
+#include "Exports.cpp"
 #include "Photino.h"
 #include "Photino.Dialog.h"
 #include "Photino.Mac.AppDelegate.h"

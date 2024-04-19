@@ -26,12 +26,13 @@
 		A6401D2D2BD258BB003D3852 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6401D2C2BD258BB003D3852 /* Security.framework */; };
 		A6401D2F2BD25CF5003D3852 /* Photino.Dialog.h in Headers */ = {isa = PBXBuildFile; fileRef = A6401D2E2BD25CF5003D3852 /* Photino.Dialog.h */; };
 		A6401D312BD25D11003D3852 /* json.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A6401D302BD25D11003D3852 /* json.hpp */; };
+		A6401D342BD26276003D3852 /* Exports.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6401D082BD2528A003D3852 /* Exports.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A6401CFB2BD251D8003D3852 /* libPhotinoNative.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libPhotinoNative.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6401D072BD2528A003D3852 /* Photino.Mac.UiDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photino.Mac.UiDelegate.h; sourceTree = "<group>"; };
-		A6401D082BD2528A003D3852 /* Exports.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = Exports.cpp; sourceTree = "<group>"; };
+		A6401D082BD2528A003D3852 /* Exports.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Exports.cpp; sourceTree = "<group>"; };
 		A6401D092BD2528A003D3852 /* Photino.Mac.UiDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Photino.Mac.UiDelegate.mm; sourceTree = "<group>"; };
 		A6401D0A2BD2528A003D3852 /* Photino.Mac.NavigationDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Photino.Mac.NavigationDelegate.mm; sourceTree = "<group>"; };
 		A6401D0B2BD2528A003D3852 /* Photino.Mac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Photino.Mac.mm; sourceTree = "<group>"; };
@@ -187,6 +188,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6401D342BD26276003D3852 /* Exports.cpp in Sources */,
 				A6401D192BD25295003D3852 /* Photino.Mac.NSWindowBorderless.mm in Sources */,
 				A6401D172BD25295003D3852 /* Photino.Mac.NavigationDelegate.mm in Sources */,
 				A6401D162BD25295003D3852 /* Photino.Mac.UiDelegate.mm in Sources */,
@@ -203,8 +205,10 @@
 		A6401D032BD251D8003D3852 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -233,6 +237,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -257,7 +262,10 @@
 		A6401D062BD251D8003D3852 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_OBJC_ARC = NO;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;

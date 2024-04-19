@@ -24,7 +24,6 @@ namespace WebFramework
             Native = new PhotinoWindow();
             Native.UseOsDefaultSize = false;
             Native.SetLogVerbosity(0);
-            Native.Chromeless = true;
             Native.Title = "";
             if (File.Exists(WindowManager.Options.IconPath)) { Native.SetIconFile(WindowManager.Options.IconPath); }
             Native.RegisterCustomSchemeHandler("fs", (object sender, string scheme, string url, out string contentType) => {
