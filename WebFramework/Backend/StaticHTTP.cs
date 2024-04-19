@@ -261,9 +261,11 @@ namespace WebFramework
         private void Listen()
         {
             _listener = new HttpListener();
-            _listener.Prefixes.Add("http://localhost:" + _port.ToString() + "/");
-            _listener.Prefixes.Add("http://127.0.0.1:" + _port.ToString() + "/");
+            Logger.LogInfo("Starting HTTP Server On Port: " + _port);
+            _listener.Prefixes.Add("http://localhost:" + _port+ "/");
             _listener.Start();
+
+            Logger.LogInfo("Started HTTP Server (Listening On localhost:" + _port + ")");
 
             Started = true;
 
@@ -403,7 +405,7 @@ namespace WebFramework
 
         private void Initialize(string path, int port)
         {
-            Logger.LogInfo("Starting HTTP Server On Port: " + port);
+            Logger.LogInfo("Found Port To Listen On: " + port);
             _rootDirectory = path;
             _port = port;
             _serverThread = new Thread(Listen);
