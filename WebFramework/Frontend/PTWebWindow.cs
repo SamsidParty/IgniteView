@@ -65,8 +65,6 @@ namespace WebFramework
 
         void Update(PhotinoWindow w)
         {
-            Logger.LogError("jofa: " + Native.Maximized.ToString());
-            Logger.LogError("mofa: " + Native.FullScreen.ToString());
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 var hwnd = w.WindowHandle;
