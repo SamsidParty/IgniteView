@@ -33,6 +33,50 @@
     }
 }
 
+#root > h1 {
+    margin: 25px;
+}
+
+.featureCards {
+    height: 300px;
+    width: 100%;
+    padding-left: 25px;
+    padding: 25px;
+    display: flex;
+    gap: 25px;
+}
+
+.featureCard {
+    width: 100%;
+    background-color: var(--col-tertiary);
+    border-radius: 5px;
+    padding: 15px;
+    position: relative;
+}
+
+.featureCard > h2 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.featureCard > button {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    width: 70px;
+    height: 35px;
+    border-radius: 5px;
+    background-color: var(--col-primary);
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+}
+
+.featureCard > button:hover {
+    opacity: 0.8;
+}
+
 .footer {
     position: absolute;
     height: 50px;
@@ -40,13 +84,19 @@
     background-color: var(--col-tertiary);
     bottom: 0;
     padding-left: 15px;
+    padding-right: 15px;
+    gap: 15px;
     display: flex;
     align-items: center;
 }
 
-.footer p {
+.footer p, .footer a {
     font-size: 14px;
     color: var(--col-text-overlay);
+}
+
+.footer a {
+    color: var(--col-primary);
 }
 
 body {
