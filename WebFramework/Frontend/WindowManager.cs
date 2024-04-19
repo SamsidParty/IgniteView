@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using WebFramework.Backend;
 
 namespace WebFramework
 {
@@ -64,6 +65,7 @@ namespace WebFramework
 
         public void LoadLib()
         {
+            Logger.LogInfo("Loading InteropLibrary.js Into Window");
             var lib = Properties.Resources.InteropLibrary;
             ExecuteJavascript(lib);
         }
@@ -110,7 +112,8 @@ namespace WebFramework
                 await AppManager.OnReady(this);
                 ReadyEventFired = true;
             }
-            
+
+            Logger.LogInfo("Window Ready");
         }
 
         public virtual async Task ExecuteJavascript(string js)
