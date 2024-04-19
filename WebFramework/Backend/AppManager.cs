@@ -9,6 +9,7 @@ using System.Text;
 using System.IO.Compression;
 using System.Threading.Tasks;
 using PhotinoNET;
+using WebFramework.Backend;
 
 namespace WebFramework
 {
@@ -76,7 +77,7 @@ namespace WebFramework
             if (!Directory.Exists(runtimePath))
             {
                 Directory.CreateDirectory(runtimePath);
-                Console.WriteLine("Extracting Dependencies...");
+                Logger.LogInfo("Extracting Dependencies...");
                 var archive = new ZipArchive(new MemoryStream(Properties.Resources.runtimes));
                 archive.ExtractToDirectory(Directory.GetParent(runtimePath).FullName);
             }
@@ -94,7 +95,7 @@ namespace WebFramework
             {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    Console.WriteLine("Loading Lib From " + Path.Combine(runtimePath, "win" + suffix, "native", libraryName + ".dll"));
+                    Logger.LogInfo("Loading Lib From " + Path.Combine(runtimePath, "win" + suffix, "native", libraryName + ".dll"));
                     libHandle = NativeLibrary.Load(Path.Combine(runtimePath, "win" + suffix, "native", libraryName + ".dll"));
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))

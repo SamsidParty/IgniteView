@@ -33,9 +33,6 @@ namespace WebFramework
         [DllImport("IgniteViewMac", CallingConvention = CallingConvention.Cdecl)]
         public static extern bool IsDark();
 
-        [DllImport("IgniteViewMac", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr Test();
-
         public static void Init(){
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) { return; }
             InitWindow(WindowManager.Options.TitlebarColor.Value.R, WindowManager.Options.TitlebarColor.Value.G, WindowManager.Options.TitlebarColor.Value.B);

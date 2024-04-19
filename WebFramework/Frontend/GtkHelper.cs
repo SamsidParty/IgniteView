@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebFramework.Backend;
 
 namespace WebFramework
 {
@@ -32,7 +33,7 @@ namespace WebFramework
                 return Instance;
             }
             catch (Exception ex){
-                Console.WriteLine(ex.Message);
+                Logger.LogError(ex.Message);
             }
             return null;
         }

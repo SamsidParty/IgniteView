@@ -11,6 +11,7 @@ using System.Text;
 using System.Linq;
 using System.Xml;
 using System.Runtime.InteropServices;
+using WebFramework.Backend;
 
 namespace WebFramework
 {
@@ -378,7 +379,7 @@ namespace WebFramework
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    Logger.LogError(ex.ToString());
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 }
 
@@ -393,6 +394,7 @@ namespace WebFramework
 
         private void Initialize(string path, int port)
         {
+            Logger.LogInfo("Starting HTTP Server On Port: " + port);
             _rootDirectory = path;
             _port = port;
             _serverThread = new Thread(Listen);

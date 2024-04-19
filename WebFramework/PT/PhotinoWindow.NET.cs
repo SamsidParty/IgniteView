@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using WebFramework;
+using WebFramework.Backend;
 
 namespace PhotinoNET;
 
@@ -2541,7 +2542,7 @@ public partial class PhotinoWindow
     private void Log(string message)
     {
         if (LogVerbosity < 1) return;
-        Console.WriteLine($"Photino.NET: \"{Title ?? "PhotinoWindow"}\"{message}");
+        Logger.LogInfo($"[PHOTINO] \"{Title ?? "PhotinoWindow"}\"{message}");
     }
 
     /// <summary>
