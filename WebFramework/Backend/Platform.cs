@@ -31,7 +31,7 @@ namespace WebFramework
 
                 try
                 {
-                    var testFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "test.txt");
+                    var testFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Helpers.SharedRandom.Next(0, 100000) + ".txt" + Helpers.SharedRandom.Next(0, 100000));
                     File.WriteAllText(testFile, "Installation Folder Is Not Read-Only");
                     File.Delete(testFile);
                 }
