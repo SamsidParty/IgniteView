@@ -60,6 +60,11 @@ namespace WebFramework.PT
 
         }
 
+        public override async Task Close()
+        {
+            Environment.Exit(0);
+        }
+
         public override async Task WindowReady()
         {
             await base.WindowReady();

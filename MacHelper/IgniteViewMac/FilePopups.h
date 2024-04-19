@@ -19,7 +19,7 @@ char* SaveFile(char* extension){
     [panel setExtensionHidden:NO];
     [panel setCanCreateDirectories:YES];
     [panel setTitle:@"Save File"];
-    [panel setNameFieldStringValue:@"file.as"];
+    [panel setNameFieldStringValue:([@"file." stringByAppendingString: [NSString stringWithUTF8String: extension]])];
     
 
     [panel beginWithCompletionHandler:^(NSInteger result){

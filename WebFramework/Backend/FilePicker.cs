@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -7,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using WebFramework.Backend;
 
 namespace WebFramework
 {
@@ -57,6 +59,8 @@ namespace WebFramework
         {
             if (IsOpen) { return new string[0]; } IsOpen = true;
 
+            Logger.LogInfo("Opening File Picker");
+
             string[] r = new string[0];
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -64,48 +68,15 @@ namespace WebFramework
                 r = await Task.Run(() => Win_OpenFilePicker(ctx, options)); // Runs On Another Thread To Prevent Blockage
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)){
-                if (options is FolderPickerOptions) {
-                    var ptr = MacHelperLoader.Current.OpenFolder(options.AllowMultiSelection);
-                    
-                    //Read Pointer Until It's Different
-                    while (StringFromNativeUtf8(ptr) == "nr") // Short For Not Returned
-                    {
-                        await Task.Delay(1);
-                    }
-
-                    r = ((string)StringFromNativeUtf8(ptr)).Split(':').Where(f => f.Length > 0).ToArray();
-
-                    MacHelperLoader.Current.FreePointer(ptr); // We Don't Want Any Memory Leaks
-                }
-                else {
-
-                    //Convert Array Into String By Appening :seperate: To Each Element
-                    var extSplit = "";
-                    for (int i = 0; i < options.AllowedFileTypes.Length; i++)
-                    {
-                        if (i != 0){
-                            extSplit += ":seperate:";
-                        }
-                        extSplit += options.AllowedFileTypes[i];
-                    }
-
-                    var ptr = MacHelperLoader.Current.OpenFile(options.AllowMultiSelection, extSplit.ToLower());
-                    
-                    //Read Pointer Until It's Different
-                    while (StringFromNativeUtf8(ptr) == "nr") // Short For Not Returned
-                    {
-                        await Task.Delay(1);
-                    }
-
-                    r = ((string)StringFromNativeUtf8(ptr)).Split(':').Where(f => f.Length > 0).ToArray(); ;
-
-                    MacHelperLoader.Current.FreePointer(ptr); // We Don't Want Any Memory Leaks
-                }
+                r = await MacHelperLoader.Current.OpenFilePicker(options);
             }
             else {
                 //TODO: Open File Picker
                 r = null;
             }
+
+
+            Logger.LogInfo("File Picker Returned " + JsonConvert.SerializeObject(r));
 
             IsOpen = false;
             return r;
@@ -159,12 +130,12 @@ namespace WebFramework
                 //Check If It's In The Easy Format Or The Annoying Format
                 if (File.Exists(val))
                 {
-                    //Yaay Easy To Read, Just Return The String
+                    //Easy To Read, Just Return The String
                     r = new string[] { val };
                 }
                 else
                 {
-                    //Annoying Oof
+                    //Annoying
 
                     var files = new List<string>();
 
@@ -215,27 +186,14 @@ namespace WebFramework
                 r = await Task.Run(() => Win_OpenFileSaver(ctx, fileExtension));
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
-                var ptr = MacHelperLoader.Current.SaveFile(fileExtension);
-                
-                //Read Pointer Until It's Different
-                while (StringFromNativeUtf8(ptr) == "nr") // Short For Not Returned
-                {
-                    await Task.Delay(1);
-                }
-
-                r = StringFromNativeUtf8(ptr);
-
-                if (r == "null"){
-                    r = null;
-                }
-
-                MacHelperLoader.Current.FreePointer(ptr); // We Don't Want Any Memory Leaks
+                r = await MacHelperLoader.Current.OpenFileSaver(fileExtension);
             }
             else {
                 //TODO: File Picker
                 r = null;
             }
-            
+
+            Logger.LogInfo("File Saver Returned " + r);
 
             IsOpen = false;
             return r;

@@ -46,6 +46,75 @@ namespace WebFramework.PT
             }
         }
 
+        public async Task<string> OpenFileSaver(string fileExtension)
+        {
+            string r;
+            var ptr = SaveFile(fileExtension);
+
+            //Read Pointer Until It's Different
+            while (FilePicker.StringFromNativeUtf8(ptr) == "nr") // Short For Not Returned
+            {
+                await Task.Delay(1);
+            }
+
+            r = FilePicker.StringFromNativeUtf8(ptr);
+
+            if (r == "null")
+            {
+                r = null;
+            }
+
+            FreePointer(ptr); // We Don't Want Any Memory Leaks
+
+            return r;
+        }
+
+        public async Task<string[]> OpenFilePicker(FilePickerOptions options)
+        {
+            string[] r;
+            if (options is FolderPickerOptions)
+            {
+                var ptr = OpenFolder(options.AllowMultiSelection);
+
+                //Read Pointer Until It's Different
+                while (FilePicker.StringFromNativeUtf8(ptr) == "nr") // Short For Not Returned
+                {
+                    await Task.Delay(1);
+                }
+
+                r = (FilePicker.StringFromNativeUtf8(ptr)).Split(':').Where(f => f.Length > 0).ToArray();
+
+                FreePointer(ptr); // We Don't Want Any Memory Leaks
+            }
+            else
+            {
+
+                //Convert Array Into String By Appending :seperate: To Each Element
+                var extSplit = "";
+                for (int i = 0; i < options.AllowedFileTypes.Length; i++)
+                {
+                    if (i != 0)
+                    {
+                        extSplit += ":seperate:";
+                    }
+                    extSplit += options.AllowedFileTypes[i];
+                }
+
+                var ptr = OpenFile(options.AllowMultiSelection, extSplit.ToLower());
+
+                //Read Pointer Until It's Different
+                while (FilePicker.StringFromNativeUtf8(ptr) == "nr") // Short For Not Returned
+                {
+                    await Task.Delay(1);
+                }
+
+                r = (FilePicker.StringFromNativeUtf8(ptr)).Split(':').Where(f => f.Length > 0).ToArray(); ;
+
+               FreePointer(ptr); // We Don't Want Any Memory Leaks
+            }
+            return r;
+        }
+
         public bool IsDarkMode()
         {
             return IsDark();

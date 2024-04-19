@@ -20,5 +20,10 @@ namespace WebFramework.Test
                 var f = await FilePicker.OpenFilePicker(Document, new FilePickerOptions() { AllowMultiSelection = true, AllowedFileTypes = FileType.AllFiles });
             });
         }
+
+        public static void OpenFilePicker()
+        {
+            FilePicker.OpenFileSaver(WindowManager.MainWindow.Document, "exe");
+        }
     }
 }
