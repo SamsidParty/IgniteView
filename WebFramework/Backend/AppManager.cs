@@ -59,12 +59,15 @@ namespace WebFramework
 
         public static string GetRuntimePath()
         {
-            if (AppDomain.CurrentDomain.BaseDirectory.Contains("WindowsApps"))
+            var opMode = Platform.GetOperatingMode();
+            if (opMode == OperatingMode.DesktopDynamic)
             {
-                //MSIX Mode
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "IgniteView", "runtimes");
+                return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "runtimes");
             }
-            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "runtimes");
+
+            //If App Directory Is Read Only
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IgniteView", "runtimes");
+
         }
 
         public static void ExtractDependencies()
@@ -84,7 +87,7 @@ namespace WebFramework
         static IntPtr ImportResolver(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
         {
             var runtimePath = GetRuntimePath();
-            var suffix = System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture == Architecture.Arm64 ? "-arm64" : "-x64";
+            var suffix = RuntimeInformation.ProcessArchitecture == Architecture.Arm64 ? "-arm64" : "-x64";
 
             IntPtr libHandle = IntPtr.Zero;
             if (libraryName == "Photino.Native" || libraryName == "IgniteViewMac" || libraryName.Contains("IVPlugin"))
