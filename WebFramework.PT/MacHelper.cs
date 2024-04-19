@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WebFramework.Backend;
 
-namespace WebFramework
+namespace WebFramework.PT
 {
     public class MacHelper
     {

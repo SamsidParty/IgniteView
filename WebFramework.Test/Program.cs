@@ -7,7 +7,7 @@ using WebFramework.Backend;
 using System.Threading.Tasks;
 using System.IO;
 
-public class Application
+public class IVApplication
 {
 
     static ThemeBasedColor TitlebarColor;

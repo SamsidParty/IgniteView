@@ -8,6 +8,6 @@ public class Program
     public static void Main(string[] args)
     {
         PTWindowProvider.Activate();
-        Application.Main(args);
+        IVApplication.Main(args);
     }
 }
