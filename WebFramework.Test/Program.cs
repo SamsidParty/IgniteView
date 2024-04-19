@@ -3,18 +3,15 @@ using System.Diagnostics;
 using System.Drawing;
 using WebFramework;
 using WebFramework.Test;
-using WebFramework.PT;
 using WebFramework.Backend;
 
-public class Program
+public class Application
 {
 
     static ThemeBasedColor TitlebarColor;
 
-    [STAThread] // Required On Windows Or Crash
     public static void Main(string[] args)
     {
-        PTWindowProvider.Activate();
         AppManager.Validate(args); // Required Or Crash
         App();
     }

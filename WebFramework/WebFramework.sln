@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFramework", "WebFramewor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFramework.Test", "..\WebFramework.Test\WebFramework.Test.csproj", "{13A02054-8528-4750-9122-E5B6EA0743FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebFramework.PT", "..\WebFramework.PT\WebFramework.PT.csproj", "{CDE6CC7F-6F34-44A1-A375-77F88CEDF7FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebFramework.PT", "..\WebFramework.PT\WebFramework.PT.csproj", "{CDE6CC7F-6F34-44A1-A375-77F88CEDF7FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebFramework.Test.PT", "..\WebFramework.Test.PT\WebFramework.Test.PT.csproj", "{57CD91B7-958B-49FD-9E16-DD865989DB98}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,14 @@ Global
 		{CDE6CC7F-6F34-44A1-A375-77F88CEDF7FD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CDE6CC7F-6F34-44A1-A375-77F88CEDF7FD}.Release|x64.ActiveCfg = Release|Any CPU
 		{CDE6CC7F-6F34-44A1-A375-77F88CEDF7FD}.Release|x64.Build.0 = Release|Any CPU
+		{57CD91B7-958B-49FD-9E16-DD865989DB98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57CD91B7-958B-49FD-9E16-DD865989DB98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57CD91B7-958B-49FD-9E16-DD865989DB98}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{57CD91B7-958B-49FD-9E16-DD865989DB98}.Debug|x64.Build.0 = Debug|Any CPU
+		{57CD91B7-958B-49FD-9E16-DD865989DB98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57CD91B7-958B-49FD-9E16-DD865989DB98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57CD91B7-958B-49FD-9E16-DD865989DB98}.Release|x64.ActiveCfg = Release|Any CPU
+		{57CD91B7-958B-49FD-9E16-DD865989DB98}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
