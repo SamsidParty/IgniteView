@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace WebFramework.UWP
         public override async Task Init()
         {
             await base.Init();
+
             WebFrameworkPage.Instance.WebView.Source = new Uri("http://localhost:" + Server.HTTPPort + "/index.html");
             WebFrameworkPage.Instance.WebView.CoreWebView2Initialized += WebView_CoreWebView2Initialized;
 

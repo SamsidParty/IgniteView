@@ -20,6 +20,11 @@ namespace WebFramework
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.IsStandalone) {
                 return ShouldSystemUseDarkMode();
             }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && !Platform.IsStandalone)
+            {
+                //UWP
+                return UWPHelperLoader.Current.IsDark();
+            }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
                 return MacHelperLoader.Current.IsDarkMode();
             }

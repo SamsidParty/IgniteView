@@ -60,6 +60,10 @@ namespace WebFramework
             {
                 MacHelperLoader.FindAndLoad(); // Load MacHelper From WebFramework.PT
             }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && !AppDomain.CurrentDomain.BaseDirectory.Contains("WindowsApps")) // Simple Way Of Checking If We Are Win32 Or UWP
+            {
+                UWPHelperLoader.FindAndLoad();
+            }
 
             if (ExecFunction.IsExecFunctionCommand(args))
             {

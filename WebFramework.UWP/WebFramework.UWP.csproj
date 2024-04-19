@@ -120,6 +120,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="UWPHelper.cs" />
     <Compile Include="UWPWebWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UWPWindowProvider.cs" />
