@@ -17,6 +17,7 @@ namespace WebFramework
 
     public class Platform
     {
+        public static bool IsStandalone = false;
 
         public static OperatingMode GetOperatingMode()
         {

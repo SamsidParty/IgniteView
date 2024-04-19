@@ -66,11 +66,15 @@ namespace WebFramework
 
         private DynamicColor _BackgroundColor;
 
+        public virtual string OverrideLib(string lib)
+        {
+            return lib;
+        }
+
         public void LoadLib()
         {
             Logger.LogInfo("Loading InteropLibrary.js Into Window");
-            var lib = Properties.Resources.InteropLibrary;
-            ExecuteJavascript(lib);
+            ExecuteJavascript(OverrideLib(Properties.Resources.InteropLibrary));
         }
 
         private void UpdateBackgroundColor()

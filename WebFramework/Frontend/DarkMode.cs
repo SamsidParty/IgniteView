@@ -17,7 +17,7 @@ namespace WebFramework
 
 
         public static bool GetIsEnabled() {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.IsStandalone) {
                 return ShouldSystemUseDarkMode();
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {

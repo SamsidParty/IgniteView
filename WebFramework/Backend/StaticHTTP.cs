@@ -328,6 +328,13 @@ namespace WebFramework
                     {
                         //Inject Script
                         var injection = "<script>/* Injection For Interop */\r\n window.external = window.external || { receiveMessage: () => {}, sendMessage: () => {} }; \r\n window.external.receiveMessage(message => eval.call(window, message));\r\n addEventListener(\"DOMContentLoaded\", () => { window.external.sendMessage(`{\"Type\":\"load\"}`);\r\n });</script>\r\n";
+
+                        if (WindowManager.MainWindow != null)
+                        {
+                            Logger.LogInfo("Sending Modified Index File");
+                            injection = WindowManager.MainWindow.OverrideLib(injection);
+                        }
+
                         var output = injection + File.ReadAllText(filename);
 
                         //Inject Requested Inline Files

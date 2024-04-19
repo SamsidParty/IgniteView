@@ -33,6 +33,10 @@ namespace WebFramework
                 if (possibleTypes.Count() > 0)
                 {
                     type = possibleTypes.First();
+                    if (type.Name == "PTWebWindow")
+                    {
+                        Platform.IsStandalone = true;
+                    }
                     Logger.LogInfo("Found Window Provider To Use: " + type.FullName);
                 }
             }
