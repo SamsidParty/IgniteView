@@ -30,7 +30,8 @@ public class IVApplication
         WindowManager.Options = new WindowOptions()
         {
             TitlebarColor = TitlebarColor,
-            StartWidthHeight = new Rectangle(0, 0, 1280, 720)
+            StartWidthHeight = new Rectangle(0, 0, 1280, 720),
+            NativeGamepadSupport = true
         };
 
 

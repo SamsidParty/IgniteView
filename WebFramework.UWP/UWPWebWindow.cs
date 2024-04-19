@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WebFramework;
 using WebFramework.Backend;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace WebFramework.UWP
 {
@@ -16,6 +17,11 @@ namespace WebFramework.UWP
             await base.Init();
             WebFrameworkPage.Instance.WebView.Source = new Uri("http://localhost:" + Server.HTTPPort + "/index.html");
             WebFrameworkPage.Instance.WebView.CoreWebView2Initialized += WebView_CoreWebView2Initialized;
+
+            if (!WindowManager.Options.NativeGamepadSupport)
+            {
+                WebFrameworkPage.Instance.RequiresPointer = RequiresPointer.WhenFocused;
+            }
         }
 
         private void WebView_CoreWebView2Initialized(Microsoft.UI.Xaml.Controls.WebView2 sender, Microsoft.UI.Xaml.Controls.CoreWebView2InitializedEventArgs args)

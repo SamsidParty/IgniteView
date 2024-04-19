@@ -34,6 +34,7 @@ namespace WebFramework.Test.UWP
         public App()
         {
             this.InitializeComponent();
+            UWPWindowProvider.Activate();
             this.Suspending += OnSuspending;
         }
 

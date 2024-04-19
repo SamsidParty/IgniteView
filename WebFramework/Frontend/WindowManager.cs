@@ -196,6 +196,11 @@ namespace WebFramework
         public int _WinTBC = -1; // Windows Wants It In A Single int
         public int _Allowed = -1;
 
+        /// <summary>
+        /// Enables Gamepads And Disables Mouse Mode On UWP
+        /// </summary>
+        public bool NativeGamepadSupport;
+
         public Rectangle StartWidthHeight = new Rectangle(0, 0, 1280, 720);
 
         /// <summary>
