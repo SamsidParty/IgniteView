@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using WebFramework.Backend;
 
 namespace WebFramework
 {
@@ -21,6 +24,18 @@ namespace WebFramework
         {
             var id = JSEvent.Listeners[p1];
             id.Invoke(new JSEvent(p2));
+        }
+
+        public static void OnReflect(string p1, string p2, string p3) //[1] = Type, [2], Method To Call [3] = List Of Args, In JSON
+        {
+            try
+            {
+                var type = Type.GetType(p1);
+                type.GetMethod(p2).Invoke(null, JsonConvert.DeserializeObject<object[]>(p3));
+            }
+            catch (Exception ex) {
+                Logger.LogError("Failed To Invoke CSharp Function At Runtime: " + ex.ToString());
+            }
         }
 
         public static void OnAttachRequested(string p1, string p2, string p3) //[1] = Script Name

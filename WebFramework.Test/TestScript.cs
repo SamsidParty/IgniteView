@@ -5,10 +5,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebFramework.Backend;
 
 namespace WebFramework.Test
 {
-    internal class TestScript : WebScript
+    public class TestScript : WebScript
     {
         public override async Task DOMContentLoaded()
         {

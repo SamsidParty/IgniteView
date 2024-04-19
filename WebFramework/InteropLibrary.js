@@ -160,8 +160,13 @@ function JSI_TitleChanged(newTitle) {
     JSI_Send("title", newTitle);
 }
 
-window.IgniteView = {
+window.CallCSharp = function () {
+    var args = Array.from(arguments);
+    if (args.length == 0) {
+        return;
+    }
 
+    JSI_Send("reflect", args.shift(), args.shift(), JSON.stringify(args));
 }
 
 var ready = document.createEvent('CustomEvent');

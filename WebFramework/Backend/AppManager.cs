@@ -95,6 +95,11 @@ namespace WebFramework
             await WindowManager.Create(WindowManager.Options);
         }
 
+        public static void Quit()
+        {
+            WindowManager.MainWindow.Close();
+        }
+
         public static string GetRuntimePath()
         {
             var opMode = Platform.GetOperatingMode();

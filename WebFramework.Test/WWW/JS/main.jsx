@@ -12,8 +12,11 @@ function App() {
 
             <div className="featureCards">
                 <div className="featureCard">
-                    <h2>Alert</h2>
-                    <button onClick={() => alert("This Button Summons Alerts")}>Test</button>
+                    <h2>JS-C# Interop</h2>
+                    <p>
+                        The Following Button Will Invoke A C# Method To Close This App.
+                    </p>
+                    <button onClick={() => CallCSharp("WebFramework.AppManager, WebFramework", "Quit")}>Close</button>
                 </div>
                 <div className="featureCard">
                 

@@ -163,6 +163,11 @@ namespace WebFramework
                     var cb = new CallbackAction(WSCallbacks.OnEvent, msg.Param1, msg.Param2, msg.Param3);
                     cb.InvokeOnUI();
                 }
+                else if (msg.Type == "reflect")
+                {
+                    var cb = new CallbackAction(WSCallbacks.OnReflect, msg.Param1, msg.Param2, msg.Param3);
+                    cb.InvokeOnUI();
+                }
                 else if (msg.Type == "attach")
                 {
                     var cb = new CallbackAction(WSCallbacks.OnAttachRequested, msg.Param1, msg.Param2, msg.Param3);
