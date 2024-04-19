@@ -160,6 +160,9 @@ function JSI_TitleChanged(newTitle) {
     JSI_Send("title", newTitle);
 }
 
+window.IgniteView = {
+
+}
 
 var ready = document.createEvent('CustomEvent');
 ready.initCustomEvent('jsiready', true, false);

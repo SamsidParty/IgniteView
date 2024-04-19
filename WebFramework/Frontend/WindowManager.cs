@@ -201,6 +201,10 @@ namespace WebFramework
         /// </summary>
         public bool NativeGamepadSupport;
 
+
+        /// <summary>
+        /// Does Not Work On UWP
+        /// </summary>
         public Rectangle StartWidthHeight = new Rectangle(0, 0, 1280, 720);
 
         /// <summary>

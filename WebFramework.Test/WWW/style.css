@@ -33,6 +33,22 @@
     }
 }
 
+.footer {
+    position: absolute;
+    height: 50px;
+    width: 100%;
+    background-color: var(--col-tertiary);
+    bottom: 0;
+    padding-left: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.footer p {
+    font-size: 14px;
+    color: var(--col-text-overlay);
+}
+
 body {
     margin: 0;
     background-color: var(--col-bg);

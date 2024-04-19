@@ -17,7 +17,12 @@ namespace WebFramework
 
     public class Platform
     {
-        public static bool IsStandalone = false;
+
+        public static bool IsNotUWP {
+            get {
+                return !AppDomain.CurrentDomain.BaseDirectory.Contains("WindowsApps");
+            }
+        }
 
         public static OperatingMode GetOperatingMode()
         {

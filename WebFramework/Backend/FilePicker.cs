@@ -1,5 +1,4 @@
-﻿using Gtk;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -104,7 +103,8 @@ namespace WebFramework
                 }
             }
             else {
-                r = await GTKFilePicker.Open(ctx, options);
+                //TODO: Open File Picker
+                r = null;
             }
 
             IsOpen = false;
@@ -232,7 +232,8 @@ namespace WebFramework
                 MacHelperLoader.Current.FreePointer(ptr); // We Don't Want Any Memory Leaks
             }
             else {
-                r = await GTKFilePicker.Save(ctx, fileExtension);
+                //TODO: File Picker
+                r = null;
             }
             
 
@@ -278,123 +279,6 @@ namespace WebFramework
 
             return r;
         }
-    }
-
-    public class GTKFilePicker
-    {
-
-        public static async Task<string> Save(DOM ctx, string extension)
-        {
-            var FnID = "gtkfunction-filesaver-" + Guid.NewGuid().ToString();
-            JSEvent.PendingFunctions[FnID] = "JSI_NotReturned";
-
-
-            Jobs.Push(AppManager.RunGTK, ctx);
-            Application.Invoke(async (s, e) =>
-            {
-
-                FileChooserDialog filechooser = new FileChooserDialog("Save File", HelperWindow.Instance, FileChooserAction.Save, "Cancel", ResponseType.Cancel, "Save", ResponseType.Accept);
-
-                var filter = new FileFilter();
-                filter.Name = extension.ToUpper() + " Files";
-                filter.AddPattern("*." + extension.ToLower());
-                
-                filechooser.AddFilter(filter);
-
-                var result = filechooser.Run();
-                if (result == (int)ResponseType.Accept)
-                {
-                    JSEvent.PendingFunctions[FnID] = filechooser.Files[0].ParsedName;
-                }
-                else
-                {
-                    JSEvent.PendingFunctions[FnID] = "";
-                }
-
-                filechooser.Destroy();
-                HelperWindow.Instance.Destroy();
-                
-            });
-
-            while (JSEvent.PendingFunctions[FnID] == "JSI_NotReturned")
-            {
-                await Task.Delay(1);
-            }
-
-            return JSEvent.PendingFunctions[FnID];
-        }
-
-        public static async Task<string[]> Open(DOM ctx, FilePickerOptions options)
-        {
-            var FnID = "gtkfunction-filepicker-" + Guid.NewGuid().ToString();
-            JSEvent.PendingFunctions[FnID] = "JSI_NotReturned";
-
-
-            Jobs.Push(AppManager.RunGTK, ctx);
-            Application.Invoke(async (s, e) =>
-            {
-                if (options is FolderPickerOptions){
-                    await FilePicker(ctx, options, FnID, FileChooserAction.SelectFolder);
-                }
-                else{
-                    await FilePicker(ctx, options, FnID, FileChooserAction.Open);
-                }
-            });
-
-            while (JSEvent.PendingFunctions[FnID] == "JSI_NotReturned")
-            {
-                await Task.Delay(1);
-            }
-
-            return JSEvent.PendingFunctions[FnID].Split(':').Where(f => f.Length > 0).ToArray();
-        }
-
-
-        static async Task FilePicker(DOM ctx, FilePickerOptions options, string FnID, FileChooserAction action){
-            FileChooserDialog filechooser = new FileChooserDialog("Select File", HelperWindow.Instance, action, "Cancel", ResponseType.Cancel, "Open", ResponseType.Accept);
-
-            if (options is FolderPickerOptions){
-
-            }
-            else{
-                var filter = new FileFilter();
-                filter.Name = "Files";
-                foreach (var t in options.AllowedFileTypes)
-                {
-                    filter.AddPattern("*." + t);
-                }
-                
-                filechooser.AddFilter(filter);
-            }
-
-            filechooser.SelectMultiple = options.AllowMultiSelection;
-
-            var result = filechooser.Run();
-            if (result == (int)ResponseType.Accept)
-            {
-                var fn = filechooser.Files;
-                var tempres = "";
-                
-                foreach (var f in fn){
-                    if (f == fn[0]){
-                        tempres += f.ParsedName;
-                    }
-                    else {
-                        tempres += ":" + f.ParsedName;
-                    }
-                    
-                }
-                JSEvent.PendingFunctions[FnID] = tempres;
-            }
-            else
-            {
-                JSEvent.PendingFunctions[FnID] = "";
-            }
-
-            filechooser.Destroy();
-            HelperWindow.Instance.Destroy();
-        }
-
     }
 
 

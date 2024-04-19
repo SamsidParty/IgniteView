@@ -33,10 +33,6 @@ namespace WebFramework
                 if (possibleTypes.Count() > 0)
                 {
                     type = possibleTypes.First();
-                    if (type.Name == "PTWebWindow")
-                    {
-                        Platform.IsStandalone = true;
-                    }
                     Logger.LogInfo("Found Window Provider To Use: " + type.FullName);
                 }
             }
@@ -60,7 +56,7 @@ namespace WebFramework
             {
                 MacHelperLoader.FindAndLoad(); // Load MacHelper From WebFramework.PT
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && !AppDomain.CurrentDomain.BaseDirectory.Contains("WindowsApps")) // Simple Way Of Checking If We Are Win32 Or UWP
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.IsNotUWP) // Simple Way Of Checking If We Are Win32 Or UWP
             {
                 UWPHelperLoader.FindAndLoad();
             }
@@ -112,11 +108,6 @@ namespace WebFramework
 
         }
 
-
-        public static void RunGTK()
-        {
-            HelperWindow.Main();
-        }
 
     }
 }
