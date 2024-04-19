@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using WebFramework;
 using WebFramework.Backend;
+using Windows.UI.ViewManagement;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -34,7 +36,16 @@ namespace WebFramework.UWP
 
         private void CoreWebView2_WebMessageReceived(Microsoft.Web.WebView2.Core.CoreWebView2 sender, Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs args)
         {
+            Update();
             MSGHandler.OnMessage(args.TryGetWebMessageAsString(), this);
+        }
+
+        void Update()
+        {
+            ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            var col = WindowManager.Options.TitlebarColor.Value;
+            titleBar.BackgroundColor = Color.FromArgb(col.A, col.R, col.G, col.B);
+            titleBar.ButtonBackgroundColor = Color.FromArgb(col.A, col.R, col.G, col.B);
         }
 
         //Override Lib To Use WebView2 Communication Method
