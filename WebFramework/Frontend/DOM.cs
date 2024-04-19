@@ -37,7 +37,7 @@ namespace WebFramework
             }
 
             var retVal = JSEvent.PendingFunctions[FnID];
-            JSEvent.PendingFunctions.Remove(FnID, out retVal);
+            JSEvent.PendingFunctions.TryRemove(FnID, out retVal);
 
             return retVal;
         }

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WebFramework
@@ -20,7 +21,7 @@ namespace WebFramework
                 return ShouldSystemUseDarkMode();
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
-                return MacHelper.IsDark();
+                return MacHelperLoader.Current.IsDarkMode();
             }
             else
             {

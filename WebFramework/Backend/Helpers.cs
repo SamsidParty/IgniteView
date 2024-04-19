@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Web;
 using System.Runtime.InteropServices;
+using Newtonsoft.Json;
 
 namespace WebFramework
 {
     public static class Helpers
     {
+        public static Random SharedRandom = new Random();
 
         public static JSLiteral ToJSLiteral(this string value)
         {
@@ -37,7 +37,7 @@ namespace WebFramework
             }
             else if (value is Array)
             {
-                return JsonSerializer.Serialize(value as Array);
+                return JsonConvert.SerializeObject(value as Array);
             }
             else if (value is JSLiteral)
             {

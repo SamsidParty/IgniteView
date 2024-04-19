@@ -8,8 +8,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.IO.Compression;
 using System.Threading.Tasks;
-using PhotinoNET;
 using WebFramework.Backend;
+using System.IO;
+using System.Threading;
 
 namespace WebFramework
 {
@@ -19,13 +20,42 @@ namespace WebFramework
         public static string Location;
         public static Func<WebWindow, Task> OnReady;
 
+        public static AppManager Instance;
+
+        public static WebWindow GetWebWindow()
+        {
+            //Find First Class That Inherits WebWindow
+            Type type = null;
+
+            foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                var possibleTypes = asm.GetTypes().Where(t => t.IsClass && t.IsSubclassOf(typeof(WebWindow)));
+                if (possibleTypes.Count() > 0)
+                {
+                    type = possibleTypes.First();
+                    Logger.LogInfo("Found Window Provider To Use: " + type.FullName);
+                }
+            }
+
+            if (type == null)
+            {
+                Logger.LogError("No Suitable Window Provider Was Found");
+                throw new Exception("No Suitable Window Provider Was Found");
+            }
+
+            return Activator.CreateInstance(type) as WebWindow;
+        }
 
         /// <summary>
         /// Makes Sure The App Can Run In It's Current State
         /// </summary>
         public static void Validate(string[] args)
         {
-            ExtractDependencies();
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                MacHelperLoader.FindAndLoad(); // Load MacHelper From WebFramework.PT
+            }
 
             if (ExecFunction.IsExecFunctionCommand(args))
             {
@@ -35,11 +65,14 @@ namespace WebFramework
                 Thread.Sleep(1024*1024);
             }
 
+            Logger.LogInfo("App Validation Complete");
+
             IsValid = true;
         }
 
         public static async Task Start(string location, Func<WebWindow, Task> onReady)
         {
+            Logger.LogInfo("Starting Application In " + location);
 
             if (!IsValid)
             {
@@ -71,45 +104,6 @@ namespace WebFramework
 
         }
 
-        public static void ExtractDependencies()
-        {
-            var runtimePath = GetRuntimePath();
-            if (!Directory.Exists(runtimePath))
-            {
-                Directory.CreateDirectory(runtimePath);
-                Logger.LogInfo("Extracting Dependencies...");
-                var archive = new ZipArchive(new MemoryStream(Properties.Resources.runtimes));
-                archive.ExtractToDirectory(Directory.GetParent(runtimePath).FullName);
-            }
-
-            NativeLibrary.SetDllImportResolver(typeof(PhotinoWindow).Assembly, ImportResolver);
-        }
-
-        static IntPtr ImportResolver(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
-        {
-            var runtimePath = GetRuntimePath();
-            var suffix = RuntimeInformation.ProcessArchitecture == Architecture.Arm64 ? "-arm64" : "-x64";
-
-            IntPtr libHandle = IntPtr.Zero;
-            if (libraryName == "Photino.Native" || libraryName == "IgniteViewMac" || libraryName.Contains("IVPlugin"))
-            {
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    Logger.LogInfo("Loading Lib From " + Path.Combine(runtimePath, "win" + suffix, "native", libraryName + ".dll"));
-                    libHandle = NativeLibrary.Load(Path.Combine(runtimePath, "win" + suffix, "native", libraryName + ".dll"));
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                {
-                    Logger.LogInfo("Loading Lib From " + Path.Combine(runtimePath, "osx" + suffix, "native", libraryName + ".dylib"));
-                    libHandle = NativeLibrary.Load(Path.Combine(runtimePath, "osx" + suffix, "native", libraryName + ".dylib"));
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                {
-                    libHandle = NativeLibrary.Load(Path.Combine(runtimePath, "linux" + suffix, "native", libraryName + ".so"));
-                }
-            }
-            return libHandle;
-        }
 
         public static void RunGTK()
         {

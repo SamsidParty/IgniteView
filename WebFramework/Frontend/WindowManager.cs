@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using WebFramework.Backend;
@@ -26,7 +27,7 @@ namespace WebFramework
 
             Logger.LogInfo("Creating Main Window");
 
-            MainWindow = new PTWebWindow();
+            MainWindow = AppManager.GetWebWindow();
             OpenWindows.Add(MainWindow);
             await MainWindow.Init();
             return MainWindow;
@@ -37,7 +38,7 @@ namespace WebFramework
     {
         public bool ReadyEventFired = false;
 
-        public DOM? Document;
+        public DOM Document;
         public Dictionary<string, Action<WSMessage, WebWindow>> MessageListeners = new Dictionary<string, Action<WSMessage, WebWindow>>();
 
         public DynamicColor BackgroundColor
@@ -126,6 +127,11 @@ namespace WebFramework
         public virtual async Task Init()
         {
             
+        }
+
+        public virtual async Task Close()
+        {
+
         }
 
         public virtual async Task UpdateTitle(string title)

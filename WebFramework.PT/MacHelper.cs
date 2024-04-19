@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using WebFramework.Backend;
 
 namespace WebFramework
 {
@@ -33,20 +35,43 @@ namespace WebFramework
         [DllImport("IgniteViewMac", CallingConvention = CallingConvention.Cdecl)]
         public static extern bool IsDark();
 
-        public static void Init(){
+        private static MacHelper _Current;
+
+        public static MacHelper Current
+        {
+            get
+            {
+                if (_Current == null) { _Current = new MacHelper(); }
+                return _Current;
+            }
+        }
+
+        public bool IsDarkMode()
+        {
+            return IsDark();
+        }
+
+        public void Init(){
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) { return; }
             InitWindow(WindowManager.Options.TitlebarColor.Value.R, WindowManager.Options.TitlebarColor.Value.G, WindowManager.Options.TitlebarColor.Value.B);
         }
 
-        public static void OnTitleChanged(string t){
+        public void OnTitleChanged(string t){
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) { return; }
             UpdateTitle(t);
         }
 
-        public static void OnIconChanged(string path){
+        public void OnIconChanged(string path){
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) { return; }
             if (!File.Exists(path)) { return; }
             UpdateIcon(path);
+        }
+
+
+        //Called By WebFramework
+        public void OnLoad()
+        {
+            Logger.LogInfo("MacHelper Is Loaded And Active");
         }
     }
 }

@@ -2,13 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using WebFramework.Backend;
 
-namespace WebFramework
+namespace WebFramework.PT
 {
     public class PTWebWindow : WebWindow
     {
@@ -17,6 +19,7 @@ namespace WebFramework
         public static extern int DwmSetWindowAttribute(IntPtr hwnd, int dwAttribute, int[] pvAttribute, int cbAttribute);
 
         public PhotinoWindow Native;
+
 
         public override async Task Init()
         {
@@ -70,8 +73,8 @@ namespace WebFramework
                 DwmSetWindowAttribute(hwnd, 35, new int[] { WindowManager.Options._WinTBC }, 4);
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
-                MacHelper.Init();
-                MacHelper.OnIconChanged(WindowManager.Options.IconPath);
+                MacHelper.Current.Init();
+                MacHelper.Current.OnIconChanged(WindowManager.Options.IconPath);
             }
         }
 
@@ -87,7 +90,7 @@ namespace WebFramework
 
             if (this == WindowManager.MainWindow)
             {
-                MacHelper.OnTitleChanged(title);
+                MacHelper.Current.OnTitleChanged(title);
             }
             
             Native.Title = title;

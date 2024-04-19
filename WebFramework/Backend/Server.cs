@@ -6,9 +6,10 @@ using System.Net.NetworkInformation;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Text.Json;
+using Newtonsoft.Json;
 using System.Runtime.InteropServices;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace WebFramework
 {
@@ -143,7 +144,7 @@ namespace WebFramework
         {
             try
             {
-                var msg = JsonSerializer.Deserialize<WSMessage>(d, WSMessage.Options);
+                var msg = JsonConvert.DeserializeObject<WSMessage>(d);
 
                 foreach (var k in context.MessageListeners.Keys)
                 {
@@ -174,9 +175,9 @@ namespace WebFramework
                 }
                 else if (msg.Type == "closeme")
                 {
-                    Jobs.Push(() =>
+                    Jobs.Push(async () =>
                     {
-                        (context as PTWebWindow).Native.Close();
+                        await context.Close();
                     }, WindowManager.MainWindow.Document);
                     Jobs.Fire(WindowManager.MainWindow.Document);
                 }
@@ -196,8 +197,6 @@ namespace WebFramework
     [Serializable]
     public class WSMessage
     {
-        public static JsonSerializerOptions Options = new JsonSerializerOptions() { IncludeFields = true };
-
         public string Type;
         public string Param1;
         public string Param2;

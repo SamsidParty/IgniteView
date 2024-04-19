@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -65,17 +66,17 @@ namespace WebFramework
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)){
                 if (options is FolderPickerOptions) {
-                    var ptr = MacHelper.OpenFolder(options.AllowMultiSelection);
+                    var ptr = MacHelperLoader.Current.OpenFolder(options.AllowMultiSelection);
                     
                     //Read Pointer Until It's Different
-                    while (Marshal.PtrToStringUTF8(ptr) == "nr") // Short For Not Returned
+                    while (StringFromNativeUtf8(ptr) == "nr") // Short For Not Returned
                     {
                         await Task.Delay(1);
                     }
 
-                    r = Marshal.PtrToStringUTF8(ptr).Split(":", StringSplitOptions.RemoveEmptyEntries);
+                    r = ((string)StringFromNativeUtf8(ptr)).Split(':').Where(f => f.Length > 0).ToArray();
 
-                    MacHelper.FreePointer(ptr); // We Don't Want Any Memory Leaks
+                    MacHelperLoader.Current.FreePointer(ptr); // We Don't Want Any Memory Leaks
                 }
                 else {
 
@@ -89,17 +90,17 @@ namespace WebFramework
                         extSplit += options.AllowedFileTypes[i];
                     }
 
-                    var ptr = MacHelper.OpenFile(options.AllowMultiSelection, extSplit.ToLower());
+                    var ptr = MacHelperLoader.Current.OpenFile(options.AllowMultiSelection, extSplit.ToLower());
                     
                     //Read Pointer Until It's Different
-                    while (Marshal.PtrToStringUTF8(ptr) == "nr") // Short For Not Returned
+                    while (StringFromNativeUtf8(ptr) == "nr") // Short For Not Returned
                     {
                         await Task.Delay(1);
                     }
 
-                    r = Marshal.PtrToStringUTF8(ptr).Split(":", StringSplitOptions.RemoveEmptyEntries);
+                    r = ((string)StringFromNativeUtf8(ptr)).Split(':').Where(f => f.Length > 0).ToArray(); ;
 
-                    MacHelper.FreePointer(ptr); // We Don't Want Any Memory Leaks
+                    MacHelperLoader.Current.FreePointer(ptr); // We Don't Want Any Memory Leaks
                 }
             }
             else {
@@ -214,21 +215,21 @@ namespace WebFramework
                 r = await Task.Run(() => Win_OpenFileSaver(ctx, fileExtension));
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
-                var ptr = MacHelper.SaveFile(fileExtension);
+                var ptr = MacHelperLoader.Current.SaveFile(fileExtension);
                 
                 //Read Pointer Until It's Different
-                while (Marshal.PtrToStringUTF8(ptr) == "nr") // Short For Not Returned
+                while (StringFromNativeUtf8(ptr) == "nr") // Short For Not Returned
                 {
                     await Task.Delay(1);
                 }
 
-                r = Marshal.PtrToStringUTF8(ptr);
+                r = StringFromNativeUtf8(ptr);
 
                 if (r == "null"){
                     r = null;
                 }
 
-                MacHelper.FreePointer(ptr); // We Don't Want Any Memory Leaks
+                MacHelperLoader.Current.FreePointer(ptr); // We Don't Want Any Memory Leaks
             }
             else {
                 r = await GTKFilePicker.Save(ctx, fileExtension);
@@ -237,6 +238,16 @@ namespace WebFramework
 
             IsOpen = false;
             return r;
+        }
+
+        // https://stackoverflow.com/a/10773988/18071273
+        public static string StringFromNativeUtf8(IntPtr nativeUtf8)
+        {
+            int len = 0;
+            while (Marshal.ReadByte(nativeUtf8, len) != 0) ++len;
+            byte[] buffer = new byte[len];
+            Marshal.Copy(nativeUtf8, buffer, 0, buffer.Length);
+            return Encoding.UTF8.GetString(buffer);
         }
 
         static async Task<string> Win_OpenFileSaver(DOM ctx, string fileExtension)
@@ -335,7 +346,7 @@ namespace WebFramework
                 await Task.Delay(1);
             }
 
-            return JSEvent.PendingFunctions[FnID].Split(":", StringSplitOptions.RemoveEmptyEntries);
+            return JSEvent.PendingFunctions[FnID].Split(':').Where(f => f.Length > 0).ToArray();
         }
 
 
