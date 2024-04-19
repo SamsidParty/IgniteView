@@ -24,6 +24,8 @@ namespace WebFramework
             Options = op;
             Options.Apply();
 
+            Logger.LogInfo("Creating Main Window");
+
             MainWindow = new PTWebWindow();
             OpenWindows.Add(MainWindow);
             await MainWindow.Init();

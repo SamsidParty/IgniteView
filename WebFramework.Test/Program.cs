@@ -13,7 +13,6 @@ public class Program
     public static void Main(string[] args)
     {
         AppManager.Validate(args); // Required Or Crash
-
         App();
     }
 

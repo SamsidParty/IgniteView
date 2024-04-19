@@ -12,6 +12,7 @@ using System.Linq;
 using System.Xml;
 using System.Runtime.InteropServices;
 using WebFramework.Backend;
+using System.Net.NetworkInformation;
 
 namespace WebFramework
 {
@@ -199,18 +200,31 @@ namespace WebFramework
             Initialize(path, port);
         }
 
+        //https://stackoverflow.com/a/53936819/18071273
+
+        static bool IsFree(int port)
+        {
+            IPGlobalProperties properties = IPGlobalProperties.GetIPGlobalProperties();
+            IPEndPoint[] listeners = properties.GetActiveTcpListeners();
+            int[] openPorts = listeners.Select(item => item.Port).ToArray<int>();
+            return openPorts.All(openPort => openPort != port);
+        }
+
+        //Find An Empty Port Recursively
         static int EmptyPort()
         {
             try
             {
-                TcpListener listener = new TcpListener(IPAddress.Loopback, 0);
-                listener.Start();
-                int port = ((IPEndPoint)listener.LocalEndpoint).Port;
-                listener.Stop();
+                var port = Random.Shared.Next(2048, 65500);
 
                 if (port < 10081) // Chrome Doesn't Like Some Ports (ERR_UNSAFE_PORT)
                 {
-                    throw new Exception("ERR_UNSAFE_PORT");
+                    throw new Exception("Unsafe Port");
+                }
+
+                if (!IsFree(port))
+                {
+                    throw new Exception("Port In Use");
                 }
                 return port;
             }

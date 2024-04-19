@@ -23,20 +23,11 @@ namespace WebFramework
             HTTPPort = NextFreePort();
             SimpleHttpServer.StartHttpServerOnThread(AppManager.Location, port: HTTPPort);
 
-            while (!SimpleHttpServer.Started) { Thread.Sleep(1); }
-
-            Thread.Sleep(1);
+            while (!SimpleHttpServer.Started) { Thread.Sleep(25); }
+            Thread.Sleep(25);
         }
 
 
-
-        static bool IsFree(int port)
-        {
-            IPGlobalProperties properties = IPGlobalProperties.GetIPGlobalProperties();
-            IPEndPoint[] listeners = properties.GetActiveTcpListeners();
-            int[] openPorts = listeners.Select(item => item.Port).ToArray<int>();
-            return openPorts.All(openPort => openPort != port);
-        }
 
         public static int NextFreePort(int port = 0)
         {
