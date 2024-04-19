@@ -1,0 +1,292 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A6401D142BD25295003D3852 /* Photino.Mac.UiDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A6401D072BD2528A003D3852 /* Photino.Mac.UiDelegate.h */; };
+		A6401D162BD25295003D3852 /* Photino.Mac.UiDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A6401D092BD2528A003D3852 /* Photino.Mac.UiDelegate.mm */; };
+		A6401D172BD25295003D3852 /* Photino.Mac.NavigationDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A6401D0A2BD2528A003D3852 /* Photino.Mac.NavigationDelegate.mm */; };
+		A6401D182BD25295003D3852 /* Photino.Mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = A6401D0B2BD2528A003D3852 /* Photino.Mac.mm */; };
+		A6401D192BD25295003D3852 /* Photino.Mac.NSWindowBorderless.mm in Sources */ = {isa = PBXBuildFile; fileRef = A6401D0C2BD2528C003D3852 /* Photino.Mac.NSWindowBorderless.mm */; };
+		A6401D1A2BD25295003D3852 /* Photino.Mac.UrlSchemeHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A6401D0D2BD2528C003D3852 /* Photino.Mac.UrlSchemeHandler.h */; };
+		A6401D1B2BD25295003D3852 /* Photino.Mac.NSWindowBorderless.h in Headers */ = {isa = PBXBuildFile; fileRef = A6401D0E2BD2528C003D3852 /* Photino.Mac.NSWindowBorderless.h */; };
+		A6401D1C2BD25295003D3852 /* Photino.Mac.AppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A6401D0F2BD25290003D3852 /* Photino.Mac.AppDelegate.h */; };
+		A6401D1D2BD25295003D3852 /* Photino.Mac.Dialog.mm in Sources */ = {isa = PBXBuildFile; fileRef = A6401D102BD25290003D3852 /* Photino.Mac.Dialog.mm */; };
+		A6401D1E2BD25295003D3852 /* Photino.Mac.AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A6401D112BD25295003D3852 /* Photino.Mac.AppDelegate.mm */; };
+		A6401D1F2BD25295003D3852 /* Photino.Mac.UrlSchemeHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = A6401D122BD25295003D3852 /* Photino.Mac.UrlSchemeHandler.mm */; };
+		A6401D202BD25295003D3852 /* Photino.Mac.NavigationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A6401D132BD25295003D3852 /* Photino.Mac.NavigationDelegate.h */; };
+		A6401D222BD2551F003D3852 /* Photino.h in Headers */ = {isa = PBXBuildFile; fileRef = A6401D212BD2551F003D3852 /* Photino.h */; };
+		A6401D252BD2583E003D3852 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6401D242BD2583E003D3852 /* Cocoa.framework */; };
+		A6401D272BD25869003D3852 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6401D262BD25869003D3852 /* UserNotifications.framework */; };
+		A6401D292BD25874003D3852 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6401D282BD25874003D3852 /* WebKit.framework */; };
+		A6401D2D2BD258BB003D3852 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6401D2C2BD258BB003D3852 /* Security.framework */; };
+		A6401D2F2BD25CF5003D3852 /* Photino.Dialog.h in Headers */ = {isa = PBXBuildFile; fileRef = A6401D2E2BD25CF5003D3852 /* Photino.Dialog.h */; };
+		A6401D312BD25D11003D3852 /* json.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A6401D302BD25D11003D3852 /* json.hpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A6401CFB2BD251D8003D3852 /* libPhotinoNative.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libPhotinoNative.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		A6401D072BD2528A003D3852 /* Photino.Mac.UiDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photino.Mac.UiDelegate.h; sourceTree = "<group>"; };
+		A6401D082BD2528A003D3852 /* Exports.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = Exports.cpp; sourceTree = "<group>"; };
+		A6401D092BD2528A003D3852 /* Photino.Mac.UiDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Photino.Mac.UiDelegate.mm; sourceTree = "<group>"; };
+		A6401D0A2BD2528A003D3852 /* Photino.Mac.NavigationDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Photino.Mac.NavigationDelegate.mm; sourceTree = "<group>"; };
+		A6401D0B2BD2528A003D3852 /* Photino.Mac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Photino.Mac.mm; sourceTree = "<group>"; };
+		A6401D0C2BD2528C003D3852 /* Photino.Mac.NSWindowBorderless.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Photino.Mac.NSWindowBorderless.mm; sourceTree = "<group>"; };
+		A6401D0D2BD2528C003D3852 /* Photino.Mac.UrlSchemeHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photino.Mac.UrlSchemeHandler.h; sourceTree = "<group>"; };
+		A6401D0E2BD2528C003D3852 /* Photino.Mac.NSWindowBorderless.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photino.Mac.NSWindowBorderless.h; sourceTree = "<group>"; };
+		A6401D0F2BD25290003D3852 /* Photino.Mac.AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photino.Mac.AppDelegate.h; sourceTree = "<group>"; };
+		A6401D102BD25290003D3852 /* Photino.Mac.Dialog.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Photino.Mac.Dialog.mm; sourceTree = "<group>"; };
+		A6401D112BD25295003D3852 /* Photino.Mac.AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Photino.Mac.AppDelegate.mm; sourceTree = "<group>"; };
+		A6401D122BD25295003D3852 /* Photino.Mac.UrlSchemeHandler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Photino.Mac.UrlSchemeHandler.mm; sourceTree = "<group>"; };
+		A6401D132BD25295003D3852 /* Photino.Mac.NavigationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photino.Mac.NavigationDelegate.h; sourceTree = "<group>"; };
+		A6401D212BD2551F003D3852 /* Photino.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photino.h; sourceTree = "<group>"; };
+		A6401D242BD2583E003D3852 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		A6401D262BD25869003D3852 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		A6401D282BD25874003D3852 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		A6401D2A2BD2588C003D3852 /* ExceptionHandling.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExceptionHandling.framework; path = System/Library/Frameworks/ExceptionHandling.framework; sourceTree = SDKROOT; };
+		A6401D2C2BD258BB003D3852 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		A6401D2E2BD25CF5003D3852 /* Photino.Dialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photino.Dialog.h; sourceTree = "<group>"; };
+		A6401D302BD25D11003D3852 /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json.hpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A6401CF92BD251D8003D3852 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A6401D2D2BD258BB003D3852 /* Security.framework in Frameworks */,
+				A6401D292BD25874003D3852 /* WebKit.framework in Frameworks */,
+				A6401D272BD25869003D3852 /* UserNotifications.framework in Frameworks */,
+				A6401D252BD2583E003D3852 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A6401CF22BD251D8003D3852 = {
+			isa = PBXGroup;
+			children = (
+				A6401D302BD25D11003D3852 /* json.hpp */,
+				A6401D2E2BD25CF5003D3852 /* Photino.Dialog.h */,
+				A6401D212BD2551F003D3852 /* Photino.h */,
+				A6401D082BD2528A003D3852 /* Exports.cpp */,
+				A6401D0F2BD25290003D3852 /* Photino.Mac.AppDelegate.h */,
+				A6401D112BD25295003D3852 /* Photino.Mac.AppDelegate.mm */,
+				A6401D102BD25290003D3852 /* Photino.Mac.Dialog.mm */,
+				A6401D0B2BD2528A003D3852 /* Photino.Mac.mm */,
+				A6401D132BD25295003D3852 /* Photino.Mac.NavigationDelegate.h */,
+				A6401D0A2BD2528A003D3852 /* Photino.Mac.NavigationDelegate.mm */,
+				A6401D0E2BD2528C003D3852 /* Photino.Mac.NSWindowBorderless.h */,
+				A6401D0C2BD2528C003D3852 /* Photino.Mac.NSWindowBorderless.mm */,
+				A6401D072BD2528A003D3852 /* Photino.Mac.UiDelegate.h */,
+				A6401D092BD2528A003D3852 /* Photino.Mac.UiDelegate.mm */,
+				A6401D0D2BD2528C003D3852 /* Photino.Mac.UrlSchemeHandler.h */,
+				A6401D122BD25295003D3852 /* Photino.Mac.UrlSchemeHandler.mm */,
+				A6401CFC2BD251D8003D3852 /* Products */,
+				A6401D232BD2583E003D3852 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		A6401CFC2BD251D8003D3852 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A6401CFB2BD251D8003D3852 /* libPhotinoNative.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A6401D232BD2583E003D3852 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A6401D2C2BD258BB003D3852 /* Security.framework */,
+				A6401D2A2BD2588C003D3852 /* ExceptionHandling.framework */,
+				A6401D282BD25874003D3852 /* WebKit.framework */,
+				A6401D262BD25869003D3852 /* UserNotifications.framework */,
+				A6401D242BD2583E003D3852 /* Cocoa.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		A6401CF72BD251D8003D3852 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A6401D312BD25D11003D3852 /* json.hpp in Headers */,
+				A6401D222BD2551F003D3852 /* Photino.h in Headers */,
+				A6401D1B2BD25295003D3852 /* Photino.Mac.NSWindowBorderless.h in Headers */,
+				A6401D1C2BD25295003D3852 /* Photino.Mac.AppDelegate.h in Headers */,
+				A6401D1A2BD25295003D3852 /* Photino.Mac.UrlSchemeHandler.h in Headers */,
+				A6401D142BD25295003D3852 /* Photino.Mac.UiDelegate.h in Headers */,
+				A6401D202BD25295003D3852 /* Photino.Mac.NavigationDelegate.h in Headers */,
+				A6401D2F2BD25CF5003D3852 /* Photino.Dialog.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		A6401CFA2BD251D8003D3852 /* PhotinoNative */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A6401D042BD251D8003D3852 /* Build configuration list for PBXNativeTarget "PhotinoNative" */;
+			buildPhases = (
+				A6401CF72BD251D8003D3852 /* Headers */,
+				A6401CF82BD251D8003D3852 /* Sources */,
+				A6401CF92BD251D8003D3852 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PhotinoNative;
+			productName = PhotinoNative;
+			productReference = A6401CFB2BD251D8003D3852 /* libPhotinoNative.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A6401CF32BD251D8003D3852 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1530;
+				TargetAttributes = {
+					A6401CFA2BD251D8003D3852 = {
+						CreatedOnToolsVersion = 15.3;
+					};
+				};
+			};
+			buildConfigurationList = A6401CF62BD251D8003D3852 /* Build configuration list for PBXProject "PhotinoNative" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A6401CF22BD251D8003D3852;
+			productRefGroup = A6401CFC2BD251D8003D3852 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A6401CFA2BD251D8003D3852 /* PhotinoNative */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A6401CF82BD251D8003D3852 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A6401D192BD25295003D3852 /* Photino.Mac.NSWindowBorderless.mm in Sources */,
+				A6401D172BD25295003D3852 /* Photino.Mac.NavigationDelegate.mm in Sources */,
+				A6401D162BD25295003D3852 /* Photino.Mac.UiDelegate.mm in Sources */,
+				A6401D1F2BD25295003D3852 /* Photino.Mac.UrlSchemeHandler.mm in Sources */,
+				A6401D1E2BD25295003D3852 /* Photino.Mac.AppDelegate.mm in Sources */,
+				A6401D1D2BD25295003D3852 /* Photino.Mac.Dialog.mm in Sources */,
+				A6401D182BD25295003D3852 /* Photino.Mac.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A6401D032BD251D8003D3852 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		A6401D062BD251D8003D3852 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A6401CF62BD251D8003D3852 /* Build configuration list for PBXProject "PhotinoNative" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A6401D032BD251D8003D3852 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A6401D042BD251D8003D3852 /* Build configuration list for PBXNativeTarget "PhotinoNative" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A6401D062BD251D8003D3852 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A6401CF32BD251D8003D3852 /* Project object */;
+}

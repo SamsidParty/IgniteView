@@ -24,7 +24,7 @@ public class Program
         var gtkPath = "/usr/local/Cellar/gtk+3/3.24.37";
         Environment.SetEnvironmentVariable ("Path", $"{gtkPath};{systemPath}");
         
-        //DevTools.Enable();
+        DevTools.Enable();
         //DevTools.HotReload("C:\\Users\\SamarthCat\\Documents\\Programming Stuff\\WebFramework\\WebFramework.Test\\WWW");
 
         //Change Color Based On Theme (light, dark)

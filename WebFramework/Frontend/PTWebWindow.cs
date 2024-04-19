@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using WebFramework.Backend;
 
 namespace WebFramework
 {
@@ -23,6 +24,7 @@ namespace WebFramework
             Native = new PhotinoWindow();
             Native.UseOsDefaultSize = false;
             Native.SetLogVerbosity(0);
+            Native.Chromeless = true;
             Native.Title = "";
             if (File.Exists(WindowManager.Options.IconPath)) { Native.SetIconFile(WindowManager.Options.IconPath); }
             Native.RegisterCustomSchemeHandler("fs", (object sender, string scheme, string url, out string contentType) => {
@@ -63,6 +65,8 @@ namespace WebFramework
 
         void Update(PhotinoWindow w)
         {
+            Logger.LogError("jofa: " + Native.Maximized.ToString());
+            Logger.LogError("mofa: " + Native.FullScreen.ToString());
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 var hwnd = w.WindowHandle;
@@ -70,7 +74,7 @@ namespace WebFramework
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
                 MacHelper.Init();
-                MacHelper.UpdateIcon(WindowManager.Options.IconPath);
+                MacHelper.OnIconChanged(WindowManager.Options.IconPath);
             }
         }
 

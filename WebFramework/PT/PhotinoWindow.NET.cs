@@ -2541,7 +2541,6 @@ public partial class PhotinoWindow
     /// <param name="message">Log message</param>
     private void Log(string message)
     {
-        if (LogVerbosity < 1) return;
         Logger.LogInfo($"[PHOTINO] \"{Title ?? "PhotinoWindow"}\"{message}");
     }
 

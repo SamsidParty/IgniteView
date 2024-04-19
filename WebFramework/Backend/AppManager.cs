@@ -100,6 +100,7 @@ namespace WebFramework
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                 {
+                    Logger.LogInfo("Loading Lib From " + Path.Combine(runtimePath, "osx" + suffix, "native", libraryName + ".dylib"));
                     libHandle = NativeLibrary.Load(Path.Combine(runtimePath, "osx" + suffix, "native", libraryName + ".dylib"));
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))

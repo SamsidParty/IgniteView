@@ -262,7 +262,7 @@ namespace WebFramework
                 }
                 catch (Exception ex)
                 {
-
+                    Logger.LogError(ex.ToString());
                 }
             }
         }
@@ -294,11 +294,6 @@ namespace WebFramework
                         break;
                     }
                 }
-            }
-
-            if (filename == "upload.bin")
-            {
-
             }
 
             filename = Path.Combine(_rootDirectory, filename);

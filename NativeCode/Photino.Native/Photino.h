@@ -21,6 +21,7 @@ typedef char *AutoString;
 #include <Security/SecTrust.h>
 #endif
 
+
 #ifdef __linux__
 #include <gtk/gtk.h>
 #include <webkit2/webkit2.h>
