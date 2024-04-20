@@ -52,7 +52,7 @@ namespace WebFramework.PT
             {
                 Native.SetSize(new System.Drawing.Size(WindowManager.Options.StartWidthHeight.Width, WindowManager.Options.StartWidthHeight.Height));
                 Native.SetResizable(!WindowManager.Options.LockWidthHeight);
-                Native.Load("http://localhost:" + Server.HTTPPort + "/index.html");
+                Native.Load(AppManager.GetMainURL());
                 Native.WaitForClose();
                 Process.GetCurrentProcess().Kill();
             }

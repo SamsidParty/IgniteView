@@ -19,7 +19,7 @@ namespace WebFramework.UWP
         {
             await base.Init();
 
-            WebFrameworkPage.Instance.WebView.Source = new Uri("http://localhost:" + Server.HTTPPort + "/index.html");
+            WebFrameworkPage.Instance.WebView.Source = new Uri(AppManager.GetMainURL());
             WebFrameworkPage.Instance.WebView.CoreWebView2Initialized += WebView_CoreWebView2Initialized;
 
             if (!WindowManager.Options.NativeGamepadSupport)

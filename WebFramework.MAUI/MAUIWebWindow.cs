@@ -8,7 +8,7 @@ namespace WebFramework.MAUI
         {
             await base.Init();
             var src = new UrlWebViewSource();
-            src.Url = "http://localhost:" + Server.HTTPPort + "/index.html";
+            src.Url = AppManager.GetMainURL();
             WebFrameworkPage.Instance.Source = src;
         }
 

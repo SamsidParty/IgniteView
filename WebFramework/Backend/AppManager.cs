@@ -75,6 +75,22 @@ namespace WebFramework
             IsValid = true;
         }
 
+        /// <summary>
+        /// Called By Platform Providers To Get The URL To Display
+        /// </summary>
+        /// <returns></returns>
+        public static string GetMainURL()
+        {
+            if (!String.IsNullOrEmpty(DevTools.OverridenURL))
+            {
+                return DevTools.OverridenURL;
+            }
+            else
+            {
+                return "http://localhost:" + Server.HTTPPort + "/index.html";
+            }
+        }
+
         public static async Task Start(string location, Func<WebWindow, Task> onReady)
         {
             Logger.LogInfo("Starting Application In " + location);
