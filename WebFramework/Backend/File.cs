@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,7 +18,18 @@ namespace WebFramework
             return Encoding.UTF8.GetString(await ReadAllBytes(file));
         }
 
+
         //Virtual Methods
+
+        public virtual async Task<string[]> EnumFiles(string folder)
+        {
+            return Directory.GetFiles(folder);
+        }
+
+        public virtual async Task<string> GetAppdataDirectory()
+        {
+            return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        }
 
         public virtual async Task WriteAllBytes(string file, byte[] bytes)
         {

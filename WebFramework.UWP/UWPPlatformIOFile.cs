@@ -13,6 +13,25 @@ namespace WebFramework.UWP
 {
     public class UWPPlatformIOFile : SharedIOFile
     {
+        public override async Task<string[]> EnumFiles(string folder)
+        {
+            var storageFolder = await StorageFolder.GetFolderFromPathAsync(folder);
+            var files = await storageFolder.GetFilesAsync();
+            var fileList = new List<string>();
+
+            foreach (var file in files)
+            {
+                fileList.Add(file.Path);
+            }
+
+            return fileList.ToArray();
+        }
+
+        public override async Task<string> GetAppdataDirectory()
+        {
+            return ApplicationData.Current.LocalFolder.Path;
+        }
+
         public override async Task<byte[]> ReadAllBytes(string file)
         {
             try
