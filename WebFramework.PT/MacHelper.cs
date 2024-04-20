@@ -52,12 +52,12 @@ namespace WebFramework.PT
             var ptr = SaveFile(fileExtension);
 
             //Read Pointer Until It's Different
-            while (FilePicker.StringFromNativeUtf8(ptr) == "nr") // Short For Not Returned
+            while (StringFromNativeUtf8(ptr) == "nr") // Short For Not Returned
             {
                 await Task.Delay(1);
             }
 
-            r = FilePicker.StringFromNativeUtf8(ptr);
+            r = StringFromNativeUtf8(ptr);
 
             if (r == "null")
             {
@@ -77,12 +77,12 @@ namespace WebFramework.PT
                 var ptr = OpenFolder(options.AllowMultiSelection);
 
                 //Read Pointer Until It's Different
-                while (FilePicker.StringFromNativeUtf8(ptr) == "nr") // Short For Not Returned
+                while (StringFromNativeUtf8(ptr) == "nr") // Short For Not Returned
                 {
                     await Task.Delay(1);
                 }
 
-                r = (FilePicker.StringFromNativeUtf8(ptr)).Split(':').Where(f => f.Length > 0).ToArray();
+                r = (StringFromNativeUtf8(ptr)).Split(':').Where(f => f.Length > 0).ToArray();
 
                 FreePointer(ptr); // We Don't Want Any Memory Leaks
             }
@@ -103,12 +103,12 @@ namespace WebFramework.PT
                 var ptr = OpenFile(options.AllowMultiSelection, extSplit.ToLower());
 
                 //Read Pointer Until It's Different
-                while (FilePicker.StringFromNativeUtf8(ptr) == "nr") // Short For Not Returned
+                while (StringFromNativeUtf8(ptr) == "nr") // Short For Not Returned
                 {
                     await Task.Delay(1);
                 }
 
-                r = (FilePicker.StringFromNativeUtf8(ptr)).Split(':').Where(f => f.Length > 0).ToArray(); ;
+                r = (StringFromNativeUtf8(ptr)).Split(':').Where(f => f.Length > 0).ToArray(); ;
 
                FreePointer(ptr); // We Don't Want Any Memory Leaks
             }
@@ -141,6 +141,16 @@ namespace WebFramework.PT
         public void OnLoad()
         {
             Logger.LogInfo("MacHelper Is Loaded And Active");
+        }
+
+        // https://stackoverflow.com/a/10773988/18071273
+        public static string StringFromNativeUtf8(IntPtr nativeUtf8)
+        {
+            int len = 0;
+            while (Marshal.ReadByte(nativeUtf8, len) != 0) ++len;
+            byte[] buffer = new byte[len];
+            Marshal.Copy(nativeUtf8, buffer, 0, buffer.Length);
+            return Encoding.UTF8.GetString(buffer);
         }
     }
 }

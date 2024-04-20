@@ -22,7 +22,7 @@ namespace WebFramework.Test
             var file = await FilePicker.OpenFilePicker(WindowManager.MainWindow.Document, new FilePickerOptions());
             if (file.Length > 0)
             {
-                await SharedIO.File.Delete(file[0]);
+                Logger.LogInfo(await SharedIO.File.ReadAllText(file[0]));
             }
         }
 

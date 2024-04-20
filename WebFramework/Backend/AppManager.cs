@@ -51,13 +51,17 @@ namespace WebFramework
         public static void Validate(string[] args)
         {
 
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.isWindowsPT) 
+            {
+                WinHelperLoader.FindAndLoad();
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.isUWP)
+            {
+                UWPHelperLoader.FindAndLoad();
+            }
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 MacHelperLoader.FindAndLoad(); // Load MacHelper From WebFramework.PT
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.isUWP) // Simple Way Of Checking If We Are Win32 Or UWP
-            {
-                UWPHelperLoader.FindAndLoad();
             }
             else if (Platform.isMAUI)
             {
