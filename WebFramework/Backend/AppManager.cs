@@ -60,6 +60,10 @@ namespace WebFramework
             {
                 UWPHelperLoader.FindAndLoad();
             }
+            else if (Platform.isMAUI)
+            {
+                MAUIHelperLoader.FindAndLoad();
+            }
 
             if (ExecFunction.IsExecFunctionCommand(args))
             {

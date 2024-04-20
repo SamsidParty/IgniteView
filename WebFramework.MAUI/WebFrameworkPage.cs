@@ -8,7 +8,5 @@ public class WebFrameworkPage : ContentPage
 	{
 		Instance = new WebView();
         Content = Instance;
-
-
     }
 }

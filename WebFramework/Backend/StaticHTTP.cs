@@ -13,6 +13,8 @@ using System.Xml;
 using System.Runtime.InteropServices;
 using WebFramework.Backend;
 using System.Net.NetworkInformation;
+using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace WebFramework
 {
@@ -288,17 +290,16 @@ namespace WebFramework
         /// Process an individual request. Handles only static file based requests
         /// </summary>
         /// <param name="context"></param>
-        private void Process(HttpListenerContext context)
+        private async Task Process(HttpListenerContext context)
         {
+            Logger.LogInfo("Received HTTP Request At: " + context.Request.Url);
+
             string filename = context.Request.Url.AbsolutePath;
+            string rawFilename = context.Request.Url.AbsolutePath;
 
-
-            if (RequestHandler != null)
-            {
-
-            }
 
             filename = filename.Substring(1);
+            rawFilename = rawFilename.Substring(1);
 
             if (string.IsNullOrEmpty(filename))
             {
@@ -307,6 +308,7 @@ namespace WebFramework
                     if (File.Exists(Path.Combine(_rootDirectory, indexFile)))
                     {
                         filename = indexFile;
+                        rawFilename = indexFile;
                         break;
                     }
                 }
@@ -314,7 +316,15 @@ namespace WebFramework
 
             filename = Path.Combine(_rootDirectory, filename);
 
-            if (File.Exists(filename))
+            var mauiFileExists = false;
+            if (Platform.isMAUI)
+            {
+                var fs = MAUIHelperLoader.Current.GetFileSystem();
+                mauiFileExists = await fs.AppPackageFileExistsAsync(Path.Combine("WWW", rawFilename));
+            }
+
+
+            if (File.Exists(filename) || mauiFileExists)
             {
                 try
                 {
@@ -335,7 +345,15 @@ namespace WebFramework
                             injection = WindowManager.MainWindow.OverrideLib(injection);
                         }
 
-                        var output = injection + File.ReadAllText(filename);
+                        var output = injection + (!Platform.isMAUI ? File.ReadAllText(filename) : "");
+                        if (Platform.isMAUI)
+                        {
+                            //MAUI Needs It's Own File Protocol
+                            var fs = MAUIHelperLoader.Current.GetFileSystem();
+                            Stream fileStream = await fs.OpenAppPackageFileAsync(Path.Combine("WWW", rawFilename));
+                            StreamReader reader = new StreamReader(fileStream);
+                            output += reader.ReadToEnd();
+                        }
 
                         //Inject Requested Inline Files
                         var pFrom = output.IndexOf("<inlines>") + "<inlines>".Length;
@@ -376,13 +394,27 @@ namespace WebFramework
                     }
                     else
                     {
-                        input = new FileStream(filename, FileMode.Open, FileAccess.Read);
+                        if (Platform.isMAUI)
+                        {
+                            //MAUI Needs It's Own File Protocol
+                            var fs = MAUIHelperLoader.Current.GetFileSystem();
+                            input = await fs.OpenAppPackageFileAsync(Path.Combine("WWW", rawFilename));
+                        }
+                        else
+                        {
+                            input = new FileStream(filename, FileMode.Open, FileAccess.Read);
+                        }
+
                     }
 
 
 
                     //Adding permanent http response headers
-                    context.Response.ContentLength64 = input.Length;
+                    if (input.CanSeek)
+                    {
+                        context.Response.ContentLength64 = input.Length;
+                    }
+
                     context.Response.AddHeader("Date", DateTime.Now.ToString("r"));
                     context.Response.AddHeader("Last-Modified", File.GetLastWriteTime(filename).ToString("r"));
 
@@ -404,6 +436,7 @@ namespace WebFramework
             }
             else
             {
+                Logger.LogError("File Not Found: " +  filename);
                 context.Response.StatusCode = (int)HttpStatusCode.NotFound;
             }
 

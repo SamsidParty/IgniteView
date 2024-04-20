@@ -11,5 +11,12 @@ namespace WebFramework.MAUI
             src.Url = "http://localhost:" + Server.HTTPPort + "/index.html";
             WebFrameworkPage.Instance.Source = src;
         }
+
+        public override async Task ExecuteJavascript(string js)
+        {
+            WebFrameworkPage.Instance.Eval(js);
+        }
+
+
     }
 }

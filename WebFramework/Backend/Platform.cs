@@ -24,6 +24,14 @@ namespace WebFramework
             }
         }
 
+        public static bool isMAUI
+        {
+            get
+            {
+                return (Type.GetType("WebFramework.MAUI.MAUIHelper, WebFramework.MAUI") != null);
+            }
+        }
+
         public static OperatingMode GetOperatingMode()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
