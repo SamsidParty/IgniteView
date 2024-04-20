@@ -31,7 +31,7 @@ public class IVApplication
         {
             TitlebarColor = TitlebarColor,
             StartWidthHeight = new Rectangle(0, 0, 1280, 720),
-            NativeGamepadSupport = true
+            NativeGamepadSupport = false
         };
 
 

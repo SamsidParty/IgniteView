@@ -13,17 +13,12 @@ namespace WebFramework.Test
     {
         public override async Task DOMContentLoaded()
         {
-            var button = await Document.QuerySelector("#fileopen");
 
-            button.AddEventListener("click", async (e) =>
-            {
-                var f = await FilePicker.OpenFilePicker(Document, new FilePickerOptions() { AllowMultiSelection = true, AllowedFileTypes = FileType.AllFiles });
-            });
         }
 
         public static void OpenFilePicker()
         {
-            FilePicker.OpenFileSaver(WindowManager.MainWindow.Document, "exe");
+            FilePicker.OpenFolderPicker(WindowManager.MainWindow.Document);
         }
     }
 }

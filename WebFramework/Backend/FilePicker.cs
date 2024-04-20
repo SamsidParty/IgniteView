@@ -63,9 +63,13 @@ namespace WebFramework
 
             string[] r = new string[0];
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.isWindowsPT)
             {
                 r = await Task.Run(() => Win_OpenFilePicker(ctx, options)); // Runs On Another Thread To Prevent Blockage
+            }
+            else if (Platform.isUWP)
+            {
+                r = await UWPHelperLoader.Current.OpenFilePicker(options);
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)){
                 r = await MacHelperLoader.Current.OpenFilePicker(options);
@@ -165,11 +169,16 @@ namespace WebFramework
         }
 
         ///<summary>
-        ///Prompts The User To Select Folder(s), Returns An Array Of Selected Folder(s), Returns An Empty Array If Cancelled By User
+        ///Prompts The User To Select A Folder, Returns An Empty String If Cancelled By User
         ///</summary>
-        public static async Task<string[]> OpenFolderPicker(DOM ctx, FolderPickerOptions options)
+        public static async Task<string> OpenFolderPicker(DOM ctx)
         {
-            return await OpenFilePicker(ctx, options);
+            var picked = await OpenFilePicker(ctx, new FolderPickerOptions() { AllowMultiSelection = false });
+            if (picked.Length > 0)
+            {
+                return picked[0];
+            }
+            return "";
         }
 
         ///<summary>
