@@ -407,6 +407,7 @@ namespace WebFramework
 
                 context.Response.StatusCode = (int)HttpStatusCode.OK;
                 await stream.CopyToAsync(context.Response.OutputStream);
+                context.Response.OutputStream.Close();
             }
             else
             {
