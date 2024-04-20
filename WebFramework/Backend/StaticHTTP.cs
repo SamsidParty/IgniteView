@@ -276,13 +276,34 @@ namespace WebFramework
                 try
                 {
                     HttpListenerContext context = _listener.GetContext();
-                    Process(context);
+
+                    //Get Requests Are Handled By The Static HTTP Server
+                    if (context.Request.HttpMethod == "GET")
+                    {
+                        Process(context);
+                    }
+                    //Post Requests Are Passed Through For JS-Interop
+                    else if (context.Request.HttpMethod == "POST")
+                    {
+                        ProcessJSI(context);
+                    }
+
                 }
                 catch (Exception ex)
                 {
                     Logger.LogError(ex.ToString());
                 }
             }
+        }
+
+        private async Task ProcessJSI(HttpListenerContext context)
+        {
+            var reader = new StreamReader(context.Request.InputStream);
+            var jsiData = reader.ReadToEnd();
+            MSGHandler.OnMessage(jsiData, WindowManager.MainWindow);
+
+            context.Response.StatusCode = (int)HttpStatusCode.OK;
+            context.Response.OutputStream.Close();
         }
 
 
@@ -320,7 +341,12 @@ namespace WebFramework
             if (Platform.isMAUI)
             {
                 var fs = MAUIHelperLoader.Current.GetFileSystem();
-                mauiFileExists = await fs.AppPackageFileExistsAsync(Path.Combine("WWW", rawFilename));
+                try
+                {
+                    //Throws Exception
+                    mauiFileExists = await fs.AppPackageFileExistsAsync(Path.Combine("WWW", rawFilename));
+                }
+                catch { }
             }
 
 
@@ -337,7 +363,7 @@ namespace WebFramework
                     if (mime == "text/html")
                     {
                         //Inject Script
-                        var injection = "<script>/* Injection For Interop */\r\n window.external = window.external || { receiveMessage: () => {}, sendMessage: () => {} }; \r\n window.external.receiveMessage(message => eval.call(window, message));\r\n addEventListener(\"DOMContentLoaded\", () => { window.external.sendMessage(`{\"Type\":\"load\"}`);\r\n });</script>\r\n";
+                        var injection = "<script> /* Injection For Interop */\r\n window.external = (window.external.sendMessage != undefined) ? window.external : { receiveMessage: (e) => {}, sendMessage: (data) => { fetch(\"./jsi.dat\", { method: \"POST\", body: data }); } }; \r\n window.external.receiveMessage(message => eval.call(window, message));\r\n addEventListener(\"DOMContentLoaded\", () => { window.external.sendMessage(`{\"Type\":\"load\"}`);\r\n });</script>\r\n";
 
                         if (WindowManager.MainWindow != null)
                         {

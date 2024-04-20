@@ -61,33 +61,6 @@ namespace WebFramework.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 
-        /////This Library Helps Interop With The C# Part Of The Codebase
-        ///
-        /////A Dict Of &lt;UUID as a string, Element&gt;
-        ///var JSI_Elements = {};
-        ///JSI_Elements[&quot;body&quot;] = document.body;
-        ///JSI_Elements[&quot;head&quot;] = document.head;
-        ///JSI_Elements[&quot;root&quot;] = document.querySelector(&quot;:root&quot;);
-        ///
-        ///JSI_AddObservers();
-        ///JSI_TitleChanged(document.title);
-        ///
-        ///function JSI_Ready() {
-        ///    JSI_LoadScripts();
-        ///}
-        ///
-        ///function JSI_LoadScripts() {
-        ///    console.log(&quot;[SCRIPT LOADER] Loader Ready&quot;);
-        ///    var scripts = document.querySelectorAll(&quot;webscri [rest of string was truncated]&quot;;.
-        /// </summary>
-        public static string InteropLibrary {
-            get {
-                return ResourceManager.GetString("InteropLibrary", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         public static byte[] runtimes {

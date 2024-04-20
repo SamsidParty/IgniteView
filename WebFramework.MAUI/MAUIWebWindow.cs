@@ -14,7 +14,10 @@ namespace WebFramework.MAUI
 
         public override async Task ExecuteJavascript(string js)
         {
-            WebFrameworkPage.Instance.Eval(js);
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                WebFrameworkPage.Instance.Eval(js);
+            });
         }
 
 

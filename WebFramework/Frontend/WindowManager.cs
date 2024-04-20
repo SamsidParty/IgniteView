@@ -74,7 +74,7 @@ namespace WebFramework
         public void LoadLib()
         {
             Logger.LogInfo("Loading InteropLibrary.js Into Window");
-            ExecuteJavascript(OverrideLib(Properties.Resources.InteropLibrary));
+            ExecuteJavascript(OverrideLib(InteropLibrary.Content));
         }
 
         private void UpdateBackgroundColor()
