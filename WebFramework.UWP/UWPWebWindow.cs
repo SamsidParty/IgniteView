@@ -32,6 +32,14 @@ namespace WebFramework.UWP
         {
             WebFrameworkPage.Instance.WebView.CoreWebView2.Settings.AreDevToolsEnabled = DevTools.Enabled;
             WebFrameworkPage.Instance.WebView.CoreWebView2.WebMessageReceived += CoreWebView2_WebMessageReceived;
+            WebFrameworkPage.Instance.WebView.CoreWebView2.NavigationCompleted += CoreWebView2_NavigationCompleted;
+        }
+
+        private void CoreWebView2_NavigationCompleted(Microsoft.Web.WebView2.Core.CoreWebView2 sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs args)
+        {
+            WebFrameworkPage.Instance.WebView.Visibility = Visibility.Collapsed;
+            WebFrameworkPage.Instance.WebView.Visibility = Visibility.Visible;
+            WebFrameworkPage.Instance.WebView.Focus(FocusState.Keyboard);
         }
 
         private void CoreWebView2_WebMessageReceived(Microsoft.Web.WebView2.Core.CoreWebView2 sender, Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs args)

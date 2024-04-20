@@ -15,6 +15,7 @@ namespace WebFramework
         public static string OverridenURL = null;
 
         static FileSystemWatcher HotWatcher;
+        public static int ForcedPort = 0;
 
         public static void EnsureNotRunning()
         {
@@ -64,6 +65,13 @@ namespace WebFramework
             }
 
 
+        }
+
+        public static void ForcePort(int port)
+        {
+            EnsureNotRunning();
+            if (!Enabled) { throw new Exception("DevTools Are Not Enabled, Call DevTools.Enable() First"); }
+            ForcedPort = port;
         }
 
         private static void HotWatcher_Changed(object sender, FileSystemEventArgs e)
