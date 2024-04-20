@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WebFramework.Backend;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
+using Windows.System.Profile;
 using Windows.UI.Xaml;
 
 namespace WebFramework.UWP
@@ -15,6 +16,11 @@ namespace WebFramework.UWP
         public bool IsDark()
         {
             return Application.Current.RequestedTheme == ApplicationTheme.Dark;
+        }
+
+        public bool IsXbox()
+        {
+            return AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Xbox";
         }
 
         public async Task<string[]> OpenFilePicker(FilePickerOptions options)
