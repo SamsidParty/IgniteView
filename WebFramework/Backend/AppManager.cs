@@ -56,7 +56,7 @@ namespace WebFramework
             {
                 MacHelperLoader.FindAndLoad(); // Load MacHelper From WebFramework.PT
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.IsNotUWP) // Simple Way Of Checking If We Are Win32 Or UWP
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.isWindowsPT) // Simple Way Of Checking If We Are Win32 Or UWP
             {
                 UWPHelperLoader.FindAndLoad();
             }

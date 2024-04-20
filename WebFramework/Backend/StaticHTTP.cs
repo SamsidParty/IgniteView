@@ -15,6 +15,7 @@ using WebFramework.Backend;
 using System.Net.NetworkInformation;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace WebFramework
 {

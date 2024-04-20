@@ -20,6 +20,20 @@ namespace WebFramework.MAUI
             });
         }
 
+        public override async Task UpdateTitle(string title)
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                WebFrameworkPage.Page.Title = title;
+            });
+        }
 
+        public override async Task Close()
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                Application.Current.Quit();
+            });
+        }
     }
 }

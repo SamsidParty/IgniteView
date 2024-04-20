@@ -17,10 +17,10 @@ namespace WebFramework
 
 
         public static bool GetIsEnabled() {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.IsNotUWP) {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.isWindowsPT) {
                 return ShouldSystemUseDarkMode();
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && !Platform.IsNotUWP)
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && !Platform.isMAUI)
             {
                 //UWP
                 return UWPHelperLoader.Current.IsDark();

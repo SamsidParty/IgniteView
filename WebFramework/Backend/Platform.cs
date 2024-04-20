@@ -18,9 +18,9 @@ namespace WebFramework
     public class Platform
     {
 
-        public static bool IsNotUWP {
+        public static bool isWindowsPT {
             get {
-                return !AppDomain.CurrentDomain.BaseDirectory.Contains("WindowsApps");
+                return !AppDomain.CurrentDomain.BaseDirectory.Contains("WindowsApps") && !isMAUI;
             }
         }
 
