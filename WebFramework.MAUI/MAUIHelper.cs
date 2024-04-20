@@ -14,6 +14,11 @@ namespace WebFramework.MAUI
             return FileSystem.Current;
         }
 
+        public bool IsDark()
+        {
+            return (AppTheme)Application.Current.RequestedTheme == AppTheme.Dark;
+        }
+
         public void OnLoad()
         {
             Logger.LogInfo("Loaded MAUI Helper");

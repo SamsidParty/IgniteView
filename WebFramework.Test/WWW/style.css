@@ -52,12 +52,27 @@
     gap: 25px;
 }
 
+
 .featureCard {
     width: 100%;
     background-color: var(--col-tertiary);
     border-radius: 5px;
     padding: 15px;
     position: relative;
+}
+
+
+@media (max-aspect-ratio: 4/3) {
+    .featureCards {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: auto;
+    }
+
+    .featureCard {
+        min-height: 400px;
+    }
 }
 
 .featureCard > h2 {
@@ -85,7 +100,7 @@
     height: 50px;
     width: 100%;
     background-color: var(--col-tertiary);
-    bottom: 0;
+    margin-top: auto;
     padding-left: 15px;
     padding-right: 15px;
     gap: 15px;
@@ -102,7 +117,13 @@
     color: var(--col-primary);
 }
 
+#root {
+    min-height: 100vh;
+    overflow-y: auto;
+}
+
 body {
     margin: 0;
+    overflow-y: auto;
     background-color: var(--col-bg);
 }

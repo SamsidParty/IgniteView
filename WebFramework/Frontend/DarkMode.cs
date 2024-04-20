@@ -20,10 +20,15 @@ namespace WebFramework
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.isWindowsPT) {
                 return ShouldSystemUseDarkMode();
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && !Platform.isMAUI)
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.isUWP)
             {
                 //UWP
                 return UWPHelperLoader.Current.IsDark();
+            }
+            else if (Platform.isMAUI)
+            {
+                //MAUI
+                return MAUIHelperLoader.Current.IsDark();
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
                 return MacHelperLoader.Current.IsDarkMode();

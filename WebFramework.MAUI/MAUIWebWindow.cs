@@ -22,7 +22,7 @@ namespace WebFramework.MAUI
 
         public override async Task UpdateTitle(string title)
         {
-            
+            //Does Nothing, MAUI Doesn't Have Titles
         }
 
         public override async Task Close()
@@ -30,6 +30,7 @@ namespace WebFramework.MAUI
             MainThread.BeginInvokeOnMainThread(() =>
             {
                 Application.Current.Quit();
+                Environment.Exit(0);
             });
         }
     }
