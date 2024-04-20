@@ -52,6 +52,14 @@ namespace WebFramework
         public static void Validate(string[] args)
         {
 
+            if (ExecFunction.IsExecFunctionCommand(args))
+            {
+                var returnCode = ExecFunction.Program.Main(args);
+                Environment.Exit(returnCode);
+
+                Thread.Sleep(1024 * 1024);
+            }
+
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 MacHelperLoader.FindAndLoad(); // Load MacHelper From WebFramework.PT
@@ -65,13 +73,7 @@ namespace WebFramework
                 MAUIHelperLoader.FindAndLoad();
             }
 
-            if (ExecFunction.IsExecFunctionCommand(args))
-            {
-                var returnCode = ExecFunction.Program.Main(args);
-                Environment.Exit(returnCode);
-
-                Thread.Sleep(1024*1024);
-            }
+            SharedIO.FindAndLoad();
 
             Logger.LogInfo("App Validation Complete");
 
