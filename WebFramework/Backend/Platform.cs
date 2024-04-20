@@ -20,7 +20,15 @@ namespace WebFramework
 
         public static bool isWindowsPT {
             get {
-                return !AppDomain.CurrentDomain.BaseDirectory.Contains("WindowsApps") && !isMAUI;
+                return !isUWP && !isMAUI;
+            }
+        }
+
+        public static bool isUWP
+        {
+            get
+            {
+                return (Type.GetType("WebFramework.UWP.UWPHelper, WebFramework.UWP") != null);
             }
         }
 
