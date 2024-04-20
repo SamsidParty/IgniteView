@@ -60,9 +60,6 @@
 }
 
 .featureCard > button {
-    position: absolute;
-    right: 15px;
-    bottom: 15px;
     width: 70px;
     height: 35px;
     border-radius: 5px;

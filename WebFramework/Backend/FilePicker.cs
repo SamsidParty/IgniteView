@@ -182,7 +182,7 @@ namespace WebFramework
         }
 
         ///<summary>
-        ///Prompts The User To Save A File, The Returned Path Might Not Exist, Returns null If Cancelled By User, File Extension Should Not Contain A Period
+        ///Prompts The User To Save A File, The Returned Path Might Not Exist, Returns An Empty String If Cancelled By User, File Extension Should Not Contain A Period
         ///</summary>
         public static async Task<string> OpenFileSaver(DOM ctx, string fileExtension)
         {
@@ -190,9 +190,13 @@ namespace WebFramework
 
             string r;
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.isWindowsPT)
             {
                 r = await Task.Run(() => Win_OpenFileSaver(ctx, fileExtension));
+            }
+            else if (Platform.isUWP)
+            {
+                r = await UWPHelperLoader.Current.OpenFileSaver(fileExtension);
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
                 r = await MacHelperLoader.Current.OpenFileSaver(fileExtension);

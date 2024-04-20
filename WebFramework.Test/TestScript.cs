@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,9 +17,22 @@ namespace WebFramework.Test
 
         }
 
-        public static void OpenFilePicker()
+        public static async Task OpenFilePicker()
         {
-            FilePicker.OpenFolderPicker(WindowManager.MainWindow.Document);
+            var file = await FilePicker.OpenFilePicker(WindowManager.MainWindow.Document, new FilePickerOptions());
+            if (file.Length > 0)
+            {
+                WindowManager.MainWindow.Document.RunFunction("alert", File.ReadAllText(file[0]));
+            }
+        }
+
+        public static async Task OpenFileSaver()
+        {
+            var file = await FilePicker.OpenFileSaver(WindowManager.MainWindow.Document, "exe");
+            if (file != "")
+            {
+                File.WriteAllText(file, "Hello, World! Test");
+            }
         }
     }
 }

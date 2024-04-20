@@ -20,6 +20,7 @@ function App() {
                 </div>
                 <div className="featureCard">
                     <button onClick={() => CallCSharp("WebFramework.Test.TestScript, WebFramework.Test", "OpenFilePicker")}>File Picker</button>
+                    <button onClick={() => CallCSharp("WebFramework.Test.TestScript, WebFramework.Test", "OpenFileSaver")}>File Saver</button>
                 </div>
                 <div className="featureCard">
                 

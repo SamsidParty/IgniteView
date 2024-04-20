@@ -71,6 +71,23 @@ namespace WebFramework.UWP
             return filePaths.ToArray();
         }
 
+        public async Task<string> OpenFileSaver(string extension)
+        {
+            var savePicker = new Windows.Storage.Pickers.FileSavePicker();
+            savePicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
+            
+            savePicker.FileTypeChoices.Add(extension + " File", new List<string>() { "." + extension });
+            savePicker.SuggestedFileName = "file";
+
+            var picked = await savePicker.PickSaveFileAsync();
+
+            if (picked != null)
+            {
+                return picked.Path;
+            }
+            return "";
+        }
+
         public void OnLoad()
         {
             Logger.LogInfo("Loaded UWP Helper");
