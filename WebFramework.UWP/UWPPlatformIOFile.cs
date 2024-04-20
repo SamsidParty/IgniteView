@@ -13,6 +13,12 @@ namespace WebFramework.UWP
 {
     public class UWPPlatformIOFile : SharedIOFile
     {
+        public override async Task<Stream> GetStream(string file)
+        {
+            var stream = await StorageFile.GetFileFromPathAsync(file);
+            return await stream.OpenStreamForReadAsync();
+        }
+
         public override async Task<string[]> EnumFiles(string folder)
         {
             var storageFolder = await StorageFolder.GetFolderFromPathAsync(folder);

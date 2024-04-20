@@ -50,5 +50,10 @@ namespace WebFramework
         {
             System.IO.File.Delete(file);
         }
+
+        public virtual async Task<Stream> GetStream(string file)
+        {
+            return File.OpenRead(file);
+        }
     }
 }

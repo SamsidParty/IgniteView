@@ -367,6 +367,12 @@ namespace WebFramework
                 {
                     HttpListenerContext context = _listener.GetContext();
 
+                    //Enable CORS On Dev Mode Only
+                    if (DevTools.Enabled)
+                    {
+                        context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                    }
+
                     //Get Requests Are Handled By The Static HTTP Server
                     if (context.Request.HttpMethod == "GET")
                     {
@@ -390,10 +396,27 @@ namespace WebFramework
         {
             var reader = new StreamReader(context.Request.InputStream);
             var jsiData = reader.ReadToEnd();
-            MSGHandler.OnMessage(jsiData, WindowManager.MainWindow);
 
-            context.Response.StatusCode = (int)HttpStatusCode.Accepted;
-            context.Response.OutputStream.Close();
+            if (!jsiData.StartsWith("{"))
+            {
+                //The Client Didn't Send Valid JSON
+                //In This Situation, The Client Has Sent A File Read Request
+                //Return The File
+
+                var stream = await SharedIO.File.GetStream(jsiData);
+
+                context.Response.StatusCode = (int)HttpStatusCode.OK;
+                await stream.CopyToAsync(context.Response.OutputStream);
+            }
+            else
+            {
+                MSGHandler.OnMessage(jsiData, WindowManager.MainWindow);
+
+                context.Response.StatusCode = (int)HttpStatusCode.Accepted;
+                context.Response.OutputStream.Close();
+            }
+
+
         }
 
 
