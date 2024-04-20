@@ -48,6 +48,11 @@ namespace WebFramework.UWP
 
         public override async Task WriteAllBytes(string file, byte[] bytes)
         {
+            if (!await Exists(file))
+            {
+                await (await StorageFolder.GetFolderFromPathAsync(Path.GetDirectoryName(file))).CreateFileAsync(Path.GetFileName(file), Windows.Storage.CreationCollisionOption.OpenIfExists);
+            }
+
             var buffer = CryptographicBuffer.CreateFromByteArray(bytes);
             await Windows.Storage.FileIO.WriteBufferAsync(await StorageFile.GetFileFromPathAsync(file), buffer);
         }
