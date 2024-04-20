@@ -1,12 +1,18 @@
 @font-face {
     font-family: Main;
-    src: url("./Inter.ttf");
+    src: url("./Fonts/InterVariable.woff2");
+}
+
+@font-face {
+    font-family: Icon;
+    src: url("./Fonts/Tabler.ttf");
 }
 
 * {
-    font-family: Main;
+    font-family: Main, Icon;
     color: var(--col-text);
     box-sizing: border-box;
+    font-weight: 500;
 
     --col-bg: white;
     --col-overlay: rgba(255, 255, 255, 0.5);

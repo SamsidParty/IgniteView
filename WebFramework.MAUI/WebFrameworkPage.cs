@@ -7,8 +7,9 @@ public class WebFrameworkPage : ContentPage
 
 	public WebFrameworkPage()
 	{
-		Instance = new WebView();
-        Content = Instance;
-		Page = this;
+		Title = "";
+        Instance = new WebView();
+		Content = Instance;
+        Page = this;
     }
 }

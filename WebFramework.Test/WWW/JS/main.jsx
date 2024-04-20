@@ -31,7 +31,7 @@ function App() {
             </div>
 
             <div className="footer">
-                <p>©️ SamsidParty {new Date().getFullYear()}</p>
+                <p>© SamsidParty {new Date().getFullYear()}</p>
                 <a style={{ marginLeft: "auto" }} href="https://github.com/SamsidParty/IgniteView" target="_blank">GitHub</a>
                 <a href="https://samsidparty.com" target="_blank">Website</a>
             </div>
