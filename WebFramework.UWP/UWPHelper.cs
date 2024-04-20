@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WebFramework.Backend;
 using Windows.Storage;
+using Windows.Storage.AccessCache;
 using Windows.UI.Xaml;
 
 namespace WebFramework.UWP
@@ -33,7 +34,7 @@ namespace WebFramework.UWP
 
                 if (folder != null)
                 {
-                    Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
+                    StorageApplicationPermissions.FutureAccessList.Add(folder);
                     filePaths.Add(folder.Path);
                 }
 
@@ -62,6 +63,7 @@ namespace WebFramework.UWP
 
                 foreach (var file in files)
                 {
+                    StorageApplicationPermissions.FutureAccessList.Add(file);
                     filePaths.Add(file.Path);
                 }
             }
@@ -83,9 +85,15 @@ namespace WebFramework.UWP
 
             if (picked != null)
             {
+                StorageApplicationPermissions.FutureAccessList.Add(picked);
                 return picked.Path;
             }
             return "";
+        }
+
+        public SharedIOFile GetPlatformIOFile()
+        {
+            return new UWPPlatformIOFile();
         }
 
         public void OnLoad()

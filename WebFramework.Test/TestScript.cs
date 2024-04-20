@@ -22,7 +22,7 @@ namespace WebFramework.Test
             var file = await FilePicker.OpenFilePicker(WindowManager.MainWindow.Document, new FilePickerOptions());
             if (file.Length > 0)
             {
-                WindowManager.MainWindow.Document.RunFunction("alert", File.ReadAllText(file[0]));
+                await SharedIO.File.Delete(file[0]);
             }
         }
 
@@ -31,8 +31,9 @@ namespace WebFramework.Test
             var file = await FilePicker.OpenFileSaver(WindowManager.MainWindow.Document, "exe");
             if (file != "")
             {
-                File.WriteAllText(file, "Hello, World! Test");
+                await SharedIO.File.WriteAllText(file, "Hello, World! Test");
             }
         }
+
     }
 }

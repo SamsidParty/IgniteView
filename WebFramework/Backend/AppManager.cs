@@ -1,5 +1,4 @@
-﻿using IgniteView.Dispatcher;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -51,14 +50,6 @@ namespace WebFramework
         /// </summary>
         public static void Validate(string[] args)
         {
-
-            if (ExecFunction.IsExecFunctionCommand(args))
-            {
-                var returnCode = ExecFunction.Program.Main(args);
-                Environment.Exit(returnCode);
-
-                Thread.Sleep(1024 * 1024);
-            }
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
