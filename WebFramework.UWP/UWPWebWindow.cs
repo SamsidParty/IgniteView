@@ -30,6 +30,7 @@ namespace WebFramework.UWP
 
         private void WebView_CoreWebView2Initialized(Microsoft.UI.Xaml.Controls.WebView2 sender, Microsoft.UI.Xaml.Controls.CoreWebView2InitializedEventArgs args)
         {
+            WebFrameworkPage.Instance.WebView.CoreWebView2.Settings.AreBrowserAcceleratorKeysEnabled = false;
             WebFrameworkPage.Instance.WebView.CoreWebView2.Settings.AreDevToolsEnabled = DevTools.Enabled;
             WebFrameworkPage.Instance.WebView.CoreWebView2.WebMessageReceived += CoreWebView2_WebMessageReceived;
             WebFrameworkPage.Instance.WebView.CoreWebView2.NavigationCompleted += CoreWebView2_NavigationCompleted;
