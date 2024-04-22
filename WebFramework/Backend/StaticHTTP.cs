@@ -373,6 +373,22 @@ namespace WebFramework
                         context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
                     }
 
+                    //Intercepted Requests
+                    var handled = false;
+                    for (int i = 0; i < RequestInterceptor.Interceptors.Count; i++)
+                    {
+                        if (RequestInterceptor.Interceptors[i](context))
+                        {
+                            handled = true;
+                            break;
+                        }
+                    }
+
+                    if (handled)
+                    {
+                        continue;
+                    }
+
                     //Get Requests Are Handled By The Static HTTP Server
                     if (context.Request.HttpMethod == "GET")
                     {
