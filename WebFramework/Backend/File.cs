@@ -55,5 +55,10 @@ namespace WebFramework
         {
             return File.OpenRead(file);
         }
+
+        public virtual async Task<Stream> GetWriteStream(string file)
+        {
+            return File.OpenWrite(file);
+        }
     }
 }

@@ -19,6 +19,12 @@ namespace WebFramework.UWP
             return await stream.OpenStreamForReadAsync();
         }
 
+        public override async Task<Stream> GetWriteStream(string file)
+        {
+            var stream = await StorageFile.GetFileFromPathAsync(file);
+            return await stream.OpenStreamForWriteAsync();
+        }
+
         public override async Task<string[]> EnumFiles(string folder)
         {
             var storageFolder = await StorageFolder.GetFolderFromPathAsync(folder);
