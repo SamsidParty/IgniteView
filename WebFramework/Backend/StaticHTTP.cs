@@ -371,6 +371,7 @@ namespace WebFramework
                     if (DevTools.Enabled)
                     {
                         context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                        context.Response.Headers.Add("Access-Control-Allow-Headers", "*");
                     }
 
                     //Intercepted Requests
