@@ -207,6 +207,9 @@ namespace WebFramework
 
         static bool IsFree(int port)
         {
+
+            if (Platform.isUWP) { return true; } // Network Isolation
+
             IPGlobalProperties properties = IPGlobalProperties.GetIPGlobalProperties();
             IPEndPoint[] listeners = properties.GetActiveTcpListeners();
             int[] openPorts = listeners.Select(item => item.Port).ToArray<int>();
