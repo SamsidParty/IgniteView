@@ -28,6 +28,10 @@ namespace WebFramework
         public static void Enable()
         {
             EnsureNotRunning();
+
+            //For Debugging On Xbox/Windows
+            Environment.SetEnvironmentVariable("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", Environment.GetEnvironmentVariable("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS") + " -enable-features=msEdgeDevToolsWdpRemoteDebugging");
+
             Enabled = true;
         }
 
