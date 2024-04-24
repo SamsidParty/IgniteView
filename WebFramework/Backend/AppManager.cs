@@ -122,11 +122,11 @@ namespace WebFramework
             var opMode = Platform.GetOperatingMode();
             if (opMode == OperatingMode.DesktopDynamic)
             {
-                return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "runtimes");
+                return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ivruntime");
             }
 
             //If App Directory Is Read Only
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IgniteView", "runtimes");
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IgniteView", "ivruntime");
 
         }
 
