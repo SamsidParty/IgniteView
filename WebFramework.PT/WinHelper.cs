@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -45,9 +46,26 @@ namespace WebFramework.PT
             public int flagsEx;
         }
 
+
         public void OnLoad()
         {
             Logger.LogInfo("Loaded WinHelper");
+        }
+
+        //https://stackoverflow.com/a/72172845/18071273
+        public bool IsDark()
+        {
+            int res = 1;
+            try
+            {
+                res = (int)Registry.GetValue("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", -1);
+            }
+            catch
+            {
+                //Exception Handling     
+            }
+
+            return res == 0;
         }
 
         public async Task<string> OpenFileSaver(DOM ctx, string fileExtension)

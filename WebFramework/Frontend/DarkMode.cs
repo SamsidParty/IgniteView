@@ -12,8 +12,6 @@ namespace WebFramework
 {
     public class DarkMode
     {
-        [DllImport("UXTheme.dll", SetLastError = true, EntryPoint = "#138")]
-        static extern bool ShouldSystemUseDarkMode();
 
         public static bool EnableForce = false;
 
@@ -29,7 +27,7 @@ namespace WebFramework
                 return true;
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.isWindowsPT) {
-                return ShouldSystemUseDarkMode();
+                return WinHelperLoader.Current.IsDark();
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.isUWP)
             {
