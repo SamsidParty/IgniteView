@@ -19,8 +19,8 @@ namespace WebFramework.UWP
         {
             await base.Init();
 
-            WebFrameworkPage.Instance.WebView.Source = new Uri(AppManager.GetMainURL());
             WebFrameworkPage.Instance.WebView.CoreWebView2Initialized += WebView_CoreWebView2Initialized;
+            WebFrameworkPage.Instance.WebView.Source = new Uri(AppManager.GetMainURL());
 
             if (!WindowManager.Options.NativeGamepadSupport)
             {
@@ -30,6 +30,12 @@ namespace WebFramework.UWP
 
         private void WebView_CoreWebView2Initialized(Microsoft.UI.Xaml.Controls.WebView2 sender, Microsoft.UI.Xaml.Controls.CoreWebView2InitializedEventArgs args)
         {
+            //Set Dark Mode Enabled If Forced
+            if (DarkMode.EnableForce)
+            {
+                WebFrameworkPage.Instance.WebView.CoreWebView2.Profile.PreferredColorScheme = Microsoft.Web.WebView2.Core.CoreWebView2PreferredColorScheme.Dark;
+            }
+
             WebFrameworkPage.Instance.WebView.CoreWebView2.Settings.AreBrowserAcceleratorKeysEnabled = false;
             WebFrameworkPage.Instance.WebView.CoreWebView2.Settings.AreDevToolsEnabled = DevTools.Enabled;
             WebFrameworkPage.Instance.WebView.CoreWebView2.WebMessageReceived += CoreWebView2_WebMessageReceived;
