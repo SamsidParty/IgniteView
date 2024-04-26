@@ -18,6 +18,8 @@ namespace WebFramework
         public static bool IsValid;
         public static string Location;
         public static Func<WebWindow, Task> OnReady;
+        public static string Publisher;
+        public static string AppID;
 
         public static AppManager Instance;
 
@@ -46,13 +48,21 @@ namespace WebFramework
         }
 
         /// <summary>
-        /// Makes Sure The App Can Run In It's Current State
+        /// Initializes The App And Fills In Platform-Specific Info
         /// </summary>
-        public static void Validate(string[] args)
+        public static void Validate(string[] args, string publisher, string appID)
         {
+            Publisher = publisher;
+            AppID = appID;
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.isWindowsPT) 
             {
+                //Needed For Photino Cache
+                var appDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppManager.Publisher, AppManager.AppID);
+                if (!Directory.Exists(appDir))
+                {
+                    Directory.CreateDirectory(appDir);
+                }
                 WinHelperLoader.FindAndLoad();
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.isUWP)

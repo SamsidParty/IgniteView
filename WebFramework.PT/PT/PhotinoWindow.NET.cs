@@ -46,7 +46,7 @@ namespace PhotinoNET
             SmoothScrollingEnabled = true,
             IgnoreCertificateErrorsEnabled = false,
             TemporaryFilesPathWide = IsWindowsPlatform
-                ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Photino")
+                ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppManager.Publisher, AppManager.AppID)
                 : null,
             TitleWide = "Photino",
             Title = "Photino",

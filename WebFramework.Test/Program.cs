@@ -14,7 +14,7 @@ public class IVApplication
 
     public static void Main(string[] args)
     {
-        AppManager.Validate(args); // Required Or Crash
+        AppManager.Validate(args, "SamsidParty", "IgniteViewTest"); // Required Or Crash
         App();
     }
 
