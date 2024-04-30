@@ -345,72 +345,72 @@ namespace WebFramework
     /// Stop server and dispose all functions.
     /// </summary>
     public void Stop()
-        {
-            _serverThread.Abort();
-            _listener.Stop();
-        }
+    {
+        _serverThread.Abort();
+        _listener.Stop();
+    }
 
-        /// <summary>
-        /// Internal Handler
-        /// </summary>
-        private void Listen()
-        {
-            _listener = new HttpListener();
-            Logger.LogInfo("Starting HTTP Server On Port: " + _port);
-            _listener.Prefixes.Add("http://localhost:" + _port+ "/");
-            _listener.Start();
+    /// <summary>
+    /// Internal Handler
+    /// </summary>
+    private void Listen()
+    {
+        _listener = new HttpListener();
+        Logger.LogInfo("Starting HTTP Server On Port: " + _port);
+        _listener.Prefixes.Add("http://localhost:" + _port+ "/");
+        _listener.Start();
 
-            Logger.LogInfo("Started HTTP Server (Listening On localhost:" + _port + ")");
+        Logger.LogInfo("Started HTTP Server (Listening On localhost:" + _port + ", Time Since Start: " + AppManager.TimeMeasure.ElapsedMilliseconds + "ms)");
 
             Started = true;
 
-            while (true)
+        while (true)
+        {
+            try
             {
-                try
+                HttpListenerContext context = _listener.GetContext();
+
+                //Enable CORS On Dev Mode Only
+                if (DevTools.Enabled)
                 {
-                    HttpListenerContext context = _listener.GetContext();
-
-                    //Enable CORS On Dev Mode Only
-                    if (DevTools.Enabled)
-                    {
-                        context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-                        context.Response.Headers.Add("Access-Control-Allow-Headers", "*");
-                    }
-
-                    //Intercepted Requests
-                    var handled = false;
-                    for (int i = 0; i < RequestInterceptor.Interceptors.Count; i++)
-                    {
-                        if (RequestInterceptor.Interceptors[i](context))
-                        {
-                            handled = true;
-                            break;
-                        }
-                    }
-
-                    if (handled)
-                    {
-                        continue;
-                    }
-
-                    //Get Requests Are Handled By The Static HTTP Server
-                    if (context.Request.HttpMethod == "GET")
-                    {
-                        Process(context);
-                    }
-                    //Post Requests Are Passed Through For JS-Interop
-                    else if (context.Request.HttpMethod == "POST")
-                    {
-                        ProcessJSI(context);
-                    }
-
+                    context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                    context.Response.Headers.Add("Access-Control-Allow-Headers", "*");
                 }
-                catch (Exception ex)
+
+                //Intercepted Requests
+                var handled = false;
+                for (int i = 0; i < RequestInterceptor.Interceptors.Count; i++)
                 {
-                    Logger.LogError(ex.ToString());
+                    if (RequestInterceptor.Interceptors[i](context))
+                    {
+                        handled = true;
+                        break;
+                    }
                 }
+
+                if (handled)
+                {
+                    continue;
+                }
+
+                //Get Requests Are Handled By The Static HTTP Server
+                if (context.Request.HttpMethod == "GET")
+                {
+                    Process(context);
+                }
+                //Post Requests Are Passed Through For JS-Interop
+                else if (context.Request.HttpMethod == "POST")
+                {
+                    ProcessJSI(context);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex.ToString());
             }
         }
+    }
 
         private async Task ProcessJSI(HttpListenerContext context)
         {
@@ -502,7 +502,7 @@ namespace WebFramework
 
                         if (WindowManager.MainWindow != null)
                         {
-                            Logger.LogInfo("Sending Modified Index File");
+                            Logger.LogInfo("Sending Modified Index File (" + AppManager.TimeMeasure.ElapsedMilliseconds + "ms)");
                             injection = WindowManager.MainWindow.OverrideLib(injection);
                         }
 

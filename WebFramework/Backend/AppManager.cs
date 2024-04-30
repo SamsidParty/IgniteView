@@ -23,6 +23,8 @@ namespace WebFramework
 
         public static AppManager Instance;
 
+        public static Stopwatch TimeMeasure = Stopwatch.StartNew();
+
         public static WebWindow GetWebWindow()
         {
             //Find First Class That Inherits WebWindow
