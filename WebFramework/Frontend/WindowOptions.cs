@@ -41,7 +41,7 @@ namespace WebFramework
 
 
         /// <summary>
-        /// Does Not Work On UWP
+        /// Only Works On Some Platforms
         /// </summary>
         public Rectangle StartWidthHeight = new Rectangle(0, 0, 1280, 720);
 

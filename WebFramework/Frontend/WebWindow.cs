@@ -125,6 +125,7 @@ namespace WebFramework
 
         public List<string> Tasks = new List<string>();
         public List<string> LoadedTasks = new List<string>();
+
         /// <summary>
         /// Add Some JavaScript To Execute On Page Load
         /// </summary>

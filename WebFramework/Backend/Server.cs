@@ -59,22 +59,22 @@ namespace WebFramework
                 }
                 else if (msg.Type == "event")
                 {
-                    var cb = new CallbackAction(WSCallbacks.OnEvent, msg.Param1, msg.Param2, msg.Param3);
+                    var cb = new CallbackAction(InteropCallbacks.OnEvent, msg.Param1, msg.Param2, msg.Param3, context);
                     cb.InvokeOnUI();
                 }
                 else if (msg.Type == "reflect")
                 {
-                    var cb = new CallbackAction(WSCallbacks.OnReflect, msg.Param1, msg.Param2, msg.Param3);
+                    var cb = new CallbackAction(InteropCallbacks.OnReflect, msg.Param1, msg.Param2, msg.Param3, context);
                     cb.InvokeOnUI();
                 }
                 else if (msg.Type == "attach")
                 {
-                    var cb = new CallbackAction(WSCallbacks.OnAttachRequested, msg.Param1, msg.Param2, msg.Param3);
+                    var cb = new CallbackAction(InteropCallbacks.OnAttachRequested, msg.Param1, msg.Param2, msg.Param3, context);
                     cb.InvokeOnUI();
                 }
                 else if (msg.Type == "retval")
                 {
-                    var cb = new CallbackAction(WSCallbacks.OnValueReturned, msg.Param1, msg.Param2, msg.Param3);
+                    var cb = new CallbackAction(InteropCallbacks.OnValueReturned, msg.Param1, msg.Param2, msg.Param3, context);
                     cb.InvokeOnUI();
                 }
                 else if (msg.Type == "closeme")
