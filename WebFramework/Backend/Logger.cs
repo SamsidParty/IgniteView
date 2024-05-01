@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,6 +12,15 @@ namespace WebFramework.Backend
     public class Logger
     {
         internal static Stream LogStream = null;
+        internal static bool LogToConsole = false;
+
+        #region WinAPI
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
+
+        #endregion
 
         /// <summary>
         /// Sets The File Name To Write Logs To (Just The Name, Excluding Extension, No Slashes)
@@ -29,6 +39,20 @@ namespace WebFramework.Backend
             LogRaw("\n\n\n\n------ New Log Start ------\n\n\n\n");
         }
 
+
+        /// <summary>
+        /// Windows Only: Opens The Console Window
+        /// Warning: Must Be Called Before Any Console.WriteLine Statements In The Program
+        /// </summary>
+        public static void ForceOpenConsole()
+        {
+            LogToConsole = true;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.isWindowsPT)
+            {
+                AllocConsole();
+            }
+        }
+
         public static void CloseLog()
         {
             if (LogStream != null)
@@ -39,7 +63,10 @@ namespace WebFramework.Backend
 
         public static void LogRaw(string log)
         {
-            Console.WriteLine(log);
+            if (LogToConsole)
+            {
+                Console.WriteLine(log);
+            }
             Debug.WriteLine(log);
 
             if (LogStream != null)

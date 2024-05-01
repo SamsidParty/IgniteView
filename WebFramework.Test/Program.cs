@@ -21,6 +21,7 @@ public class IVApplication
     public static async Task App()
     {
         await Logger.SetFileName("main");
+        Logger.ForceOpenConsole();
         DevTools.Enable();
 
         if (Directory.Exists("C:\\Users\\SamarthCat\\Documents\\Programming Stuff\\WebFramework\\WebFramework.Test\\WWW"))
