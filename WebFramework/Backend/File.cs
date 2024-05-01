@@ -28,7 +28,7 @@ namespace WebFramework
 
         public virtual async Task<string> GetAppdataDirectory()
         {
-            return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppManager.Publisher, AppManager.AppID);
         }
 
         public virtual async Task WriteAllBytes(string file, byte[] bytes)

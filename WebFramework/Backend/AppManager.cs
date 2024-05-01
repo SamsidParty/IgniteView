@@ -126,6 +126,7 @@ namespace WebFramework
 
         public static void Quit()
         {
+            Logger.CloseLog();
             WindowManager.MainWindow.Close();
         }
 
