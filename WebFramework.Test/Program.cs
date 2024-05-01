@@ -34,6 +34,7 @@ public class IVApplication
 
         WindowManager.Options = new WindowOptions()
         {
+            EnableAcrylic = true,
             TitlebarColor = TitlebarColor,
             StartWidthHeight = new Rectangle(0, 0, 1280, 720),
             NativeGamepadSupport = false

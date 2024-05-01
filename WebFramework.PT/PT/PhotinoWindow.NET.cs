@@ -37,7 +37,7 @@ namespace PhotinoNET
             CustomSchemeNames = new string[16],
             DevToolsEnabled = true,
             GrantBrowserPermissions = true,
-            UserAgent = "Photino WebView",
+            UserAgent = "IgniteView Window",
             MediaAutoplayEnabled = true,
             FileSystemAccessEnabled = true,
             WebSecurityEnabled = true,
@@ -48,8 +48,8 @@ namespace PhotinoNET
             TemporaryFilesPathWide = IsWindowsPlatform
                 ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppManager.Publisher, AppManager.AppID)
                 : null,
-            TitleWide = "Photino",
-            Title = "Photino",
+            TitleWide = "IgniteView",
+            Title = "IgniteView",
             UseOsDefaultLocation = true,
             UseOsDefaultSize = true,
             Zoom = 100,

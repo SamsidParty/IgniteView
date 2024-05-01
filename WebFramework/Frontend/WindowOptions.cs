@@ -25,7 +25,10 @@ namespace WebFramework
             }
             set
             {
-                Environment.SetEnvironmentVariable("WEBVIEW2_DEFAULT_BACKGROUND_COLOR", "FF" + value.HexValue);
+                if (!EnableAcrylic)
+                {
+                    Environment.SetEnvironmentVariable("WEBVIEW2_DEFAULT_BACKGROUND_COLOR", "FF" + value.HexValue);
+                }
                 TBC = value;
                 EditTitlebarColor();
             }
@@ -33,6 +36,12 @@ namespace WebFramework
         DynamicColor TBC = Color.White;
         public int _WinTBC = -1; // Windows Wants It In A Single int
         public int _Allowed = -1;
+
+        /// <summary>
+        /// Enables A Transparency Effect On The Window
+        /// On Windows 11, The Mica Effect Will Be Used
+        /// </summary>
+        public bool EnableAcrylic = false;
 
         /// <summary>
         /// Enables Gamepads And Disables Mouse Mode On UWP

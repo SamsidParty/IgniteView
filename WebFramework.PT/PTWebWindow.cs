@@ -15,15 +15,18 @@ namespace WebFramework.PT
     public class PTWebWindow : WebWindow
     {
 
-        [DllImport("dwmapi.dll")]
-        public static extern int DwmSetWindowAttribute(IntPtr hwnd, int dwAttribute, int[] pvAttribute, int cbAttribute);
-
         public PhotinoWindow Native;
 
 
         public override async Task Init()
         {
             await base.Init();
+
+            if (WindowManager.Options.EnableAcrylic)
+            {
+                Environment.SetEnvironmentVariable("WEBVIEW2_DEFAULT_BACKGROUND_COLOR", "00000000");
+            }
+
             Native = new PhotinoWindow();
             Native.UseOsDefaultSize = false;
             Native.SetLogVerbosity(0);
@@ -75,7 +78,15 @@ namespace WebFramework.PT
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 var hwnd = w.WindowHandle;
-                DwmSetWindowAttribute(hwnd, 35, new int[] { WindowManager.Options._WinTBC }, 4);
+
+                if (WindowManager.Options.EnableAcrylic)
+                {
+                    WinHelperLoader.Current.EnableMica(hwnd);
+                }
+                else
+                {
+                    WinHelperLoader.Current.SetTitlebarColor(hwnd, WindowManager.Options._WinTBC);   
+                }
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
                 MacHelper.Current.Init();
