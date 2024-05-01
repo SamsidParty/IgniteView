@@ -187,6 +187,8 @@ Photino::Photino(PhotinoInitParams* initParams)
     NSRect frame = NSMakeRect(0, 0, 0, 0);
 
     _chromeless = initParams->Chromeless;
+    _acrylic = initParams->EnableAcrylic;
+    
     if (initParams->Chromeless)
     {
         // For MouseMoved events, Photino.Mac.NSWindowBorderless.mm
@@ -872,6 +874,22 @@ void Photino::AttachWebView()
     [_window.contentView addSubview: _webview];
     [_window.contentView setAutoresizesSubviews: true];
 
+    if (_acrylic) {
+        [_webview setValue:[NSNumber numberWithBool: YES] forKey:@"drawsTransparentBackground"];
+        
+        Class vibrantClass=NSClassFromString(@"NSVisualEffectView");
+        if (vibrantClass)
+        {
+            NSVisualEffectView *vibrant=[[vibrantClass alloc] initWithFrame:_window.contentView.bounds];
+            [vibrant setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
+            // uncomment for dark mode instead of light mode
+            // [vibrant setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameVibrantDark]];
+            [vibrant setBlendingMode:NSVisualEffectBlendingModeBehindWindow];
+            [_window.contentView addSubview:vibrant positioned:NSWindowBelow relativeTo:nil];
+        }
+    }
+
+    
     UiDelegate *uiDelegate = [[[UiDelegate alloc] init] autorelease];
     uiDelegate->photino = this;
     uiDelegate->window = _window;

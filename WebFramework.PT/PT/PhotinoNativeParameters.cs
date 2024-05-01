@@ -184,6 +184,9 @@ namespace PhotinoNET
         ///<summary>OPTIONAL: If true, overrides Height and Width parameters and lets the OS position the newly created window. Default is true.</summary>
         [MarshalAs(UnmanagedType.I1)] internal bool UseOsDefaultSize;
 
+        ///<summary>OPTIONAL: If true, window will have an acrylic background. Default is false.</summary>
+        [MarshalAs(UnmanagedType.I1)] internal bool EnableAcrylic;
+
         ///<summary>OPTIONAL: If true, requests for access to local resources (camera, microphone, etc.) will automatically be granted. Default is true.</summary>
         [MarshalAs(UnmanagedType.I1)] internal bool GrantBrowserPermissions;
         [MarshalAs(UnmanagedType.I1)] internal bool MediaAutoplayEnabled;

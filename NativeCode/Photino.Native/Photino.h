@@ -110,6 +110,7 @@ struct PhotinoInitParams
     bool Topmost;
     bool UseOsDefaultLocation;
     bool UseOsDefaultSize;
+    bool EnableAcrylic;
     bool GrantBrowserPermissions;
     bool MediaAutoplayEnabled;
     bool FileSystemAccessEnabled;
@@ -186,6 +187,7 @@ private:
     std::vector<Monitor *> GetMonitors();
     
     bool _chromeless;
+    bool _acrylic;
     
     int _preMaximizedWidth;
     int _preMaximizedHeight;
