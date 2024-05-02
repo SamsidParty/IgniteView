@@ -22,7 +22,7 @@ namespace WebFramework.PT
         {
             await base.Init();
 
-            Logger.LogInfo("Starting PT (" + AppManager.TimeMeasure.ElapsedMilliseconds + "ms)");
+            Logger.LogInfo("Creating PT (" + AppManager.TimeMeasure.ElapsedMilliseconds + "ms)");
 
             if (WindowManager.Options.EnableAcrylic)
             {
@@ -58,6 +58,7 @@ namespace WebFramework.PT
                 Native.SetSize(new System.Drawing.Size(WindowManager.Options.StartWidthHeight.Width, WindowManager.Options.StartWidthHeight.Height));
                 Native.SetResizable(!WindowManager.Options.LockWidthHeight);
                 Native.Load(AppManager.GetMainURL());
+                Logger.LogInfo("Starting PT (" + AppManager.TimeMeasure.ElapsedMilliseconds + "ms)");
                 Native.WaitForClose();
                 Process.GetCurrentProcess().Kill();
             }

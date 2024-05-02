@@ -226,7 +226,7 @@ namespace WebFramework
 
             try
             {
-                var port = Helpers.SharedRandom.Next(2048, 65500);
+                var port = Helpers.SharedRandom.Next(10081, 65500);
 
                 if (port < 10081 || !isValidPort(port)) // Chrome Doesn't Like Some Ports (ERR_UNSAFE_PORT)
                 {
