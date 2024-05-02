@@ -33,7 +33,7 @@ namespace WebFramework.Backend
                 LogStream = await SharedIO.File.GetWriteStream(Path.Combine(await SharedIO.File.GetAppdataDirectory(), name + ".ivlog"));
             }
             catch {
-                LogStream = await SharedIO.File.GetWriteStream(Path.Combine(await SharedIO.File.GetAppdataDirectory(), DateTime.UtcNow + ".ivlog"));
+                
             }
 
             LogRaw("\n\n\n\n------ New Log Start ------\n\n\n\n");

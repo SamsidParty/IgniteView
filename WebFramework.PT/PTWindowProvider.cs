@@ -15,6 +15,18 @@ namespace WebFramework.PT
     {
         public static void Activate()
         {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                MacHelperLoader.Current = Activator.CreateInstance(typeof(MacHelper));
+                MacHelperLoader.Current.OnLoad();
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                WinHelperLoader.Current = Activator.CreateInstance(typeof(WinHelper));
+                WinHelperLoader.Current.OnLoad();
+            }
+
+            AppManager.WindowToUse = typeof(PTWebWindow);
             ExtractDependencies();
             NativeLibrary.SetDllImportResolver(typeof(PhotinoWindow).Assembly, ImportResolver);
         }

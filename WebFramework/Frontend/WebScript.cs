@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebFramework.Backend;
 
 namespace WebFramework
 {
@@ -16,6 +17,7 @@ namespace WebFramework
 
         public static void Register<T>(string scriptName) where T : WebScript
         {
+            Logger.LogInfo("Registered WebScript: " + scriptName);
             RegisteredScripts[scriptName] = typeof(T);
         }
 

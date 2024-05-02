@@ -22,6 +22,8 @@ namespace WebFramework.PT
         {
             await base.Init();
 
+            Logger.LogInfo("Starting PT (" + AppManager.TimeMeasure.ElapsedMilliseconds + "ms)");
+
             if (WindowManager.Options.EnableAcrylic)
             {
                 Environment.SetEnvironmentVariable("WEBVIEW2_DEFAULT_BACKGROUND_COLOR", "00000000");
@@ -75,6 +77,8 @@ namespace WebFramework.PT
 
         void Update(PhotinoWindow w)
         {
+            Logger.LogInfo("Recieved Update From PT (" + AppManager.TimeMeasure.ElapsedMilliseconds + "ms)");
+
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 var hwnd = w.WindowHandle;

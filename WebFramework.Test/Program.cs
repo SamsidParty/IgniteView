@@ -24,10 +24,10 @@ public class IVApplication
         Logger.ForceOpenConsole();
         DevTools.Enable();
 
-        if (Directory.Exists("C:\\Users\\SamarthCat\\Documents\\Programming Stuff\\WebFramework\\WebFramework.Test\\WWW"))
+        /*if (Directory.Exists("C:\\Users\\SamarthCat\\Documents\\Programming Stuff\\WebFramework\\WebFramework.Test\\WWW"))
         {
-            DevTools.HotReload("C:\\Users\\SamarthCat\\Documents\\Programming Stuff\\WebFramework\\WebFramework.Test\\WWW");
-        }
+            //DevTools.HotReload("C:\\Users\\SamarthCat\\Documents\\Programming Stuff\\WebFramework\\WebFramework.Test\\WWW");
+        }*/
 
 
         //Change Color Based On Theme (light, dark)

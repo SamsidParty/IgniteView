@@ -356,11 +356,11 @@ namespace WebFramework
     private void Listen()
     {
         _listener = new HttpListener();
-        Logger.LogInfo("Starting HTTP Server On Port: " + _port);
+        Logger.LogInfo("Starting HTTP Server On Port: " + _port + " (" + AppManager.TimeMeasure.ElapsedMilliseconds + "ms)");
         _listener.Prefixes.Add("http://localhost:" + _port+ "/");
         _listener.Start();
 
-        Logger.LogInfo("Started HTTP Server (Listening On localhost:" + _port + ", Time Since Start: " + AppManager.TimeMeasure.ElapsedMilliseconds + "ms)");
+        Logger.LogInfo("Started HTTP Server (Listening On localhost:" + _port + ", " + AppManager.TimeMeasure.ElapsedMilliseconds + "ms)");
 
             Started = true;
 

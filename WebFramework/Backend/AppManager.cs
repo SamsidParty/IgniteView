@@ -22,31 +22,19 @@ namespace WebFramework
         public static string AppID;
 
         public static AppManager Instance;
+        public static Type WindowToUse; // Called By WindowProvider
 
         public static Stopwatch TimeMeasure = Stopwatch.StartNew();
 
         public static WebWindow GetWebWindow()
         {
-            //Find First Class That Inherits WebWindow
-            Type type = null;
-
-            foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+            if (WindowToUse == null)
             {
-                var possibleTypes = asm.GetTypes().Where(t => t.IsClass && t.IsSubclassOf(typeof(WebWindow)));
-                if (possibleTypes.Count() > 0)
-                {
-                    type = possibleTypes.First();
-                    Logger.LogInfo("Found Window Provider To Use: " + type.FullName);
-                }
+                throw new NullReferenceException("No Suitable Window Provider Was Found");
             }
 
-            if (type == null)
-            {
-                Logger.LogError("No Suitable Window Provider Was Found");
-                throw new Exception("No Suitable Window Provider Was Found");
-            }
-
-            return Activator.CreateInstance(type) as WebWindow;
+            Logger.LogInfo("Found Window To Use: " + WindowToUse.Name);
+            return Activator.CreateInstance(WindowToUse) as WebWindow;
         }
 
         /// <summary>
@@ -65,19 +53,19 @@ namespace WebFramework
                 {
                     Directory.CreateDirectory(appDir);
                 }
-                WinHelperLoader.FindAndLoad();
+                //WinHelperLoader.FindAndLoad();
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.isUWP)
             {
-                UWPHelperLoader.FindAndLoad();
+                //UWPHelperLoader.FindAndLoad();
             }
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                MacHelperLoader.FindAndLoad(); // Load MacHelper From WebFramework.PT
+                //MacHelperLoader.FindAndLoad(); // Load MacHelper From WebFramework.PT
             }
             else if (Platform.isMAUI)
             {
-                MAUIHelperLoader.FindAndLoad();
+                //MAUIHelperLoader.FindAndLoad();
             }
 
             SharedIO.FindAndLoad();
