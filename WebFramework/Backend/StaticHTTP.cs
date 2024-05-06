@@ -172,6 +172,7 @@ namespace WebFramework
                 {".xml", "text/xml"},
                 {".xpi", "application/x-xpinstall"},
                 {".zip", "application/zip"},
+                {".svg", "image/svg+xml"},
 
                 #endregion
             };
@@ -208,7 +209,7 @@ namespace WebFramework
         static bool IsFree(int port)
         {
 
-            if (Platform.isUWP) { return true; } // Network Isolation
+            if (Platform.isUWP || Platform.isMAUI) { return true; } // Network Isolation
 
             IPGlobalProperties properties = IPGlobalProperties.GetIPGlobalProperties();
             IPEndPoint[] listeners = properties.GetActiveTcpListeners();

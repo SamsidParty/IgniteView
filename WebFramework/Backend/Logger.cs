@@ -30,7 +30,11 @@ namespace WebFramework.Backend
         {
             try
             {
-                LogStream = await SharedIO.File.GetWriteStream(Path.Combine(await SharedIO.File.GetAppdataDirectory(), name + ".ivlog"));
+                if (!Platform.isMAUI)
+                {
+                    LogStream = await SharedIO.File.GetWriteStream(Path.Combine(await SharedIO.File.GetAppdataDirectory(), name + ".ivlog"));
+                }
+
             }
             catch {
                 
