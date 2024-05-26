@@ -21,7 +21,7 @@ public class IVApplication
     public static async Task App()
     {
         await Logger.SetFileName("main");
-        Logger.ForceOpenConsole();
+        //Logger.ForceOpenConsole();
         Logger.EnableTimer = true;
         DevTools.Enable();
 

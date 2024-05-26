@@ -11,6 +11,8 @@ namespace WebFramework
 
         /// <summary>
         /// Path To An Icon In PNG Format
+        /// The Icon Must Be Exactly 256x256 Pixels, Other Sizes Will Not Display Properly
+        /// Transparency Is Supported
         /// </summary>
         public string IconPath = "";
 
@@ -90,9 +92,10 @@ namespace WebFramework
         {
             ApplyTitlebarColor();
 
-            if (IconPath != "" && !File.Exists(IconPath))
+            if (IconPath != "")
             {
-                throw new FileNotFoundException(IconPath);
+                if (!File.Exists(IconPath)) { throw new FileNotFoundException(IconPath); }
+                if (!IconPath.ToLower().EndsWith(".png")) { throw new FormatException("Icon Must Be A PNG File"); }
             }
             else
             {

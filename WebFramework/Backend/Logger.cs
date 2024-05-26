@@ -91,7 +91,7 @@ namespace WebFramework.Backend
             if (EnableTimer)
             {
                 if (TimeMeasure == null) { TimeMeasure = Stopwatch.StartNew(); }
-                log = "[" + TimeMeasure.ElapsedMilliseconds + "MS]" + log;
+                log = "[" + TimeMeasure.ElapsedMilliseconds + "MS] " + log;
             }
             LogRaw("[INFO] " + log);
         }

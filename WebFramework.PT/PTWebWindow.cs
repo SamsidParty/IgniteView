@@ -33,14 +33,48 @@ namespace WebFramework.PT
             Native.UseOsDefaultSize = false;
             Native.SetLogVerbosity(0);
             Native.Title = "";
-            if (File.Exists(WindowManager.Options.IconPath)) { Native.SetIconFile(WindowManager.Options.IconPath); }
+
+            RegisterNativeEvents();
+
+            if (this == WindowManager.MainWindow)
+            {
+                Native.SetSize(new System.Drawing.Size(WindowManager.Options.StartWidthHeight.Width, WindowManager.Options.StartWidthHeight.Height));
+                Native.SetResizable(!WindowManager.Options.LockWidthHeight);
+                Native.Load(AppManager.GetMainURL());
+                Logger.LogInfo("Starting PT");
+                Native.WaitForClose();
+                Process.GetCurrentProcess().Kill();
+            }
+        }
+
+        public void ApplyIcon()
+        {
+            if (File.Exists(WindowManager.Options.IconPath)) { 
+
+
+                //Convert Icon First, Then Apply It
+                if (Platform.isWindowsPT)
+                {
+                    Native.SetIconFile(WindowsIconConverter.ConvertPngToIco(File.ReadAllBytes(WindowManager.Options.IconPath)));
+                }
+                else
+                {
+                    Native.SetIconFile(WindowManager.Options.IconPath);
+                }
+            }
+        }
+
+        public void RegisterNativeEvents()
+        {
             Native.RegisterCustomSchemeHandler("fs", (object sender, string scheme, string url, out string contentType) => {
 
                 var path = url.Replace("fs://", "");
 
                 contentType = "application/octet-stream";
-                if (File.Exists(path)){
-                    if (SimpleHttpServer._mimeTypeMappings.ContainsKey(Path.GetExtension(path))){
+                if (File.Exists(path))
+                {
+                    if (SimpleHttpServer._mimeTypeMappings.ContainsKey(Path.GetExtension(path)))
+                    {
                         contentType = SimpleHttpServer._mimeTypeMappings[Path.GetExtension(path)];
                     }
                     return new FileStream(path, FileMode.Open, FileAccess.Read);
@@ -55,19 +89,7 @@ namespace WebFramework.PT
                 MSGHandler.OnMessage(e, this);
             };
 
-            Native.WindowCreated += async (s, e) => { Update(Native); };
-
-            if (this == WindowManager.MainWindow)
-            {
-                Native.SetSize(new System.Drawing.Size(WindowManager.Options.StartWidthHeight.Width, WindowManager.Options.StartWidthHeight.Height));
-                Native.SetResizable(!WindowManager.Options.LockWidthHeight);
-                Native.Load(AppManager.GetMainURL());
-                Logger.LogInfo("Starting PT");
-                Native.WaitForClose();
-                Process.GetCurrentProcess().Kill();
-            }
-
-
+            Native.WindowCreated += async (s, e) => { ApplyIcon(); Update(Native); };
         }
 
         public override async Task Close()
