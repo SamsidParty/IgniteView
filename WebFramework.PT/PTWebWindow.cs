@@ -22,7 +22,7 @@ namespace WebFramework.PT
         {
             await base.Init();
 
-            Logger.LogInfo("Creating PT (" + AppManager.TimeMeasure.ElapsedMilliseconds + "ms)");
+            Logger.LogInfo("Creating PT");
 
             if (WindowManager.Options.EnableAcrylic)
             {
@@ -62,7 +62,7 @@ namespace WebFramework.PT
                 Native.SetSize(new System.Drawing.Size(WindowManager.Options.StartWidthHeight.Width, WindowManager.Options.StartWidthHeight.Height));
                 Native.SetResizable(!WindowManager.Options.LockWidthHeight);
                 Native.Load(AppManager.GetMainURL());
-                Logger.LogInfo("Starting PT (" + AppManager.TimeMeasure.ElapsedMilliseconds + "ms)");
+                Logger.LogInfo("Starting PT");
                 Native.WaitForClose();
                 Process.GetCurrentProcess().Kill();
             }
@@ -82,7 +82,7 @@ namespace WebFramework.PT
 
         void Update(PhotinoWindow w)
         {
-            Logger.LogInfo("Recieved Update From PT (" + AppManager.TimeMeasure.ElapsedMilliseconds + "ms)");
+            Logger.LogInfo("Recieved Update From PT");
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {

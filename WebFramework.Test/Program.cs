@@ -22,6 +22,7 @@ public class IVApplication
     {
         await Logger.SetFileName("main");
         Logger.ForceOpenConsole();
+        Logger.EnableTimer = true;
         DevTools.Enable();
 
         /*if (Directory.Exists("C:\\Users\\SamarthCat\\Documents\\Programming Stuff\\WebFramework\\WebFramework.Test\\WWW"))

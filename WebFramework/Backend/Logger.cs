@@ -14,6 +14,13 @@ namespace WebFramework.Backend
         internal static Stream LogStream = null;
         internal static bool LogToConsole = false;
 
+        /// <summary>
+        /// If Enabled, Log Info Messages Will Include A ms Field, Representing The Time In MS Since The First Log
+        /// </summary>
+        public static bool EnableTimer = false;
+        internal static Stopwatch TimeMeasure;
+
+
         #region WinAPI
 
         [DllImport("kernel32.dll", SetLastError = true)]
@@ -81,6 +88,11 @@ namespace WebFramework.Backend
 
         public static void LogInfo(string log)
         {
+            if (EnableTimer)
+            {
+                if (TimeMeasure == null) { TimeMeasure = Stopwatch.StartNew(); }
+                log = "[" + TimeMeasure.ElapsedMilliseconds + "MS]" + log;
+            }
             LogRaw("[INFO] " + log);
         }
 

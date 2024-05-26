@@ -14,7 +14,7 @@ namespace WebFramework.Test
     {
         public override async Task DOMContentLoaded()
         {
-            Logger.LogInfo("App Loaded In " + AppManager.TimeMeasure.ElapsedMilliseconds + "ms");
+            Logger.LogInfo("App Loaded");
         }
 
         public static async Task OpenFilePicker()

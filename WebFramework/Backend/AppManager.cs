@@ -24,8 +24,6 @@ namespace WebFramework
         public static AppManager Instance;
         public static Type WindowToUse; // Called By WindowProvider
 
-        public static Stopwatch TimeMeasure = Stopwatch.StartNew();
-
         public static WebWindow GetWebWindow()
         {
             if (WindowToUse == null)

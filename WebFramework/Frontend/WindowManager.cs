@@ -25,7 +25,7 @@ namespace WebFramework
             Options = op;
             Options.Apply();
 
-            Logger.LogInfo("Creating Main Window (" + AppManager.TimeMeasure.ElapsedMilliseconds + "ms)");
+            Logger.LogInfo("Creating Main Window");
 
             MainWindow = AppManager.GetWebWindow();
             OpenWindows.Add(MainWindow);

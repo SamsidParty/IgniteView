@@ -357,11 +357,11 @@ namespace WebFramework
     private void Listen()
     {
         _listener = new HttpListener();
-        Logger.LogInfo("Starting HTTP Server On Port: " + _port + " (" + AppManager.TimeMeasure.ElapsedMilliseconds + "ms)");
+        Logger.LogInfo("Starting HTTP Server On Port: " + _port);
         _listener.Prefixes.Add("http://localhost:" + _port+ "/");
         _listener.Start();
 
-        Logger.LogInfo("Started HTTP Server (Listening On localhost:" + _port + ", " + AppManager.TimeMeasure.ElapsedMilliseconds + "ms)");
+        Logger.LogInfo("Started HTTP Server (Listening On localhost:" + _port);
 
             Started = true;
 
@@ -503,7 +503,7 @@ namespace WebFramework
 
                         if (WindowManager.MainWindow != null)
                         {
-                            Logger.LogInfo("Sending Modified Index File (" + AppManager.TimeMeasure.ElapsedMilliseconds + "ms)");
+                            Logger.LogInfo("Sending Modified Index File");
                             injection = WindowManager.MainWindow.OverrideLib(injection);
                         }
 

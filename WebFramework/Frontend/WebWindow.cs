@@ -45,7 +45,7 @@ namespace WebFramework
 
         public void LoadLib()
         {
-            Logger.LogInfo("Loading InteropLibrary.js Into Window (" + AppManager.TimeMeasure.ElapsedMilliseconds + "ms)");
+            Logger.LogInfo("Loading InteropLibrary.js Into Window");
             ExecuteJavascript(OverrideLib(InteropLibrary.Content));
         }
 
