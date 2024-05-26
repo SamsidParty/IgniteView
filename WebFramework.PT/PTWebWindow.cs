@@ -47,11 +47,15 @@ namespace WebFramework.PT
                 }
                 return new MemoryStream(Encoding.UTF8.GetBytes("404 Not Found"));
             });
+
+            //Register Interop
             Native.WebMessageReceived += async (s, e) =>
             {
                 Update(Native);
                 MSGHandler.OnMessage(e, this);
             };
+
+            Native.WindowCreated += async (s, e) => { Update(Native); };
 
             if (this == WindowManager.MainWindow)
             {

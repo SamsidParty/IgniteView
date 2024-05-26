@@ -110,6 +110,7 @@ namespace WebFramework.PT
         public void EnableMica(IntPtr hwnd)
         {
             //Enable Mica On Parent Window
+            Logger.LogInfo("Enabling Mica On Window: " + hwnd);
             int enable = 0x02;
             DwmSetWindowAttribute(hwnd, 38, ref enable, Marshal.SizeOf(typeof(int)));
         }
