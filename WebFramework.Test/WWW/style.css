@@ -1,19 +1,14 @@
 @font-face {
-    font-family: Main;
-    src: url("./Fonts/InterVariable.woff2");
-}
-
-@font-face {
     font-family: Icon;
     src: url("./Fonts/Tabler.ttf");
 }
 
+
 * {
-    font-family: Main, Icon;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", Icon;
     color: var(--col-text);
     box-sizing: border-box;
     font-weight: 500;
-
     --col-bg: white;
     --col-overlay: rgba(255, 255, 255, 0.5);
     --col-text: #111111;
@@ -126,4 +121,19 @@ body {
     margin: 0;
     overflow-y: auto;
     background-color: transparent !important;
+    animation: fadeInAnimation ease 400ms;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
