@@ -17,6 +17,7 @@ namespace WebFramework.Test
             Logger.LogInfo("App Loaded");
         }
 
+        [JSFunction("OpenFilePicker")]
         public static async Task OpenFilePicker()
         {
             var file = await FilePicker.OpenFilePicker(WindowManager.MainWindow.Document, new FilePickerOptions());
@@ -26,6 +27,7 @@ namespace WebFramework.Test
             }
         }
 
+        [JSFunction("OpenFileSaver")]
         public static async Task OpenFileSaver()
         {
             var file = await FilePicker.OpenFileSaver(WindowManager.MainWindow.Document, "exe");

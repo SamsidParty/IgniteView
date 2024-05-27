@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using WebFramework.Backend;
@@ -23,9 +24,27 @@ namespace WebFramework
 
         public static void AttachToWindow(string scriptName, WebWindow w)
         {
-            var type = WebScript.RegisteredScripts[scriptName];
+            Type type = WebScript.RegisteredScripts[scriptName];
             var script = (WebScript)Activator.CreateInstance(type);
             script.Document = w.Document;
+
+            //Find JSFunctions To Bind
+            MethodInfo[] methods = type.GetMethods();
+            foreach (MethodInfo method in methods)
+            {
+                Attribute[] attrs = Attribute.GetCustomAttributes(method, true);
+                foreach (Attribute attr in attrs)
+                {
+                    if (attr is JSFunctionAttribute)
+                    {
+                        JSFunctionAttribute jsFunctionBind = (JSFunctionAttribute)attr;
+                        var injection = $"window[`{jsFunctionBind.JSFunctionName}`] = () => CallCSharp(`{type.FullName}, {type.Assembly.FullName}`, `{method.Name}`);";
+                        w.ExecuteJavascript(injection);
+                    }
+                }
+
+            }
+
             Task.Run(script.DOMContentLoaded);
         }
 

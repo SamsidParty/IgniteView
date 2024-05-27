@@ -19,8 +19,8 @@ function App() {
                     <button onClick={() => CallCSharp("WebFramework.AppManager, WebFramework", "Quit")}>Close</button>
                 </div>
                 <div className="featureCard">
-                    <button onClick={() => CallCSharp("WebFramework.Test.TestScript, WebFramework.Test", "OpenFilePicker")}>File Picker</button>
-                    <button onClick={() => CallCSharp("WebFramework.Test.TestScript, WebFramework.Test", "OpenFileSaver")}>File Saver</button>
+                    <button onClick={OpenFilePicker}>File Picker</button>
+                    <button onClick={OpenFileSaver}>File Saver</button>
                 </div>
                 <div className="featureCard">
                 

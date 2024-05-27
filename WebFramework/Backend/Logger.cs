@@ -98,7 +98,12 @@ namespace WebFramework.Backend
 
         public static void LogError(string log)
         {
-            LogRaw("[ERROR] " + log);
+            LogRaw("\x1b[31m[ERROR]\x1b[0m " + log);
+        }
+
+        public static void LogWarning(string log)
+        {
+            LogRaw("\x1b[33m[WARNING]\x1b[0m " + log);
         }
     }
 }

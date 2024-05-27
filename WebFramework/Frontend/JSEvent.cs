@@ -20,7 +20,7 @@ namespace WebFramework
 
         public static string GenerateFunction(string fname, params object[] values)
         {
-            var js = fname + "(";
+            var js = JSFunction.SanitizeFunctionName(fname) + "(";
             for (var i = 0; i < values.Length; i++)
             {
                 var value = values[i];
