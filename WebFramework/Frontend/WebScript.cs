@@ -50,7 +50,7 @@ namespace WebFramework
         {
             JSFunctionAttribute jsFunctionBind = (JSFunctionAttribute)attr;
             var type = method.DeclaringType;
-            var injection = $"window[`{jsFunctionBind.JSFunctionName}`] = () => CallCSharp(`{type.FullName}, {type.Assembly.FullName}`, `{method.Name}`);";
+            var injection = $"window[`{jsFunctionBind.JSFunctionName}`] = async (...arguments) => await CallCSharp(`{type.FullName}, {type.Assembly.FullName}`, `{method.Name}`, ...(Array.from(arguments)));";
             context.ExecuteJavascript(injection);
         }
 

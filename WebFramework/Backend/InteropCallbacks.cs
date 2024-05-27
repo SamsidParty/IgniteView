@@ -26,7 +26,7 @@ namespace WebFramework
             id.Invoke(new JSEvent(p2));
         }
 
-        public static void OnReflect(string p1, string p2, string p3, WebWindow context) //[1] = Type, [2], Method To Call [3] = List Of Args, In JSON
+        public static void OnReflect(string p1, string p2, string p3, WebWindow context) //[1] = Type, [2] = Method To Call, [3] = List Of Args, In JSON
         {
             try
             {
