@@ -51,7 +51,6 @@ namespace WebFramework.PT
         {
             if (File.Exists(WindowManager.Options.IconPath)) { 
 
-
                 //Convert Icon First, Then Apply It
                 if (Platform.isWindowsPT)
                 {
@@ -89,7 +88,10 @@ namespace WebFramework.PT
                 MSGHandler.OnMessage(e, this);
             };
 
-            Native.WindowCreated += async (s, e) => { ApplyIcon(); Update(Native); };
+            Native.WindowCreated += async (s, e) => {
+                Jobs.Add(ApplyIcon, this as WebWindow);
+                Update(Native);
+            };
         }
 
         public override async Task Close()

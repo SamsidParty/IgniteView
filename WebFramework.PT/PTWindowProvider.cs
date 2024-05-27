@@ -13,6 +13,8 @@ namespace WebFramework.PT
 {
     public class PTWindowProvider
     {
+        public static Dictionary<string, IntPtr> LibCache = new Dictionary<string, IntPtr>();
+
         public static void Activate()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
@@ -31,6 +33,15 @@ namespace WebFramework.PT
             NativeLibrary.SetDllImportResolver(typeof(PhotinoWindow).Assembly, ImportResolver);
         }
 
+        public static IntPtr GetLib(string lib)
+        {
+            Logger.LogInfo("Loading Lib From " + lib);
+
+            if (LibCache.ContainsKey(lib)) { return LibCache[lib]; }
+
+            LibCache[lib] = NativeLibrary.Load(lib);
+            return LibCache[lib];
+        }
 
         public static void ExtractDependencies()
         {
@@ -54,17 +65,15 @@ namespace WebFramework.PT
             {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    Logger.LogInfo("Loading Lib From " + Path.Combine(runtimePath, "win" + suffix, "native", libraryName + ".dll"));
-                    libHandle = NativeLibrary.Load(Path.Combine(runtimePath, "win" + suffix, "native", libraryName + ".dll"));
+                    libHandle = GetLib(Path.Combine(runtimePath, "win" + suffix, "native", libraryName + ".dll"));
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                 {
-                    Logger.LogInfo("Loading Lib From " + Path.Combine(runtimePath, "osx" + suffix, "native", libraryName + ".dylib"));
-                    libHandle = NativeLibrary.Load(Path.Combine(runtimePath, "osx" + suffix, "native", libraryName + ".dylib"));
+                    libHandle = GetLib(Path.Combine(runtimePath, "osx" + suffix, "native", libraryName + ".dylib"));
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
-                    libHandle = NativeLibrary.Load(Path.Combine(runtimePath, "linux" + suffix, "native", libraryName + ".so"));
+                    libHandle = GetLib(Path.Combine(runtimePath, "linux" + suffix, "native", libraryName + ".so"));
                 }
             }
             return libHandle;

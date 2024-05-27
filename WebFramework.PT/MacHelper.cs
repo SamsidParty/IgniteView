@@ -54,7 +54,7 @@ namespace WebFramework.PT
             //Read Pointer Until It's Different
             while (StringFromNativeUtf8(ptr) == "nr") // Short For Not Returned
             {
-                await Task.Delay(1);
+                await Task.Yield();
             }
 
             r = StringFromNativeUtf8(ptr);
@@ -79,7 +79,7 @@ namespace WebFramework.PT
                 //Read Pointer Until It's Different
                 while (StringFromNativeUtf8(ptr) == "nr") // Short For Not Returned
                 {
-                    await Task.Delay(1);
+                    await Task.Yield();
                 }
 
                 r = (StringFromNativeUtf8(ptr)).Split(':').Where(f => f.Length > 0).ToArray();
@@ -105,7 +105,7 @@ namespace WebFramework.PT
                 //Read Pointer Until It's Different
                 while (StringFromNativeUtf8(ptr) == "nr") // Short For Not Returned
                 {
-                    await Task.Delay(1);
+                    await Task.Yield();
                 }
 
                 r = (StringFromNativeUtf8(ptr)).Split(':').Where(f => f.Length > 0).ToArray(); ;

@@ -33,7 +33,7 @@ namespace WebFramework
 
             while (JSFunction.PendingFunctions[functionID] == "JSI_NotReturned")
             {
-                await Task.Delay(1);
+                await Task.Yield();
             }
 
             var retVal = JSFunction.PendingFunctions[functionID];

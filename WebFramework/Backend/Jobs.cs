@@ -5,11 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using WebFramework.Backend;
 
 namespace WebFramework
 {
     
-    internal class Jobs {
+    public class Jobs {
 
         public static List<Action> Queue = new List<Action>();
 
@@ -17,6 +18,14 @@ namespace WebFramework
         /// Queue A Job To Be Run On The UI Thread
         /// </summary>
         public static void Add(Action j, DOM ctx) {
+            Add(j, ctx.Window);
+        }
+
+        /// <summary>
+        /// Queue A Job To Be Run On The UI Thread
+        /// </summary>
+        public static void Add(Action j, WebWindow ctx)
+        {
             Queue.Add(j);
             RunAllFromRemoteThread(ctx);
         }
@@ -35,7 +44,28 @@ namespace WebFramework
         /// Invokes Pending Jobs On The UI Thread
         /// </summary>
         public static void RunAllFromRemoteThread(DOM ctx){
-            ctx.Window.ExecuteJavascript("JSI_Send('firejobs');");
+            RunAllFromRemoteThread(ctx.Window);
+        }
+
+        /// <summary>
+        /// Invokes Pending Jobs On The UI Thread
+        /// </summary>
+        public static void RunAllFromRemoteThread(WebWindow ctx)
+        {
+            if (!ctx.ReadyEventFired) // Wait Until The Window Is Ready
+            {
+                Task.Run(async () =>
+                {
+                    while (!ctx.ReadyEventFired)
+                    {
+                        await Task.Yield();
+                    }
+                    RunAllFromRemoteThread(ctx);
+                });
+                return;
+            }
+
+            ctx.ExecuteJavascript("JSI_Send('firejobs');");
         }
 
     }
