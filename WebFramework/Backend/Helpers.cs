@@ -25,6 +25,9 @@ namespace WebFramework
             }
         }
 
+        /// <summary>
+        /// Converts An Object To A JavaScript String Representation
+        /// </summary>
         public static string AsJavaScript(this object value)
         {
             if (value is string)
@@ -61,6 +64,9 @@ namespace WebFramework
         public static bool IsNumeric(Type type, TypeCode typeCode) { return (typeCode == TypeCode.Decimal || (type.IsPrimitive && typeCode != TypeCode.Object && typeCode != TypeCode.Boolean && typeCode != TypeCode.Char)); }
     }
 
+    /// <summary>
+    /// A Raw, Unwrapped JS Value (Dangerous, Don't Use With User-Generated Data)
+    /// </summary>
     public class JSLiteral
     {
         public string Value;

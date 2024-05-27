@@ -18,26 +18,26 @@ namespace WebFramework
 
         public async Task RunFunction(string fname, params object[] values)
         {
-            await Window.ExecuteJavascript(JSEvent.GenerateFunction(fname, values));
+            await Window.ExecuteJavascript(JSFunction.GenerateFunction(fname, values));
         }
 
         public async Task<string> RunFunctionWithReturn(string fname, params object[] values)
         {
-            var FnID = "interopfunction-" + fname + "-" + Guid.NewGuid().ToString();
-            JSEvent.PendingFunctions[FnID] = "JSI_NotReturned";
+            var functionID = "interopfunction-" + fname + "-" + Guid.NewGuid().ToString();
+            JSEvent.PendingFunctions[functionID] = "JSI_NotReturned";
             var js = "let fnResult = ";
-            js += JSEvent.GenerateFunction(fname, values);
+            js += JSFunction.GenerateFunction(fname, values);
             js += "\n";
-            js += JSEvent.GenerateFunction("JSI_Send", "retval", FnID, "fnResult".ToJSLiteral());
+            js += JSFunction.GenerateFunction("JSI_Send", "retval", functionID, "fnResult".ToJSLiteral());
             await Window.ExecuteJavascript(js);
 
-            while (JSEvent.PendingFunctions[FnID] == "JSI_NotReturned")
+            while (JSEvent.PendingFunctions[functionID] == "JSI_NotReturned")
             {
                 await Task.Delay(1);
             }
 
-            var retVal = JSEvent.PendingFunctions[FnID];
-            JSEvent.PendingFunctions.TryRemove(FnID, out retVal);
+            var retVal = JSEvent.PendingFunctions[functionID];
+            JSEvent.PendingFunctions.TryRemove(functionID, out retVal);
 
             return retVal;
         }

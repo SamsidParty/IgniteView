@@ -161,7 +161,7 @@ function JSI_TitleChanged(newTitle) {
     JSI_Send("title", newTitle);
 }
 
-window.CallCSharp = function () {
+window.CallCSharp = async function () {
     var args = Array.from(arguments);
     if (args.length == 0) {
         return;

@@ -34,5 +34,22 @@ namespace WebFramework
 
             return rgx.Replace(name, "");
         }
+
+        /// <summary>
+        /// Generates A String To Call A Function In JavaScript
+        /// </summary>
+        public static string GenerateFunction(string fname, params object[] values)
+        {
+            var js = JSFunction.SanitizeFunctionName(fname) + "(";
+            for (var i = 0; i < values.Length; i++)
+            {
+                var value = values[i];
+                js += value.AsJavaScript() + ",";
+            }
+
+            js += ");";
+
+            return js;
+        }
     }
 }

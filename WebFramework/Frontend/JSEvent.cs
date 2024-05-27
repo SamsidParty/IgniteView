@@ -11,26 +11,18 @@ namespace WebFramework
 {
     public class JSEvent : Dictionary<string, object>
     {
-
+        /// <summary>
+        /// Keeps Track Of Registered Event Listeners
+        /// </summary>
         public static Dictionary<string, Action<JSEvent>> Listeners = new Dictionary<string, Action<JSEvent>>();
+
+        /// <summary>
+        /// Keeps Track Of Function IDs & Return Values Of Functions That Have Not Been Returned Yet
+        /// </summary>
         public static ConcurrentDictionary<string, string> PendingFunctions = new ConcurrentDictionary<string, string>();
 
         public string JSONData;
         public JObject Data;
-
-        public static string GenerateFunction(string fname, params object[] values)
-        {
-            var js = JSFunction.SanitizeFunctionName(fname) + "(";
-            for (var i = 0; i < values.Length; i++)
-            {
-                var value = values[i];
-                js += value.AsJavaScript() + ",";
-            }
-
-            js += ");";
-
-            return js;
-        }
 
         public JSEvent(string j)
         {
