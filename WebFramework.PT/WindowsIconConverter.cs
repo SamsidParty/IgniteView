@@ -16,7 +16,21 @@ namespace WebFramework.PT
     internal class WindowsIconConverter
     {
 
-        #region PNG To Ico
+
+        [Flags]
+        public enum MoveFileFlags
+        {
+            None = 0,
+            ReplaceExisting = 1,
+            CopyAllowed = 2,
+            DelayUntilReboot = 4,
+            WriteThrough = 8,
+            CreateHardlink = 16,
+            FailIfNotTrackable = 32,
+        }
+
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern bool MoveFileEx(string lpExistingFileName, string lpNewFileName, MoveFileFlags dwFlags);
 
         //Based On https://stackoverflow.com/a/11448060/18071273
         public static string ConvertPngToIco(byte[] pngBytes)
@@ -66,9 +80,10 @@ namespace WebFramework.PT
 
             icoStream.Close();
 
+            //Delete The File Later On, When It's Not Needed
+            MoveFileEx(path, null, MoveFileFlags.DelayUntilReboot);
+
             return path;
         }
-
-        #endregion
     }
 }
