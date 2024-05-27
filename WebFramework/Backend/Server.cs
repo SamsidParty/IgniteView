@@ -79,11 +79,11 @@ namespace WebFramework
                 }
                 else if (msg.Type == "closeme")
                 {
-                    Jobs.Push(async () =>
+                    Jobs.Add(async () =>
                     {
                         await context.Close();
                     }, WindowManager.MainWindow.Document);
-                    Jobs.Fire(WindowManager.MainWindow.Document);
+                    Jobs.RunAllFromRemoteThread(WindowManager.MainWindow.Document);
                 }
                 else if (msg.Type == "title")
                 {
@@ -91,7 +91,7 @@ namespace WebFramework
                 }
                 else if (msg.Type == "firejobs")
                 {
-                    Jobs.Pop();
+                    Jobs.RunAll();
                 }
             }
             catch (Exception ex) { context.Document.RunFunction("console.error", ex.ToString()); }

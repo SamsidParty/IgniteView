@@ -28,7 +28,7 @@ namespace WebFramework.Test
         }
 
         [JSFunction("OpenFileSaver")]
-        public static async Task OpenFileSaver()
+        public async Task OpenFileSaver()
         {
             var file = await FilePicker.OpenFileSaver(WindowManager.MainWindow.Document, "exe");
             if (file != "")

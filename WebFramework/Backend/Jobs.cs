@@ -9,24 +9,32 @@ using System.Xml.Linq;
 namespace WebFramework
 {
     
-    public class Jobs {
+    internal class Jobs {
 
         public static List<Action> Queue = new List<Action>();
 
-        public static void Push(Action j, DOM ctx) {
+        /// <summary>
+        /// Queue A Job To Be Run On The UI Thread
+        /// </summary>
+        public static void Add(Action j, DOM ctx) {
             Queue.Add(j);
-            Fire(ctx);
+            RunAllFromRemoteThread(ctx);
         }
 
-        //Invokes The Jobs On The UI Thread
-        public static void Pop() {
+        /// <summary>
+        /// Invokes Pending Jobs Directly (Must Be Run On The UI Thread)
+        /// </summary>
+        public static void RunAll() {
             foreach (var j in Queue){
                 j.Invoke();
             }
             Queue.Clear();
         }
 
-        public static void Fire(DOM ctx){
+        /// <summary>
+        /// Invokes Pending Jobs On The UI Thread
+        /// </summary>
+        public static void RunAllFromRemoteThread(DOM ctx){
             ctx.Window.ExecuteJavascript("JSI_Send('firejobs');");
         }
 

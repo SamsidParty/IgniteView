@@ -22,11 +22,11 @@ namespace WebFramework
             RegisteredScripts[scriptName] = typeof(T);
         }
 
-        public static void AttachToWindow(string scriptName, WebWindow w)
+        public static void AttachToWindow(string scriptName, WebWindow context)
         {
             Type type = WebScript.RegisteredScripts[scriptName];
             var script = (WebScript)Activator.CreateInstance(type);
-            script.Document = w.Document;
+            script.Document = context.Document;
 
             //Find JSFunctions To Bind
             MethodInfo[] methods = type.GetMethods();
@@ -37,15 +37,21 @@ namespace WebFramework
                 {
                     if (attr is JSFunctionAttribute)
                     {
-                        JSFunctionAttribute jsFunctionBind = (JSFunctionAttribute)attr;
-                        var injection = $"window[`{jsFunctionBind.JSFunctionName}`] = () => CallCSharp(`{type.FullName}, {type.Assembly.FullName}`, `{method.Name}`);";
-                        w.ExecuteJavascript(injection);
+                        BindJSFunction(attr, method, context);
                     }
                 }
 
             }
 
             Task.Run(script.DOMContentLoaded);
+        }
+
+        public static void BindJSFunction(Attribute attr, MethodInfo method, WebWindow context)
+        {
+            JSFunctionAttribute jsFunctionBind = (JSFunctionAttribute)attr;
+            var type = method.DeclaringType;
+            var injection = $"window[`{jsFunctionBind.JSFunctionName}`] = () => CallCSharp(`{type.FullName}, {type.Assembly.FullName}`, `{method.Name}`);";
+            context.ExecuteJavascript(injection);
         }
 
         public virtual async Task DOMContentLoaded()
