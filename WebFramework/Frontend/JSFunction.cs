@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -20,6 +21,11 @@ namespace WebFramework
 
     public class JSFunction
     {
+        /// <summary>
+        /// Keeps Track Of Function IDs & Return Values Of Functions That Have Not Been Returned Yet
+        /// </summary>
+        public static ConcurrentDictionary<string, string> PendingFunctions = new ConcurrentDictionary<string, string>();
+
         /// <summary>
         /// Makes Sure A Function Name Has No Special Characters
         /// </summary>

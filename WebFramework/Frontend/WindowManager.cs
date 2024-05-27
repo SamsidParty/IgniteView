@@ -32,5 +32,15 @@ namespace WebFramework
             await MainWindow.Init();
             return MainWindow;
         }
+
+        public static WebWindow GetWindowByID(string windowID)
+        {
+            foreach (WebWindow window in OpenWindows)
+            {
+                if (window.ID == windowID) { return window; }
+            }
+
+            return null;
+        }
     }
 }

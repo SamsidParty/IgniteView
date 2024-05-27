@@ -17,7 +17,7 @@ namespace WebFramework
 
         public static void OnValueReturned(string p1, string p2, string p3, WebWindow context) //[1] = Function ID, [2] = Function Returned Value
         {
-            JSEvent.PendingFunctions[p1] = p2;
+            JSFunction.PendingFunctions[p1] = p2;
         }
 
         public static void OnEvent(string p1, string p2, string p3, WebWindow context) //[1] = Event ID, [2] = Event Data
@@ -30,8 +30,16 @@ namespace WebFramework
         {
             try
             {
-                var type = Type.GetType(p1);
-                type.GetMethod(p2).Invoke(null, JsonConvert.DeserializeObject<object[]>(p3));
+                if (p1.StartsWith("WebScriptID_")) // Use WebScript Instance Instead Of Type
+                {
+                    var ws = WebScript.GetWebScriptByID(p1);
+                    ws.GetType().GetMethod(p2).Invoke(ws, JsonConvert.DeserializeObject<object[]>(p3));
+                }
+                else
+                {
+                    var type = Type.GetType(p1);
+                    type.GetMethod(p2).Invoke(null, JsonConvert.DeserializeObject<object[]>(p3));
+                }
             }
             catch (Exception ex) {
                 Logger.LogError("Failed To Invoke CSharp Function At Runtime: " + ex.ToString());

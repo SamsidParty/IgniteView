@@ -20,7 +20,7 @@ function App() {
                 </div>
                 <div className="featureCard">
                     <button onClick={() => OpenFilePicker()}>File Picker</button>
-                    <button onClick={OpenFileSaver}>File Saver</button>
+                    <button onClick={() => OpenFileSaver()}>File Saver</button>
                 </div>
                 <div className="featureCard">
                 

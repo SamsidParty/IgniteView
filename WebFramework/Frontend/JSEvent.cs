@@ -16,11 +16,6 @@ namespace WebFramework
         /// </summary>
         public static Dictionary<string, Action<JSEvent>> Listeners = new Dictionary<string, Action<JSEvent>>();
 
-        /// <summary>
-        /// Keeps Track Of Function IDs & Return Values Of Functions That Have Not Been Returned Yet
-        /// </summary>
-        public static ConcurrentDictionary<string, string> PendingFunctions = new ConcurrentDictionary<string, string>();
-
         public string JSONData;
         public JObject Data;
 

@@ -13,6 +13,13 @@ namespace WebFramework
         public DOM Document;
         public Dictionary<string, Action<WSMessage, WebWindow>> MessageListeners = new Dictionary<string, Action<WSMessage, WebWindow>>();
 
+        public List<WebScript> AttachedScripts = new List<WebScript>();
+
+        /// <summary>
+        /// Unique Identifier Used To Identify This Window With JS Interop
+        /// </summary>
+        public string ID = Guid.NewGuid().ToString();
+
         public DynamicColor BackgroundColor
         {
             get
@@ -102,7 +109,7 @@ namespace WebFramework
 
         public virtual async Task Init()
         {
-
+            
         }
 
         public virtual async Task Close()

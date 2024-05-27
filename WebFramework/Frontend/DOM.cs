@@ -24,20 +24,20 @@ namespace WebFramework
         public async Task<string> RunFunctionWithReturn(string fname, params object[] values)
         {
             var functionID = "interopfunction-" + fname + "-" + Guid.NewGuid().ToString();
-            JSEvent.PendingFunctions[functionID] = "JSI_NotReturned";
+            JSFunction.PendingFunctions[functionID] = "JSI_NotReturned";
             var js = "let fnResult = ";
             js += JSFunction.GenerateFunction(fname, values);
             js += "\n";
             js += JSFunction.GenerateFunction("JSI_Send", "retval", functionID, "fnResult".ToJSLiteral());
             await Window.ExecuteJavascript(js);
 
-            while (JSEvent.PendingFunctions[functionID] == "JSI_NotReturned")
+            while (JSFunction.PendingFunctions[functionID] == "JSI_NotReturned")
             {
                 await Task.Delay(1);
             }
 
-            var retVal = JSEvent.PendingFunctions[functionID];
-            JSEvent.PendingFunctions.TryRemove(functionID, out retVal);
+            var retVal = JSFunction.PendingFunctions[functionID];
+            JSFunction.PendingFunctions.TryRemove(functionID, out retVal);
 
             return retVal;
         }
