@@ -51,19 +51,6 @@ namespace WebFramework
                 {
                     Directory.CreateDirectory(appDir);
                 }
-                //WinHelperLoader.FindAndLoad();
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Platform.isUWP)
-            {
-                //UWPHelperLoader.FindAndLoad();
-            }
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                //MacHelperLoader.FindAndLoad(); // Load MacHelper From WebFramework.PT
-            }
-            else if (Platform.isMAUI)
-            {
-                //MAUIHelperLoader.FindAndLoad();
             }
 
             SharedIO.FindAndLoad();
