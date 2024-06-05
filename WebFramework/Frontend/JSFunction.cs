@@ -31,7 +31,7 @@ namespace WebFramework
         /// </summary>
         public static string SanitizeFunctionName(string name)
         {
-            Regex rgx = new Regex("[^a-zA-Z0-9_-]");
+            Regex rgx = new Regex("[^a-zA-Z0-9._-]");
 
             if (rgx.IsMatch(name))
             {

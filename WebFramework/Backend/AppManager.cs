@@ -118,6 +118,8 @@ namespace WebFramework
 
         public static string GetRuntimePath()
         {
+            var runtimeID = "ivruntime2"; // TODO: Make This Less Hardcoded
+
             var opMode = Platform.GetOperatingMode();
             if (opMode == OperatingMode.DesktopDynamic)
             {
@@ -125,7 +127,7 @@ namespace WebFramework
             }
 
             //If App Directory Is Read Only
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IgniteView", "ivruntime");
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IgniteView", runtimeID);
 
         }
 
