@@ -39,7 +39,17 @@ namespace WebFramework.Backend
             {
                 if (!Platform.isMAUI)
                 {
-                    LogStream = await SharedIO.File.GetWriteStream(Path.Combine(await SharedIO.File.GetAppdataDirectory(), name + ".ivlog"));
+                    if (SharedIO.File == null)
+                    {
+                        //For Programs That Don't Use IgniteView (Like Background Services) 
+                        var file = new SharedIOFile();
+                        LogStream = await file.GetWriteStream(Path.Combine(await file.GetAppdataDirectory(), name + ".ivlog"));
+                    }
+                    else
+                    {
+                        LogStream = await SharedIO.File.GetWriteStream(Path.Combine(await SharedIO.File.GetAppdataDirectory(), name + ".ivlog"));
+                    }
+                    
                 }
 
             }
