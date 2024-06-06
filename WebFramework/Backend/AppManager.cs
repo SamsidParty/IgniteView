@@ -105,7 +105,7 @@ namespace WebFramework
 
         public static string GetRuntimePath()
         {
-            var runtimeID = "ivruntime2"; // TODO: Make This Less Hardcoded
+            var runtimeID = "ivruntime3"; // TODO: Make This Less Hardcoded
 
             var opMode = Platform.GetOperatingMode();
             if (opMode == OperatingMode.DesktopDynamic)
