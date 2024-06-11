@@ -89,6 +89,7 @@ namespace WebFramework.Backend
                 Console.WriteLine(log);
             }
             Debug.WriteLine(log);
+            Trace.WriteLine(log);
 
             if (LogStream != null)
             {

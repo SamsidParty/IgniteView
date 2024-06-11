@@ -110,7 +110,7 @@ namespace WebFramework
             var opMode = Platform.GetOperatingMode();
             if (opMode == OperatingMode.DesktopDynamic)
             {
-                return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ivruntime");
+                return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, runtimeID);
             }
 
             //If App Directory Is Read Only
