@@ -79,6 +79,7 @@ namespace WebFramework.Backend
             if (LogStream != null)
             {
                 LogStream.Close();
+                LogStream = null;
             }
         }
 

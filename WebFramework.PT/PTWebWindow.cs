@@ -43,7 +43,7 @@ namespace WebFramework.PT
                 Native.Load(AppManager.GetMainURL());
                 Logger.LogInfo("Starting PT");
                 Native.WaitForClose();
-                Process.GetCurrentProcess().Kill();
+                await Close();
             }
         }
 
@@ -96,6 +96,7 @@ namespace WebFramework.PT
 
         public override async Task Close()
         {
+            await CleanUp.RunCleanUpActions();
             Environment.Exit(0);
         }
 

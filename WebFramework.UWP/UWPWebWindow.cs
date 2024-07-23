@@ -84,6 +84,7 @@ namespace WebFramework.UWP
 
         public override async Task Close()
         {
+            await CleanUp.RunCleanUpActions();
             Application.Current.Exit();
         }
     }

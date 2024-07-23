@@ -1,4 +1,6 @@
 ﻿
+using WebFramework.Backend;
+
 namespace WebFramework.MAUI
 {
     // All the code in this file is included in all platforms.
@@ -27,6 +29,8 @@ namespace WebFramework.MAUI
 
         public override async Task Close()
         {
+            await CleanUp.RunCleanUpActions();
+
             MainThread.BeginInvokeOnMainThread(() =>
             {
                 Application.Current.Quit();
