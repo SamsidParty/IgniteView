@@ -24,7 +24,7 @@ namespace WebFramework
         public static AppManager Instance;
         public static Type WindowToUse; // Called By WindowProvider
 
-        public static WebWindow GetWebWindow()
+        public static WebWindow GetWebWindow(WindowOptions options)
         {
             if (WindowToUse == null)
             {
@@ -32,7 +32,7 @@ namespace WebFramework
             }
 
             Logger.LogInfo("Found Window To Use: " + WindowToUse.Name);
-            return Activator.CreateInstance(WindowToUse) as WebWindow;
+            return Activator.CreateInstance(WindowToUse, options) as WebWindow;
         }
 
         /// <summary>

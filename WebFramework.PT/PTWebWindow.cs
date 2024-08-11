@@ -17,48 +17,60 @@ namespace WebFramework.PT
 
         public PhotinoWindow Native;
 
+        public PTWebWindow(WindowOptions options) : base(options) { }
 
         public override async Task Init()
         {
-            await base.Init();
 
             Logger.LogInfo("Creating PT");
 
-            if (WindowManager.Options.EnableAcrylic)
+            if (Options.EnableAcrylic)
             {
                 Environment.SetEnvironmentVariable("WEBVIEW2_DEFAULT_BACKGROUND_COLOR", "00000000");
             }
 
-            Native = new PhotinoWindow();
+            if (this == WindowManager.MainWindow)
+            {
+                Native = new PhotinoWindow();
+            }
+            else
+            {
+                Native = new PhotinoWindow((WindowManager.MainWindow as PTWebWindow).Native);
+            }
+
             Native.UseOsDefaultSize = false;
             Native.SetLogVerbosity(0);
             Native.Title = "";
+            Native.WebSecurityEnabled = false;
 
             RegisterNativeEvents();
 
-            if (this == WindowManager.MainWindow)
+            Native.SetSize(new System.Drawing.Size(Options.StartWidthHeight.Width, Options.StartWidthHeight.Height));
+            Native.SetResizable(!Options.LockWidthHeight);
+            Native.SetFullScreen(Options.Fullscreen);
+            Native.SetChromeless(Options.Fullscreen);
+            Native.Load(AppManager.GetMainURL());
+            Logger.LogInfo("Starting PT");
+            Native.WaitForClose();
+
+            if (WindowManager.MainWindow == this)
             {
-                Native.SetSize(new System.Drawing.Size(WindowManager.Options.StartWidthHeight.Width, WindowManager.Options.StartWidthHeight.Height));
-                Native.SetResizable(!WindowManager.Options.LockWidthHeight);
-                Native.Load(AppManager.GetMainURL());
-                Logger.LogInfo("Starting PT");
-                Native.WaitForClose();
                 await Close();
             }
         }
 
         public void ApplyIcon()
         {
-            if (File.Exists(WindowManager.Options.IconPath)) { 
+            if (File.Exists(Options.IconPath)) { 
 
                 //Convert Icon First, Then Apply It
                 if (Platform.isWindowsPT)
                 {
-                    Native.SetIconFile(WindowsIconConverter.ConvertPngToIco(File.ReadAllBytes(WindowManager.Options.IconPath)));
+                    Native.SetIconFile(WindowsIconConverter.ConvertPngToIco(File.ReadAllBytes(Options.IconPath)));
                 }
                 else
                 {
-                    Native.SetIconFile(WindowManager.Options.IconPath);
+                    Native.SetIconFile(Options.IconPath);
                 }
             }
         }
@@ -113,18 +125,18 @@ namespace WebFramework.PT
             {
                 var hwnd = w.WindowHandle;
 
-                if (WindowManager.Options.EnableAcrylic)
+                if (Options.EnableAcrylic)
                 {
                     WinHelperLoader.Current.EnableMica(hwnd);
                 }
                 else
                 {
-                    WinHelperLoader.Current.SetTitlebarColor(hwnd, WindowManager.Options._WinTBC);   
+                    WinHelperLoader.Current.SetTitlebarColor(hwnd, Options._WinTBC);   
                 }
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
                 MacHelper.Current.Init();
-                MacHelper.Current.OnIconChanged(WindowManager.Options.IconPath);
+                MacHelper.Current.OnIconChanged(Options.IconPath);
             }
         }
 

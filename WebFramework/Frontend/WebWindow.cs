@@ -15,10 +15,17 @@ namespace WebFramework
 
         public List<WebScript> AttachedScripts = new List<WebScript>();
 
+        public WindowOptions Options;
+
         /// <summary>
         /// Unique Identifier Used To Identify This Window With JS Interop
         /// </summary>
         public string ID = Guid.NewGuid().ToString();
+
+        public WebWindow(WindowOptions options)
+        {
+            Options = options;
+        }
 
         public DynamicColor BackgroundColor
         {

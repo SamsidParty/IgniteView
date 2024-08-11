@@ -6,6 +6,8 @@ namespace WebFramework.MAUI
     // All the code in this file is included in all platforms.
     public class MAUIWebWindow : WebWindow
     {
+        public MAUIWebWindow(WindowOptions options) : base(options) { }
+
         public override async Task Init()
         {
             await base.Init();

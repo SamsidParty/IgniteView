@@ -15,6 +15,8 @@ namespace WebFramework.UWP
 {
     public class UWPWebWindow : WebWindow
     {
+        public UWPWebWindow(WindowOptions options) : base(options) { }
+
         public override async Task Init()
         {
             await base.Init();
@@ -22,7 +24,7 @@ namespace WebFramework.UWP
             WebFrameworkPage.Instance.WebView.CoreWebView2Initialized += WebView_CoreWebView2Initialized;
             WebFrameworkPage.Instance.WebView.Source = new Uri(AppManager.GetMainURL());
 
-            if (!WindowManager.Options.NativeGamepadSupport)
+            if (!Options.NativeGamepadSupport)
             {
                 WebFrameworkPage.Instance.RequiresPointer = RequiresPointer.WhenFocused;
             }
@@ -58,7 +60,7 @@ namespace WebFramework.UWP
         void Update()
         {
             ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            var col = WindowManager.Options.TitlebarColor.Value;
+            var col = Options.TitlebarColor.Value;
             titleBar.BackgroundColor = Color.FromArgb(col.A, col.R, col.G, col.B);
             titleBar.ButtonBackgroundColor = Color.FromArgb(col.A, col.R, col.G, col.B);
         }

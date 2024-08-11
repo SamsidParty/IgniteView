@@ -18,19 +18,24 @@ namespace WebFramework
 
         public static async Task<WebWindow> Create(WindowOptions op)
         {
-            if (Options != null && Options._Allowed > -1)
+            var createdWindow = AppManager.GetWebWindow(op);
+
+            if (MainWindow == null)
             {
-                throw new InvalidOperationException("You Can Only Create A Main Window Once");
+                if (op != null)
+                {
+                    Options = op;
+                    Options.Apply();
+                }
+
+                Logger.LogInfo("Creating Main Window");
+                MainWindow = createdWindow;
             }
-            Options = op;
-            Options.Apply();
 
-            Logger.LogInfo("Creating Main Window");
+            OpenWindows.Add(createdWindow);
+            await createdWindow.Init();
 
-            MainWindow = AppManager.GetWebWindow();
-            OpenWindows.Add(MainWindow);
-            await MainWindow.Init();
-            return MainWindow;
+            return createdWindow;
         }
 
         public static WebWindow GetWindowByID(string windowID)

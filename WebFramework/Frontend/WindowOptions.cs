@@ -37,7 +37,6 @@ namespace WebFramework
         }
         DynamicColor TBC = Color.White;
         public int _WinTBC = -1; // Windows Wants It In A Single int
-        public int _Allowed = -1;
 
         /// <summary>
         /// Enables A Transparency Effect On The Window
@@ -60,6 +59,11 @@ namespace WebFramework
         /// Only Works On Some Platforms
         /// </summary>
         public bool LockWidthHeight = false;
+
+        /// <summary>
+        /// Only Works On Some Platforms
+        /// </summary>
+        public bool Fullscreen = false;
 
         void EditTitlebarColor()
         {

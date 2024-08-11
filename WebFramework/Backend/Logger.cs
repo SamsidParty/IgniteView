@@ -85,7 +85,7 @@ namespace WebFramework.Backend
 
         public static void LogRaw(string log)
         {
-            if (LogToConsole)
+            if (LogToConsole || Environment.CommandLine.Contains("--debug"))
             {
                 Console.WriteLine(log);
             }
