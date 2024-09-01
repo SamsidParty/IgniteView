@@ -65,6 +65,16 @@ namespace WebFramework
         /// </summary>
         public bool Fullscreen = false;
 
+        /// <summary>
+        /// Only Works On Some Platforms
+        /// </summary>
+        public bool DisableTitlebar = false;
+
+        /// <summary>
+        /// String Appended To URL, EG: ?test=1
+        /// </summary>
+        public string URLSuffix;
+
         void EditTitlebarColor()
         {
             TBC.Changed.Add((c) =>

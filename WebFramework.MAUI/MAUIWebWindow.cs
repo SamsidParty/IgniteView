@@ -12,7 +12,7 @@ namespace WebFramework.MAUI
         {
             await base.Init();
             var src = new UrlWebViewSource();
-            src.Url = AppManager.GetMainURL();
+            src.Url = AppManager.GetMainURL() + Options.URLSuffix;
             WebFrameworkPage.Instance.Source = src;
         }
 

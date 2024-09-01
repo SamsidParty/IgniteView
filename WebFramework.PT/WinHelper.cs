@@ -66,6 +66,20 @@ namespace WebFramework.PT
         [DllImport("user32.dll")]
         internal static extern bool EnumChildWindows(IntPtr hwnd, WindowEnumProc func, IntPtr lParam);
 
+
+        public static bool isWindows11
+        {
+            get
+            {
+                var reg = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion");
+
+                var currentBuildStr = (string)reg.GetValue("CurrentBuild");
+                var currentBuild = int.Parse(currentBuildStr);
+
+                return currentBuild >= 22000;
+            }
+        }
+
         internal enum AccentState
         {
             ACCENT_DISABLED = 0,
@@ -109,6 +123,8 @@ namespace WebFramework.PT
 
         public void EnableMica(IntPtr hwnd)
         {
+            if (!isWindows11) { return; }
+
             //Enable Mica On Parent Window
             Logger.LogInfo("Enabling Mica On Window: " + hwnd);
             int enable = 0x02;
@@ -117,9 +133,13 @@ namespace WebFramework.PT
 
         public void SetTitlebarColor(IntPtr hwnd, int color)
         {
-            Logger.LogInfo("Changing Titlebar Color Of Window: " + hwnd);
             DwmSetWindowAttribute(hwnd, 35, new int[] { color }, 4);
         }
+        public void EnableRoundedCorners(IntPtr hwnd)
+        {
+            DwmSetWindowAttribute(hwnd, 33, new int[] { 2 }, 4);
+        }
+
 
         //https://stackoverflow.com/a/72172845/18071273
         public bool IsDark()

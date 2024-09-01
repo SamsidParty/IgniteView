@@ -48,8 +48,8 @@ namespace WebFramework.PT
             Native.SetSize(new System.Drawing.Size(Options.StartWidthHeight.Width, Options.StartWidthHeight.Height));
             Native.SetResizable(!Options.LockWidthHeight);
             Native.SetFullScreen(Options.Fullscreen);
-            Native.SetChromeless(Options.Fullscreen);
-            Native.Load(AppManager.GetMainURL());
+            Native.SetChromeless(Options.Fullscreen || Options.DisableTitlebar);
+            Native.Load(AppManager.GetMainURL() + Options.URLSuffix);
             Logger.LogInfo("Starting PT");
             Native.WaitForClose();
 
@@ -108,8 +108,13 @@ namespace WebFramework.PT
 
         public override async Task Close()
         {
-            await CleanUp.RunCleanUpActions();
-            Environment.Exit(0);
+            if (WindowManager.MainWindow == this)
+            {
+                await CleanUp.RunCleanUpActions();
+                Environment.Exit(0);
+                return;
+            }
+            Native.Close();
         }
 
         public override async Task WindowReady()
@@ -131,7 +136,12 @@ namespace WebFramework.PT
                 }
                 else
                 {
-                    WinHelperLoader.Current.SetTitlebarColor(hwnd, Options._WinTBC);   
+                    WinHelperLoader.Current.SetTitlebarColor(hwnd, Options._WinTBC);    
+                }
+
+                if (Options.DisableTitlebar)
+                {
+                    WinHelperLoader.Current.EnableRoundedCorners(hwnd);
                 }
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
