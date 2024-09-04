@@ -24,6 +24,17 @@ namespace WebFramework
             }
         }
 
+
+        public static bool isWindows11
+        {
+            get
+            {
+                if (!Platform.isWindowsPT) { return false; }
+
+                return WinHelperLoader.Current.isWindows11;
+            }
+        }
+
         public static bool isUWP
         {
             get

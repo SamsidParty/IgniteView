@@ -55,7 +55,7 @@ namespace PhotinoNET
             Zoom = 100,
             MaxHeight = int.MaxValue,
             MaxWidth = int.MaxValue,
-            EnableAcrylic = WindowManager.Options.EnableAcrylic
+            EnableAcrylic = WindowManager.Options.EnableAcrylic && (!Platform.isWindowsPT || Platform.isWindows11)
         };
 
         //Pointers to the type and instance.

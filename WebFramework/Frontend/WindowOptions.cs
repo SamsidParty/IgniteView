@@ -27,7 +27,7 @@ namespace WebFramework
             }
             set
             {
-                if (!EnableAcrylic)
+                if (!EnableAcrylic || !Platform.isWindows11)
                 {
                     Environment.SetEnvironmentVariable("WEBVIEW2_DEFAULT_BACKGROUND_COLOR", "FF" + value.HexValue);
                 }

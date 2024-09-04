@@ -24,7 +24,7 @@ namespace WebFramework.PT
 
             Logger.LogInfo("Creating PT");
 
-            if (Options.EnableAcrylic)
+            if (Options.EnableAcrylic || !Platform.isWindows11)
             {
                 Environment.SetEnvironmentVariable("WEBVIEW2_DEFAULT_BACKGROUND_COLOR", "00000000");
             }
@@ -130,7 +130,7 @@ namespace WebFramework.PT
             {
                 var hwnd = w.WindowHandle;
 
-                if (Options.EnableAcrylic)
+                if (Options.EnableAcrylic || !Platform.isWindows11)
                 {
                     WinHelperLoader.Current.EnableMica(hwnd);
                 }

@@ -66,8 +66,7 @@ namespace WebFramework.PT
         [DllImport("user32.dll")]
         internal static extern bool EnumChildWindows(IntPtr hwnd, WindowEnumProc func, IntPtr lParam);
 
-
-        public static bool isWindows11
+        public bool isWindows11
         {
             get
             {
