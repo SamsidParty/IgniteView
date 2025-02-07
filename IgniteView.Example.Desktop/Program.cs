@@ -5,6 +5,7 @@ namespace IgniteView.Example.Desktop
 {
     internal class Program
     {
+        [STAThread]
         static void Main(string[] args)
         {
             DesktopPlatformManager.Activate();
