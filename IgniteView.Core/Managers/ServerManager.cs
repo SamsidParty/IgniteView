@@ -7,12 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using WatsonWebserver;
 using WatsonWebserver.Core;
+using IgniteView.Core.Types;
 
 namespace IgniteView.Core
 {
     public class ServerManager
     {
         public Webserver CurrentServer;
+        public FileResolver Resolver;
 
         /// <summary>
         /// Gets the URL where the server is listening (excluding a trailing slash)
@@ -45,14 +47,21 @@ namespace IgniteView.Core
         {
             WebserverSettings settings = new WebserverSettings("127.0.0.1", GetFreePort());
             CurrentServer = new Webserver(settings, DefaultRoute);
+
+            if (!Resolver.DirectSetup(CurrentServer))
+            {
+                // TODO: Implement manual resolving
+            }            
+
             CurrentServer.Start();
         }
 
         public ServerManager()
         {
+            Resolver = new WWWRootFileResolver();
             Start();
         }
 
-        static async Task DefaultRoute(HttpContextBase ctx) => await ctx.Response.Send("Hello from the default route!");
+        async Task DefaultRoute(HttpContextBase ctx) => ctx.Response.Headers.Set("Location", Resolver.GetIndexFile());
     }
 }

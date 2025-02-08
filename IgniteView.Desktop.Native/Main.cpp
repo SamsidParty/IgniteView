@@ -30,7 +30,6 @@ extern "C" {
     }
 
     _declspec(dllexport) void CreateApp(const char* appID) {
-        std::cout << appID << std::endl;
         App = saucer::application::init({
             .id = appID,
         });
