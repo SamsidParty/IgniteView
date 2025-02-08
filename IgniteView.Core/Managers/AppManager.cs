@@ -11,13 +11,19 @@ namespace IgniteView.Core
     /// </summary>
     public class AppManager
     {
+        public static AppManager Instance;
+
         public AppIdentity CurrentIdentity;
+        public ServerManager CurrentServerManager;
 
         /// <summary>
         /// Creates an application while defining explicit metadata about the app's identity
         /// </summary>
         public AppManager(AppIdentity identity)
         {
+            Instance = this;
+
+            CurrentServerManager = new ServerManager();
             CurrentIdentity = identity;
         }
 

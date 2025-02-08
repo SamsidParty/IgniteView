@@ -8,6 +8,14 @@ namespace IgniteView.Core
 {
     public class WebWindow
     {
+        public AppManager CurrentAppManager
+        {
+            get
+            {
+                return AppManager.Instance;
+            }
+        }
+
         public static WebWindow Create() => PlatformManager.Instance.CreateWebWindow();
 
         /// <summary>

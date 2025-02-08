@@ -13,12 +13,12 @@ namespace IgniteView.Desktop
         #region Native Imports
 
         [DllImport("IgniteView.Desktop.Native")]
-        static extern void NewWebWindow();
+        static extern void NewWebWindow(string url);
 
         #endregion
 
         public DesktopWebWindow(): base() {
-            NewWebWindow();
+            NewWebWindow(CurrentAppManager.CurrentServerManager.BaseURL);
         }
     }
 }
