@@ -22,6 +22,11 @@ namespace IgniteView.Core
         public abstract void Run();
 
         /// <summary>
+        /// Runs after the AppManager has been initialized, but before any window has been created
+        /// </summary>
+        public abstract void Create();
+
+        /// <summary>
         /// Gets the current PlatformManager
         /// </summary>
         public static PlatformManager Instance

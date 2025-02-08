@@ -25,6 +25,8 @@ namespace IgniteView.Core
 
             CurrentServerManager = new ServerManager();
             CurrentIdentity = identity;
+
+            PlatformManager.Instance.Create();
         }
 
         /// <summary>

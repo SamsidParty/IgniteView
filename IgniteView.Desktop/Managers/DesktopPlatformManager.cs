@@ -13,8 +13,8 @@ namespace IgniteView.Desktop
     {
         #region Native Imports
 
-        [DllImport("IgniteView.Desktop.Native")]
-        static extern void CreateApp();
+        [DllImport("IgniteView.Desktop.Native", CharSet = CharSet.Unicode)]
+        static extern void CreateApp(string appID);
 
         [DllImport("IgniteView.Desktop.Native")]
         static extern void RunApp();
@@ -25,8 +25,6 @@ namespace IgniteView.Desktop
         {
             NativeLibrary.SetDllImportResolver(typeof(DesktopWebWindow).Assembly, ImportResolver);
             Instance = new DesktopPlatformManager();
-
-            CreateApp();
         }
 
         
@@ -66,5 +64,6 @@ namespace IgniteView.Desktop
 
         public override WebWindow CreateWebWindow() => new DesktopWebWindow();
         public override void Run() => RunApp();
+        public override void Create() => CreateApp(AppManager.Instance.CurrentIdentity.IDString);
     }
 }

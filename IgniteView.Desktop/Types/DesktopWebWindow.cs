@@ -12,7 +12,7 @@ namespace IgniteView.Desktop
     {
         #region Native Imports
 
-        [DllImport("IgniteView.Desktop.Native")]
+        [DllImport("IgniteView.Desktop.Native", CharSet = CharSet.Ansi)]
         static extern void NewWebWindow(string url);
 
         #endregion
