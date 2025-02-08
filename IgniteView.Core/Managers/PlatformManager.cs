@@ -17,6 +17,11 @@ namespace IgniteView.Core
         public abstract WebWindow CreateWebWindow();
 
         /// <summary>
+        /// Runs the main loop of the application
+        /// </summary>
+        public abstract void Run();
+
+        /// <summary>
         /// Gets the current PlatformManager
         /// </summary>
         public static PlatformManager Instance

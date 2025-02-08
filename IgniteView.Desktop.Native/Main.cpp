@@ -1,6 +1,7 @@
-#include "webview/webview.h"
-
+#include <saucer/smartview.hpp>
+#include <windows.h>
 #include <iostream>
+#include <list>
 
 #ifdef _WIN32
 BOOL WINAPI DllMain(
@@ -13,18 +14,28 @@ int main() {
   return TRUE;
 }
 
+std::shared_ptr<saucer::application> App;
+std::list<std::shared_ptr<saucer::smartview<saucer::default_serializer>>> WindowList;
+
 extern "C" {
-    _declspec(dllexport) void InitWebWindow() {
-        try {
-            webview::webview w(false, nullptr);
-            w.set_title("Basic Example");
-            w.set_size(480, 320, WEBVIEW_HINT_NONE);
-            w.set_html("Hello, World");
-            w.run();
-        }
-        catch (const webview::exception& e) {
-            std::cerr << e.what() << '\n';
-        }
+    _declspec(dllexport) void NewWebWindow() {
+        auto window = std::shared_ptr{ App->make<saucer::smartview<>>(saucer::preferences{.application = App}) };
+        WindowList.push_back(window);
+
+        window->set_title("Hello World!");
+
+        window->set_url("https://google.com");
+        window->show();
+    }
+
+    _declspec(dllexport) void CreateApp() {
+        App = saucer::application::init({
+            .id = "hello-world",
+        });
+    }
+
+    _declspec(dllexport) void RunApp() {
+        App->run();
     }
 }
 

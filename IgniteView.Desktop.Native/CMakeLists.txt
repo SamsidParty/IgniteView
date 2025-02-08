@@ -2,17 +2,20 @@ cmake_minimum_required(VERSION 3.25)
 project(IgniteView.Desktop.Native)
 add_library(IgniteView.Desktop.Native SHARED)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
+set(saucer_serializer "Rflpp")
+
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 23 CXX_EXTENSIONS OFF CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
 
 FetchContent_Declare(
-    webview
-    GIT_REPOSITORY https://github.com/webview/webview
-    GIT_TAG 0.12.0)
-FetchContent_MakeAvailable(webview)
+    saucer 
+    GIT_REPOSITORY "https://github.com/saucer/saucer" 
+    GIT_TAG v6.0.1
+)
+
+FetchContent_MakeAvailable(saucer)
 
 target_sources(IgniteView.Desktop.Native PRIVATE Main.cpp)
-target_link_libraries(IgniteView.Desktop.Native PUBLIC webview::core)
+target_link_libraries(${PROJECT_NAME} PUBLIC saucer::saucer)

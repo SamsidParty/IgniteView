@@ -26,7 +26,7 @@ namespace IgniteView.Core
         /// </summary>
         public void Run()
         {
-
+            PlatformManager.Instance.Run();
         }
     }
 }
