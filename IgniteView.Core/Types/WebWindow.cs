@@ -63,6 +63,15 @@ namespace IgniteView.Core
 
         #endregion
 
+        #region Window Handle
+
+        /// <summary>
+        /// Gets the handle of the window, on supported platforms this will return the native handle of the window
+        /// </summary>
+        public virtual IntPtr NativeHandle { get; }
+
+        #endregion
+
         #region Virtual Methods
 
         /// <summary>

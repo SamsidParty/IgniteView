@@ -4,6 +4,7 @@
 
 #ifdef _WIN32
 #include <windows.h>
+#include <saucer/modules/stable/webview2.hpp>
 
 BOOL WINAPI DllMain(
     HINSTANCE hinstDLL,
@@ -16,11 +17,13 @@ int main() {
 }
 
 std::shared_ptr<saucer::application> App;
-std::vector<std::shared_ptr<saucer::smartview<saucer::default_serializer>>> WindowList;
+std::vector<std::shared_ptr<saucer::webview>> WindowList;
+
+
 
 extern "C" {
     _declspec(dllexport) int NewWebWindow(const char* url) {
-        auto window = std::shared_ptr{ App->make<saucer::smartview<>>(saucer::preferences{.application = App}) };
+        auto window = std::shared_ptr{ App->make<saucer::webview>(saucer::preferences{.application = App}) };
         WindowList.push_back(window);
 
         window->set_url(url);
@@ -41,6 +44,14 @@ extern "C" {
         auto title = WindowList[index]->title();
         auto titlePtr = strdup(title.c_str());
         return (const char*)titlePtr;
+    }
+
+    _declspec(dllexport) const void* GetWebWindowHandle(int index) {
+        #ifdef _WIN32
+        return WindowList[index]->window::native().hwnd;
+        #endif
+
+        return 0;
     }
 
     _declspec(dllexport) void CreateApp(const char* appID) {

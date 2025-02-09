@@ -21,8 +21,11 @@ namespace IgniteView.Desktop
         [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
         static extern int SetWebWindowTitle(int index, string newTitle);
 
-        [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
+        [DllImport(InteropHelper.DLLName)]
         static extern IntPtr GetWebWindowTitle(int index);
+
+        [DllImport(InteropHelper.DLLName)]
+        static extern IntPtr GetWebWindowHandle(int index);
 
         #endregion
 
@@ -32,6 +35,7 @@ namespace IgniteView.Desktop
         int WindowIndex;
 
         public override string Title { get => InteropHelper.PointerToString(GetWebWindowTitle(WindowIndex)); set => SetWebWindowTitle(WindowIndex, value); }
+        public override IntPtr NativeHandle { get => GetWebWindowHandle(WindowIndex); }
 
         public override WebWindow Show()
         {
