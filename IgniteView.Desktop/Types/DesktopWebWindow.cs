@@ -12,17 +12,33 @@ namespace IgniteView.Desktop
     {
         #region Native Imports
 
-        [DllImport("IgniteView.Desktop.Native", CharSet = CharSet.Ansi)]
-        static extern void NewWebWindow(string url);
+        [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
+        static extern int NewWebWindow(string url);
+
+        [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
+        static extern void ShowWebWindow(int index);
+
+        [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
+        static extern int SetWebWindowTitle(int index, string newTitle);
+
+        [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
+        static extern IntPtr GetWebWindowTitle(int index);
 
         #endregion
 
+        /// <summary>
+        /// Represents the internal index of the window in the C++ code
+        /// </summary>
+        int WindowIndex;
+
+        public override string Title { get => InteropHelper.PointerToString(GetWebWindowTitle(WindowIndex)); set => SetWebWindowTitle(WindowIndex, value); }
+
         public override WebWindow Show()
         {
-            NewWebWindow(CurrentAppManager.CurrentServerManager.BaseURL);
+            ShowWebWindow(WindowIndex);
             return base.Show();
         }
 
-        public DesktopWebWindow() : base() { }
+        public DesktopWebWindow() : base() { WindowIndex = NewWebWindow(CurrentAppManager.CurrentServerManager.BaseURL); }
     }
 }

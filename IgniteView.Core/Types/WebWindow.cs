@@ -45,8 +45,26 @@ namespace IgniteView.Core
 
         #endregion
 
+        #region Window Title
+
+        /// <summary>
+        /// Gets or sets the title of this WebWindow
+        /// </summary>
+        public virtual string Title { get; set; }
+
+        /// <summary>
+        /// Sets the title of this WebWindow
+        /// </summary>
+        public virtual WebWindow WithTitle(string newTitle)
+        {
+            Title = newTitle;
+            return this;
+        }
+
+        #endregion
+
         #region Virtual Methods
-        
+
         /// <summary>
         /// Call this after configuring the window to display it on screen
         /// </summary>

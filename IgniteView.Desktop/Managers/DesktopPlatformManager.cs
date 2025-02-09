@@ -13,10 +13,10 @@ namespace IgniteView.Desktop
     {
         #region Native Imports
 
-        [DllImport("IgniteView.Desktop.Native", CharSet = CharSet.Unicode)]
+        [DllImport(InteropHelper.DLLName, CharSet = CharSet.Unicode)]
         static extern void CreateApp(string appID);
 
-        [DllImport("IgniteView.Desktop.Native")]
+        [DllImport(InteropHelper.DLLName)]
         static extern void RunApp();
 
         #endregion
