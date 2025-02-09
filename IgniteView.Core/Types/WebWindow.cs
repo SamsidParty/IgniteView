@@ -16,11 +16,54 @@ namespace IgniteView.Core
             }
         }
 
+        #region Window Bounds
+        public WindowBounds Bounds
+        {
+            get
+            {
+                if (_Bounds.InitialWidth == 0)
+                {
+                    _Bounds = new WindowBounds(1280, 720);
+                }
+                return _Bounds;
+            }
+            set
+            {
+                _Bounds = value;
+            }
+        }
+        public WindowBounds _Bounds;
+
+        /// <summary>
+        /// Sets the window bounds of this WebWindow
+        /// </summary>
+        public WebWindow WithBounds(WindowBounds bounds)
+        {
+            Bounds = bounds;
+            return this;
+        }
+
+        #endregion
+
+        #region Virtual Methods
+        
+        /// <summary>
+        /// Call this after configuring the window to display it on screen
+        /// </summary>
+        public virtual WebWindow Show() => this;
+
+        #endregion
+
+        #region Constructors
+
         public static WebWindow Create() => PlatformManager.Instance.CreateWebWindow();
+        public static WebWindow Create(WindowBounds bounds) => Create().WithBounds(bounds);
 
         /// <summary>
         /// Only inherited classes should call this constructor
         /// </summary>
         protected WebWindow() { }
+
+        #endregion
     }
 }

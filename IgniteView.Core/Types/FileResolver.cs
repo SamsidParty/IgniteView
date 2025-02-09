@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WatsonWebserver;
 
-namespace IgniteView.Core.Types
+namespace IgniteView.Core
 {
     public abstract class FileResolver
     {

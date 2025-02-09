@@ -11,8 +11,8 @@ namespace IgniteView.Example.Desktop
             DesktopPlatformManager.Activate();
             var app = new AppManager(new AppIdentity("SamsidParty", "IgniteView Example"));
 
-            var mainWindow = WebWindow.Create();
-            //var mainWindow2 = WebWindow.Create();
+            var mainWindow = WebWindow.Create().Show();
+            var mainWindow2 = WebWindow.Create().Show();
 
             app.Run();
         }

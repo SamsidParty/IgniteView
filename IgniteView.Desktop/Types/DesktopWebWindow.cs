@@ -17,8 +17,12 @@ namespace IgniteView.Desktop
 
         #endregion
 
-        public DesktopWebWindow(): base() {
+        public override WebWindow Show()
+        {
             NewWebWindow(CurrentAppManager.CurrentServerManager.BaseURL);
+            return base.Show();
         }
+
+        public DesktopWebWindow() : base() { }
     }
 }

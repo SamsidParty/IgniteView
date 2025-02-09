@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using WatsonWebserver;
 using WatsonWebserver.Core;
-using IgniteView.Core.Types;
 
 namespace IgniteView.Core
 {
