@@ -28,7 +28,10 @@ namespace IgniteView.Desktop
         protected static extern int SetWebWindowTitle(int index, string newTitle);
 
         [DllImport(InteropHelper.DLLName)]
-        protected static extern void SetWebWindowDark(int index, bool isDark);
+        protected static extern void SetWebWindowDark(int index, bool isDark);        
+        
+        [DllImport(InteropHelper.DLLName)]
+        protected static extern void SetWebWindowBounds(int index, int w, int h, int minW, int minH, int maxW, int maxH);
 
         [DllImport(InteropHelper.DLLName)]
         protected static extern IntPtr GetWebWindowTitle(int index);
@@ -43,12 +46,21 @@ namespace IgniteView.Desktop
         public override string Title { get => InteropHelper.PointerToString(GetWebWindowTitle(WindowIndex)); set => SetWebWindowTitle(WindowIndex, value); }
         public override IntPtr NativeHandle { get => GetWebWindowHandle(WindowIndex); }
 
+        public override WindowBounds Bounds { 
+            get => base.Bounds;
+            set {
+                SetWebWindowBounds(WindowIndex, value.InitialWidth, value.InitialHeight, value.MinWidth, value.MinHeight, value.MaxWidth, value.MaxHeight);
+                base.Bounds = value;
+            } 
+        }
+
         #endregion
 
         public override WebWindow Show()
         {
+            base.Show();
             ShowWebWindow(WindowIndex);
-            return base.Show();
+            return this;
         }
 
         public DesktopWebWindow() : base() { 

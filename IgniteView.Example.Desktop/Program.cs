@@ -13,12 +13,14 @@ namespace IgniteView.Example.Desktop
 
             var mainWindow =
                 WebWindow.Create()
+                .WithBounds(new LockedWindowBounds(640, 480))
                 .WithTitle("Main Window")
                 .Show();
 
             var secondWindow =
                 WebWindow.Create()
                 .Show()
+                .WithBounds(new WindowBounds(900, 720))
                 .WithTitle("Test Window");
 
             app.Run();

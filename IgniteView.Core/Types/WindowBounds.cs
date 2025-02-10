@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace IgniteView.Core
 {
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
-    public struct WindowBounds
+    /// <summary>
+    /// Represents the dimensions and dimension restrictions of a window
+    /// </summary>
+    public class WindowBounds
     {
         public int MinWidth;
         public int MinHeight;
@@ -28,6 +30,19 @@ namespace IgniteView.Core
             MaxWidth = 999999;
             InitialWidth = width;
             InitialHeight = height;
+        }
+
+
+        /// <summary>
+        /// Default window bounds
+        /// </summary>
+        public WindowBounds() {
+            MinHeight = 0;
+            MinWidth = 0;
+            MaxHeight = 999999;
+            MaxWidth = 999999;
+            InitialWidth = 1280;
+            InitialHeight = 720;
         }
     }
 }

@@ -41,6 +41,19 @@ extern "C" {
         WindowList[index]->show();
     }
 
+    EXPORT void SetWebWindowBounds(int index, int w, int h, int minW, int minH, int maxW, int maxH) {
+        WindowList[index]->set_size(w, h);
+        WindowList[index]->set_min_size(minW, minH);
+        WindowList[index]->set_max_size(maxW, maxH);
+
+        if (minW == maxW && minH == maxH) { // Detect locked window bounds
+            WindowList[index]->set_resizable(false);
+        }
+        else {
+            WindowList[index]->set_resizable(true);
+        }
+    }
+
     EXPORT void SetWebWindowTitle(int index, const char* title) {
         WindowList[index]->set_title(title);
     }

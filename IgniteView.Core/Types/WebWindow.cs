@@ -17,22 +17,8 @@ namespace IgniteView.Core
         }
 
         #region Window Bounds
-        public WindowBounds Bounds
-        {
-            get
-            {
-                if (_Bounds.InitialWidth == 0)
-                {
-                    _Bounds = new WindowBounds(1280, 720);
-                }
-                return _Bounds;
-            }
-            set
-            {
-                _Bounds = value;
-            }
-        }
-        public WindowBounds _Bounds;
+
+        public virtual WindowBounds Bounds { get; set; }
 
         /// <summary>
         /// Sets the window bounds of this WebWindow
@@ -77,7 +63,14 @@ namespace IgniteView.Core
         /// <summary>
         /// Call this after configuring the window to display it on screen
         /// </summary>
-        public virtual WebWindow Show() => this;
+        public virtual WebWindow Show()
+        {
+            if (Bounds == null) { 
+                Bounds = new WindowBounds();
+            }
+
+            return this;
+        }
 
         #endregion
 
