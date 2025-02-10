@@ -1,4 +1,5 @@
 ﻿using IgniteView.Core;
+using IgniteView.Desktop.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,20 @@ namespace IgniteView.Desktop
 
         #endregion
 
+        #region Platform Helpers
+
+        Win32Helper CurrentWin32Helper;
+
+        void LoadHelpers()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                CurrentWin32Helper = new Win32Helper();
+            }
+        }
+
+        #endregion
+
         /// <summary>
         /// Represents the internal index of the window in the C++ code
         /// </summary>
@@ -40,9 +55,13 @@ namespace IgniteView.Desktop
         public override WebWindow Show()
         {
             ShowWebWindow(WindowIndex);
+            CurrentWin32Helper?.EnableMica(NativeHandle);
             return base.Show();
         }
 
-        public DesktopWebWindow() : base() { WindowIndex = NewWebWindow(CurrentAppManager.CurrentServerManager.BaseURL); }
+        public DesktopWebWindow() : base() { 
+            LoadHelpers();
+            WindowIndex = NewWebWindow(CurrentAppManager.CurrentServerManager.BaseURL);
+        }
     }
 }
