@@ -6,15 +6,15 @@
 #include <windows.h>
 #include <saucer/modules/stable/webview2.hpp>
 
-BOOL WINAPI DllMain(
-    HINSTANCE hinstDLL,
-    DWORD fdwReason,
-    LPVOID lpvReserved) {
+BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
+    return TRUE;
+}
+
 #else
 int main() {
-#endif
   return TRUE;
 }
+#endif
 
 std::shared_ptr<saucer::application> App;
 std::vector<std::shared_ptr<saucer::webview>> WindowList;
@@ -38,6 +38,10 @@ extern "C" {
 
     _declspec(dllexport) void SetWebWindowTitle(int index, const char* title) {
         WindowList[index]->set_title(title);
+    }
+
+    _declspec(dllexport) void SetWebWindowDark(int index, bool isDark) {
+        WindowList[index]->set_force_dark_mode(isDark);
     }
 
     _declspec(dllexport) const char* GetWebWindowTitle(int index) {

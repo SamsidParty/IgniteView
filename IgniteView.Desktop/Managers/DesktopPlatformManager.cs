@@ -1,4 +1,5 @@
 ﻿using IgniteView.Core;
+using IgniteView.Desktop.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,7 +63,13 @@ namespace IgniteView.Desktop
 
         #endregion
 
-        public override WebWindow CreateWebWindow() => new DesktopWebWindow();
+        public override WebWindow CreateWebWindow() {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return new Win32WebWindow();
+            }
+            return new DesktopWebWindow();
+        }
         public override void Run() => RunApp();
         public override void Create() => CreateApp(AppManager.Instance.CurrentIdentity.IDString);
     }
