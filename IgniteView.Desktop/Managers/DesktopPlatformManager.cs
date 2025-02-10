@@ -24,6 +24,9 @@ namespace IgniteView.Desktop
 
         public static void Activate()
         {
+            // Set the environment variables for webview2
+            Environment.SetEnvironmentVariable("WEBVIEW2_DEFAULT_BACKGROUND_COLOR", "00FFFFFF");
+
             NativeLibrary.SetDllImportResolver(typeof(DesktopWebWindow).Assembly, ImportResolver);
             Instance = new DesktopPlatformManager();
         }
