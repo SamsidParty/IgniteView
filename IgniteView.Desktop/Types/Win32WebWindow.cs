@@ -24,6 +24,9 @@ namespace IgniteView.Desktop.Types
 
         #region Properties
 
+        /// <summary>
+        /// Returns true if the system is running windows 11 or later
+        /// </summary>
         public bool IsWindows11
         {
             get
@@ -37,6 +40,9 @@ namespace IgniteView.Desktop.Types
             }
         }
 
+        /// <summary>
+        /// Returns true if the system is in dark mode
+        /// </summary>
         public bool IsDarkMode
         {
             get
@@ -67,9 +73,28 @@ namespace IgniteView.Desktop.Types
         /// </summary>
         void UpdateDarkModeState() => SetWebWindowDark(WindowIndex, IsDarkMode);
 
+        /// <summary>
+        /// Constantly checks if the dark mode state has changed and updates accordingly.
+        /// TODO: Find a better method to detect when dark mode state changes
+        /// </summary>
+        async Task DarkModeCheckLoop()
+        {
+            var lastDarkValue = IsDarkMode;
+            while (true)
+            {
+                await Task.Delay(1000);
+
+                if (lastDarkValue != IsDarkMode) { 
+                    lastDarkValue = IsDarkMode;
+                    UpdateDarkModeState();
+                }
+            }
+        }
+
         public override WebWindow Show()
         {
             UpdateDarkModeState();
+            Task.Run(DarkModeCheckLoop);
             base.Show();
             EnableMica(NativeHandle);
             return this;
