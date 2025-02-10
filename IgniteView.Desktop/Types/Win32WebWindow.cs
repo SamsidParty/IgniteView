@@ -20,6 +20,15 @@ namespace IgniteView.Desktop.Types
         [DllImport("dwmapi.dll")]
         public static extern int DwmSetWindowAttribute(IntPtr hwnd, int dwAttribute, ref int pvAttribute, int cbAttribute);
 
+        public enum WindowBackgroundMode
+        {
+            Disabled = 0,
+            Mica = 2,
+            Acrylic = 3,
+            DarkMica = 4
+        }
+
+
         #endregion
 
         #region Properties
@@ -58,13 +67,18 @@ namespace IgniteView.Desktop.Types
             }
         }
 
+        /// <summary>
+        /// Experimental; Native win32 window background mode
+        /// </summary>
+        public WindowBackgroundMode BackgroundMode = WindowBackgroundMode.Mica;
+
         #endregion
 
         void EnableMica(IntPtr hwnd)
         {
             if (!IsWindows11) { return; }
 
-            int enable = 0x02;
+            int enable = (int)BackgroundMode;
             DwmSetWindowAttribute(hwnd, 38, ref enable, Marshal.SizeOf(typeof(int)));
         }
 
