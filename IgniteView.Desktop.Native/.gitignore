@@ -50,6 +50,8 @@ include/divisible/*
 .idea/*.xml
 
 build/**/*
+build_mac/**/*
+build_linux/**/*
 
 include/*
 lib/*

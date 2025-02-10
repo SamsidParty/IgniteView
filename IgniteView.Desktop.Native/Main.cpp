@@ -10,9 +10,14 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
     return TRUE;
 }
 
+#define EXPORT _declspec(dllexport)
+
 #else
+
+#define EXPORT extern "C"
+
 int main() {
-  return TRUE;
+  return 0;
 }
 #endif
 
@@ -22,7 +27,7 @@ std::vector<std::shared_ptr<saucer::webview>> WindowList;
 
 
 extern "C" {
-    _declspec(dllexport) int NewWebWindow(const char* url) {
+    EXPORT int NewWebWindow(const char* url) {
         auto window = std::shared_ptr{ App->make<saucer::webview>(saucer::preferences{.application = App}) };
         WindowList.push_back(window);
 
@@ -32,25 +37,25 @@ extern "C" {
         return WindowList.size() - 1;
     }
 
-    _declspec(dllexport) void ShowWebWindow(int index) {
+    EXPORT void ShowWebWindow(int index) {
         WindowList[index]->show();
     }
 
-    _declspec(dllexport) void SetWebWindowTitle(int index, const char* title) {
+    EXPORT void SetWebWindowTitle(int index, const char* title) {
         WindowList[index]->set_title(title);
     }
 
-    _declspec(dllexport) void SetWebWindowDark(int index, bool isDark) {
+    EXPORT void SetWebWindowDark(int index, bool isDark) {
         WindowList[index]->set_force_dark_mode(isDark);
     }
 
-    _declspec(dllexport) const char* GetWebWindowTitle(int index) {
+    EXPORT const char* GetWebWindowTitle(int index) {
         auto title = WindowList[index]->title();
         auto titlePtr = strdup(title.c_str());
         return (const char*)titlePtr;
     }
 
-    _declspec(dllexport) const void* GetWebWindowHandle(int index) {
+    EXPORT const void* GetWebWindowHandle(int index) {
         #ifdef _WIN32
         return WindowList[index]->window::native().hwnd;
         #endif
@@ -58,17 +63,17 @@ extern "C" {
         return 0;
     }
 
-    _declspec(dllexport) void CreateApp(const char* appID) {
+    EXPORT void CreateApp(const char* appID) {
         App = saucer::application::init({
             .id = appID,
         });
     }
 
-    _declspec(dllexport) void RunApp() {
+    EXPORT void RunApp() {
         App->run();
     }
 
-    _declspec(dllexport) void Free(void* ptr) {
+    EXPORT void Free(void* ptr) {
         free(ptr);
     }
 }
