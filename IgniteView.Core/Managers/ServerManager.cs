@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using WatsonWebserver;
 using WatsonWebserver.Core;
+using System.Text.RegularExpressions;
+using MimeMapping;
 
 namespace IgniteView.Core
 {
@@ -47,20 +49,51 @@ namespace IgniteView.Core
             WebserverSettings settings = new WebserverSettings("127.0.0.1", GetFreePort());
             CurrentServer = new Webserver(settings, DefaultRoute);
 
-            if (!Resolver.DirectSetup(CurrentServer))
-            {
-                // TODO: Implement manual resolving
-            }            
+            CurrentServer.Routes.PreAuthentication.Dynamic.Add(WatsonWebserver.Core.HttpMethod.GET, new Regex(".*"), ResolverRoute);      
 
             CurrentServer.Start();
         }
 
         public ServerManager()
         {
-            Resolver = new WWWRootFileResolver();
+            Resolver = new DirectoryFileResolver();
             Start();
         }
 
         async Task DefaultRoute(HttpContextBase ctx) => ctx.Response.Headers.Set("Location", Resolver.GetIndexFile());
+
+        async Task RedirectToRoot(HttpContextBase ctx)
+        {
+            ctx.Response.StatusCode = 307; // Temporary redirect
+            ctx.Response.Headers.Add("Location", Resolver.GetIndexFile());
+            await ctx.Response.Send("");
+        }
+
+        async Task ResolverRoute(HttpContextBase ctx)
+        {
+            var relativePath = ctx.Request.Url.RawWithoutQuery;
+
+            // Redirect requests to "/" to "index.html" (or whatever the resolver wants us to redirect to)
+            if (relativePath == "/")
+            {
+                await RedirectToRoot(ctx);
+                return;
+            }
+
+            if (Resolver.DoesFileExist(relativePath)) {
+                // Read the file and send to the client
+                var fileStream = Resolver.OpenFileStream(relativePath);
+
+                ctx.Response.StatusCode = 200;
+                ctx.Response.ContentLength = fileStream.Length;
+                ctx.Response.ContentType = MimeUtility.GetMimeMapping(Path.GetExtension(relativePath));
+                await ctx.Response.Send(fileStream.Length, fileStream);
+
+                await fileStream.DisposeAsync();
+            }
+
+            ctx.Response.StatusCode = 404;
+            await ctx.Response.Send("404 Not Found");
+        }
     }
 }

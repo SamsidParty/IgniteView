@@ -15,14 +15,17 @@ namespace IgniteView.Core
         public abstract string GetIndexFile();
 
         /// <summary>
-        /// Returns an array of relative paths of all the files present (eg. ["/index.html", "/JS/main.js", "/CSS/main.css"]).
-        /// Only used during manual resolving (if DirectSetup() returns false)
+        /// Checks whether a file exists
         /// </summary>
-        public abstract string[] GetFiles();
+        /// <param name="fileRelativeToRoot">The path of the file, relative to the URL root (eg. /index.html)</param>
+        /// <returns>Whether the file exists</returns>
+        public abstract bool DoesFileExist(string fileRelativeToRoot);
 
         /// <summary>
-        /// Allows the resolver to setup the web server to work with the resolver, return true if the server should ignore manual resolving
+        /// Opens a file stream for reading
         /// </summary>
-        public abstract bool DirectSetup(Webserver server);
+        /// <param name="fileRelativeToRoot">The path of the file, relative to the URL root (eg. /index.html)</param>
+        /// <returns>A seekable stream</returns>
+        public abstract Stream OpenFileStream(string fileRelativeToRoot);
     }
 }

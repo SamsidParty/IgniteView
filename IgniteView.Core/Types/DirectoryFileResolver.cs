@@ -7,11 +7,17 @@ using WatsonWebserver;
 
 namespace IgniteView.Core
 {
-    public class WWWRootFileResolver : FileResolver
+    /// <summary>
+    /// Resolves files from a directory
+    /// </summary>
+    public class DirectoryFileResolver : FileResolver
     {
         public string WWWRootPath;
 
-        public WWWRootFileResolver()
+        /// <summary>
+        /// Creates a DirectoryFileResolver that resolves files from the wwwroot/ directory relative to the executable path
+        /// </summary>
+        public DirectoryFileResolver()
         {
             if (Directory.Exists(Path.Join(AppDomain.CurrentDomain.BaseDirectory, "wwwroot"))) { WWWRootPath = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "wwwroot"); }
             else if (Directory.Exists(Path.Join(AppDomain.CurrentDomain.BaseDirectory, "WWW"))) { WWWRootPath = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "WWW"); }
@@ -21,12 +27,13 @@ namespace IgniteView.Core
             }
         }
 
-        public override bool DirectSetup(Webserver server)
+        /// <summary>
+        /// Creates a DirectoryFileResolver that resolves files from a custom directory
+        /// </summary>
+        public DirectoryFileResolver(string wwwRootPath)
         {
-            server.Routes.PreAuthentication.Content.BaseDirectory = WWWRootPath;
-            server.Routes.PreAuthentication.Content.Add("/", true);
-
-            return true;
+            if (!Directory.Exists(wwwRootPath)) { throw new DirectoryNotFoundException(wwwRootPath + " Does not exist!"); }
+            WWWRootPath = wwwRootPath;
         }
 
         public override string GetIndexFile()
@@ -39,6 +46,18 @@ namespace IgniteView.Core
             throw new FileNotFoundException("Couldn't find an 'index.html' file in your wwwroot folder!");
         }
 
-        public override string[] GetFiles() => throw new NotImplementedException("Manual resolving is disabled on this resolver");
+        public override bool DoesFileExist(string fileRelativeToRoot)
+        {
+            return File.Exists(Path.Join(WWWRootPath, fileRelativeToRoot));
+        }
+
+        public override Stream OpenFileStream(string fileRelativeToRoot)
+        {
+            if (DoesFileExist(fileRelativeToRoot)) {
+                return File.OpenRead(Path.Join(WWWRootPath, fileRelativeToRoot));
+            }
+
+            return new MemoryStream();
+        }
     }
 }
