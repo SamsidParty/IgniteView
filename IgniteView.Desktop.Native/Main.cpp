@@ -62,6 +62,10 @@ extern "C" {
         WindowList[index]->set_force_dark_mode(isDark);
     }
 
+    EXPORT void SetWebWindowDevToolsEnabled(int index, bool enableDevTools) {
+        WindowList[index]->set_dev_tools(enableDevTools);
+    }
+
     EXPORT const char* GetWebWindowTitle(int index) {
         auto title = WindowList[index]->title();
         auto titlePtr = strdup(title.c_str());

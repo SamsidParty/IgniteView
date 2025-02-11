@@ -28,8 +28,11 @@ namespace IgniteView.Desktop
         protected static extern int SetWebWindowTitle(int index, string newTitle);
 
         [DllImport(InteropHelper.DLLName)]
-        protected static extern void SetWebWindowDark(int index, bool isDark);        
-        
+        protected static extern void SetWebWindowDark(int index, bool isDark);
+
+        [DllImport(InteropHelper.DLLName)]
+        protected static extern void SetWebWindowDevToolsEnabled(int index, bool devToolsEnabled);
+
         [DllImport(InteropHelper.DLLName)]
         protected static extern void SetWebWindowBounds(int index, int w, int h, int minW, int minH, int maxW, int maxH);
 
@@ -65,6 +68,9 @@ namespace IgniteView.Desktop
 
         public DesktopWebWindow() : base() { 
             WindowIndex = NewWebWindow(CurrentAppManager.CurrentServerManager.BaseURL);
+
+            // Enable dev tools if debug mode
+            SetWebWindowDevToolsEnabled(WindowIndex, DebugMode.IsDebugMode);
         }
     }
 }
