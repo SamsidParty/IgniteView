@@ -85,6 +85,7 @@ namespace IgniteView.Core
         /// </summary>
         public virtual void ExecuteJavaScript(JSFunction functionToExecute) => ExecuteJavaScript(functionToExecute.ToString());
 
+        public virtual void ExecuteCommand(CommandData commandData) => CommandManager.ExecuteCommand(this, commandData);
 
         #endregion
 

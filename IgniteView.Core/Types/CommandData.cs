@@ -26,21 +26,21 @@ namespace IgniteView.Core
         public dynamic Parameter;
 
 
+        public static implicit operator CommandData(string commandString) => new CommandData(commandString);
+
+
         /// <summary>
-        /// Converts a command string in format "function:id;param" to a CommandData object
+        /// Creates a CommandData object from a string in format "function:id;param"
         /// </summary>
-        public static CommandData Parse(string commandString)
+        public CommandData(string commandString)
         {
             var function = commandString.Substring(0, commandString.IndexOf(":"));
             var commandId = commandString.Substring(commandString.IndexOf(":") + 1, commandString.IndexOf(";") - commandString.IndexOf(":") - 1);
             var paramString = commandString.Substring(commandString.IndexOf(";") + 1);
 
-            return new CommandData()
-            {
-                Function = function,
-                CallbackID = commandId,
-                Parameter = JsonConvert.DeserializeObject(paramString)
-            };
+            Function = function;
+            CallbackID = commandId;
+            Parameter = JsonConvert.DeserializeObject(paramString);
         }
     }
 }
