@@ -21,20 +21,30 @@ int main() {
 }
 #endif
 
-std::shared_ptr<saucer::application> App;
-std::vector<std::shared_ptr<saucer::webview>> WindowList;
+typedef void(__stdcall* CommandBridgeCallback)(const wchar_t*);
 
+std::shared_ptr<saucer::application> App;
+std::vector<std::shared_ptr<saucer::smartview<saucer::default_serializer>>> WindowList;
+std::vector<CommandBridgeCallback> CommandBridgeList;
 
 
 extern "C" {
-    EXPORT int NewWebWindow(const char* url) {
-        auto window = std::shared_ptr{ App->make<saucer::webview>(saucer::preferences{.application = App}) };
+    EXPORT int NewWebWindow(const char* url, CommandBridgeCallback commandBridge) {
+        auto window = std::shared_ptr{ App->make<saucer::smartview<saucer::default_serializer>>(saucer::preferences{.application = App}) };
         WindowList.push_back(window);
+        CommandBridgeList.push_back(commandBridge);
+        int windowIndex = WindowList.size() - 1;
 
         window->set_url(url);
+        window->expose("igniteview_commandbridge", [windowIndex](std::wstring param)
+            {
+                wchar_t* paramPtr = wcsdup(param.c_str()); // This is freed by the C# code
+                CommandBridgeList[windowIndex](paramPtr);
+            });
+
         window->show();
 
-        return WindowList.size() - 1;
+        return windowIndex;
     }
 
     EXPORT void ShowWebWindow(int index) {
@@ -67,7 +77,7 @@ extern "C" {
     }
 
     EXPORT const char* GetWebWindowTitle(int index) {
-        auto title = WindowList[index]->title();
+        auto title = WindowList[index]->title(); // This is freed by the C# code
         auto titlePtr = strdup(title.c_str());
         return (const char*)titlePtr;
     }

@@ -15,11 +15,21 @@ namespace IgniteView.Desktop
         static extern void Free(IntPtr ptr);
 
         /// <summary>
-        /// Reads a string from a pointer and frees its memory
+        /// Reads an ansi string from a pointer and frees its memory
         /// </summary>
-        public static string PointerToString(IntPtr ptr)
+        public static string PointerToStringAnsi(IntPtr ptr)
         {
             var data = Marshal.PtrToStringAnsi(ptr);
+            Free(ptr);
+            return data;
+        }
+
+        /// <summary>
+        /// Reads a unicode string from a pointer and frees its memory
+        /// </summary>
+        public static string PointerToStringUni(IntPtr ptr)
+        {
+            var data = Marshal.PtrToStringUni(ptr);
             Free(ptr);
             return data;
         }

@@ -13,7 +13,7 @@ def add_to_cs_file(script_data):
     with open("../IgniteView.Core/Types/InjectedScript.cs", "w") as f:
         f.write(csharp_code)
     
-    print("Wrote to ../IgniteView.Core/Types/InjectedScript.cs")
+    print("Written to ../IgniteView.Core/Types/InjectedScript.cs")
 
 def combine_js_files():
     # Find all js files in the current folder and concat them together

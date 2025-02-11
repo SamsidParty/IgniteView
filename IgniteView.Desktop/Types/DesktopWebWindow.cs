@@ -19,7 +19,7 @@ namespace IgniteView.Desktop
         #region Native Imports
 
         [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
-        protected static extern int NewWebWindow(string url);
+        protected static extern int NewWebWindow(string url, CommandBridgeCallback commandBridge);
 
         [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
         protected static extern void ShowWebWindow(int index);
@@ -46,7 +46,7 @@ namespace IgniteView.Desktop
 
         #region Properties
 
-        public override string Title { get => InteropHelper.PointerToString(GetWebWindowTitle(WindowIndex)); set => SetWebWindowTitle(WindowIndex, value); }
+        public override string Title { get => InteropHelper.PointerToStringAnsi(GetWebWindowTitle(WindowIndex)); set => SetWebWindowTitle(WindowIndex, value); }
         public override IntPtr NativeHandle { get => GetWebWindowHandle(WindowIndex); }
 
         public override WindowBounds Bounds { 
@@ -59,6 +59,20 @@ namespace IgniteView.Desktop
 
         #endregion
 
+        #region Command Bridge
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        public delegate void CommandBridgeCallback(IntPtr param);
+
+        public CommandBridgeCallback CommandExecuteRequested;
+        void OnCommandExecuteRequested(IntPtr param)
+        {
+            var paramValue = InteropHelper.PointerToStringUni(param);
+            Console.WriteLine(paramValue);
+        }
+
+        #endregion
+
         public override WebWindow Show()
         {
             base.Show();
@@ -66,8 +80,9 @@ namespace IgniteView.Desktop
             return this;
         }
 
-        public DesktopWebWindow() : base() { 
-            WindowIndex = NewWebWindow(CurrentAppManager.CurrentServerManager.BaseURL);
+        public DesktopWebWindow() : base() {
+            CommandExecuteRequested = new CommandBridgeCallback(OnCommandExecuteRequested);
+            WindowIndex = NewWebWindow(CurrentAppManager.CurrentServerManager.BaseURL, CommandExecuteRequested);
 
             // Enable dev tools if debug mode
             SetWebWindowDevToolsEnabled(WindowIndex, DebugMode.IsDebugMode);

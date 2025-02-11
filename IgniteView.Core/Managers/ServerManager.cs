@@ -86,7 +86,9 @@ namespace IgniteView.Core
             var htmlContent = reader.ReadToEnd();
             await fileStream.DisposeAsync();
 
-            var injectedCode = "<script src=\"/igniteview/injected.js\" ></script></head>"; // Loads a script from InjectedJSRoute (the function above)
+            var injectedCode = "<script src=\"/igniteview/injected.js\" ></script>"; // Loads a script from InjectedJSRoute (the function above)
+
+            injectedCode += "</head>";
             htmlContent = htmlContent.Replace("</head>", injectedCode); // Adds the code inside the head
 
             ctx.Response.StatusCode = 200;
