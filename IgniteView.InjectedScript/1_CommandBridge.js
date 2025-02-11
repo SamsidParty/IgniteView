@@ -6,6 +6,13 @@ window.igniteView.commandQueue.add = (commandId, resolve) => {
     window.igniteView.commandQueue[commandId] = (result) => {
         console.log("[COMMAND BRIDGE] Received result for command " + commandId);
         resolve(JSON.parse(result));
+    }
+}
+
+window.igniteView.commandQueue.resolve = (commandId, result) => { // Called by C#
+    // Resolve the command in the command queue
+    if (!!window.igniteView.commandQueue[commandId]) {
+        window.igniteView.commandQueue[commandId](result);
         window.igniteView.commandQueue[commandId] = undefined;
     }
 }

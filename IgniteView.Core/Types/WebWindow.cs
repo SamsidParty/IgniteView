@@ -80,6 +80,12 @@ namespace IgniteView.Core
 
         }
 
+        /// <summary>
+        /// Executes a JSFunction in the root page of the window
+        /// </summary>
+        public virtual void ExecuteJavaScript(JSFunction functionToExecute) => ExecuteJavaScript(functionToExecute.ToString());
+
+
         #endregion
 
         #region Constructors

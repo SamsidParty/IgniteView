@@ -15,7 +15,8 @@ namespace IgniteView.Core
 
         public static void ExecuteCommand(WebWindow target, CommandData commandData)
         {
-            Console.WriteLine(commandData.Parameter);
+            var returnFunction = new JSFunction("window.igniteView.commandQueue.resolve", commandData.CallbackID);
+            target.ExecuteJavaScript(returnFunction);
         }
     }
 }
