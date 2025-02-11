@@ -56,7 +56,34 @@ namespace IgniteView.Core
                 }
                 else
                 {
-                    paramList.Add(commandData.Parameters[paramIndex]);
+                    var providedParam = commandData.Parameters[paramIndex];
+                    var providedParamType = providedParam.GetType();
+                    var expectedParamType = parameter.ParameterType;
+
+                    if (providedParamType != expectedParamType)
+                    {
+                        // Try to automatically convert types
+                        var recoveredFromTypeError = false;
+
+                        if (expectedParamType == typeof(string)) { // Easy conversion
+                            recoveredFromTypeError = true;
+                            providedParam = providedParam.ToString();
+                        }
+                        else if (expectedParamType == typeof(Int32) && providedParamType == typeof(Int64)) // Common error cause JS numbers are int64
+                        {
+                            recoveredFromTypeError = true;
+                            providedParam = Convert.ToInt32(providedParam);
+                        }
+
+                        if (!recoveredFromTypeError)
+                        {
+                            // Cannot automatically convert types, throw an error
+                            throw new ArgumentException("The provided parameter of type " + providedParamType.Name + " does not match expected type " + expectedParamType.Name);
+                        }
+
+                    }
+
+                    paramList.Add(providedParam);
                     paramIndex++;
                 }
             }

@@ -51,6 +51,10 @@ extern "C" {
         WindowList[index]->show();
     }
 
+    EXPORT void CloseWebWindow(int index) {
+        WindowList[index]->close();
+    }
+
     EXPORT void ExecuteJavaScriptOnWebWindow(int index, const char* javascriptCode) {
         std::basic_string_view stringView(javascriptCode);
         WindowList[index]->execute(stringView);
@@ -96,7 +100,7 @@ extern "C" {
         return WindowList[index]->window::native().hwnd;
         #endif
 
-        return 0;
+        return &index;
     }
 
     EXPORT void CreateApp(const char* appID) {

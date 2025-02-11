@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -55,6 +56,15 @@ namespace IgniteView.Core
         /// Gets the handle of the window, on supported platforms this will return the native handle of the window
         /// </summary>
         public virtual IntPtr NativeHandle { get; }
+
+        #endregion
+
+        #region Window ID
+
+        /// <summary>
+        /// Gets the unique ID for this window
+        /// </summary>
+        public int ID;
 
         #endregion
 
@@ -118,12 +128,14 @@ namespace IgniteView.Core
         }
 
         /// <summary>
+        /// Closes the WebWindow, once you call this method you should remove all references to this WebWindow
+        /// </summary>
+        public virtual void Close() => CurrentAppManager.OpenWindows.Remove(this);
+
+        /// <summary>
         /// Executes raw JavaScript code in the root page of the window
         /// </summary>
-        public virtual void ExecuteJavaScript(string scriptData)
-        {
-
-        }
+        public virtual void ExecuteJavaScript(string scriptData) { }
 
         /// <summary>
         /// Executes a JSFunction in the root page of the window
@@ -142,7 +154,12 @@ namespace IgniteView.Core
         /// <summary>
         /// Only inherited classes should call this constructor
         /// </summary>
-        protected WebWindow() { }
+        protected WebWindow() 
+        { 
+            CurrentAppManager.OpenWindows.Add(this);
+            AppManager.LastWindowID++;
+            ID = AppManager.LastWindowID;
+        }
 
         #endregion
     }

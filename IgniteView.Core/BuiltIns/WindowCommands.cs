@@ -14,13 +14,20 @@ namespace IgniteView.Core
             return WebWindow
                 .Create(url)
                 .Show()
-                .NativeHandle.ToString();
+                .ID.ToString();
         }
 
         [Command("igniteview_window_close")]
         public static void CloseWindow(WebWindow window, int windowId)
         {
-            Console.WriteLine("test");
+            if (windowId == -1) {
+                window.Close(); // Close the calling window
+                return;
+            }
+
+            // Close the window with id windowId
+            var windowToClose = window.CurrentAppManager.OpenWindows.Where((w) => w.ID == windowId);
+            windowToClose.FirstOrDefault(window).Close();
         }
     }
 }

@@ -16,6 +16,9 @@ namespace IgniteView.Core
         public AppIdentity CurrentIdentity;
         public ServerManager CurrentServerManager;
 
+        public List<WebWindow> OpenWindows = new();
+        public static int LastWindowID = 0;
+
         /// <summary>
         /// Creates an application while defining explicit metadata about the app's identity
         /// </summary>

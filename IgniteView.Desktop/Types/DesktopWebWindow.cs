@@ -21,8 +21,11 @@ namespace IgniteView.Desktop
         [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
         protected static extern int NewWebWindow(string url, CommandBridgeCallback commandBridge);
 
-        [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
+        [DllImport(InteropHelper.DLLName)]
         protected static extern void ShowWebWindow(int index);
+
+        [DllImport(InteropHelper.DLLName)]
+        protected static extern void CloseWebWindow(int index);
 
         [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
         protected static extern void ExecuteJavaScriptOnWebWindow(int index, string jsCode);
@@ -87,6 +90,12 @@ namespace IgniteView.Desktop
             base.Show();
             ShowWebWindow(WindowIndex);
             return this;
+        }
+
+        public override void Close()
+        {
+            base.Close();
+            CloseWebWindow(WindowIndex);
         }
 
         public override void ExecuteJavaScript(string scriptData)
