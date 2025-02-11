@@ -1,0 +1,3 @@
+window.igniteView.commandBridge = {
+
+}
