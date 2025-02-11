@@ -13,7 +13,7 @@ window.igniteView.commandQueue.add = (commandId, resolve) => {
 window.igniteView.commandBridge.invoke = (command, param) => {
     // Build the command string in format "command:id;param_json"
     var commandId = crypto.randomUUID();
-    var commandString = `${command}:${commandId};`;
+    var commandString = `${command}:${commandId};${JSON.stringify(param)}`;
 
     console.log("[COMMAND BRIDGE] Sending command of type " + command + " with id " + commandId);
 

@@ -51,6 +51,11 @@ extern "C" {
         WindowList[index]->show();
     }
 
+    EXPORT void ExecuteJavaScriptOnWebWindow(int index, const char* javascriptCode) {
+        std::basic_string_view stringView(javascriptCode);
+        WindowList[index]->execute(stringView);
+    }
+
     EXPORT void SetWebWindowBounds(int index, int w, int h, int minW, int minH, int maxW, int maxH) {
         WindowList[index]->set_size(w, h);
         WindowList[index]->set_min_size(minW, minH);

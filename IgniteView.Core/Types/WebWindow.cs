@@ -72,6 +72,14 @@ namespace IgniteView.Core
             return this;
         }
 
+        /// <summary>
+        /// Executes raw JavaScript code in the root page of the window
+        /// </summary>
+        public virtual void ExecuteJavaScript(string scriptData)
+        {
+
+        }
+
         #endregion
 
         #region Constructors

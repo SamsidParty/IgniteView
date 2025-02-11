@@ -25,6 +25,9 @@ namespace IgniteView.Desktop
         protected static extern void ShowWebWindow(int index);
 
         [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
+        protected static extern void ExecuteJavaScriptOnWebWindow(int index, string jsCode);
+
+        [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
         protected static extern int SetWebWindowTitle(int index, string newTitle);
 
         [DllImport(InteropHelper.DLLName)]
@@ -68,10 +71,12 @@ namespace IgniteView.Desktop
         void OnCommandExecuteRequested(IntPtr param)
         {
             var paramValue = InteropHelper.PointerToStringUni(param);
-            Console.WriteLine(paramValue);
+            CommandManager.ExecuteCommand(this, paramValue);
         }
 
         #endregion
+
+        #region Virtual Method Overrides
 
         public override WebWindow Show()
         {
@@ -79,6 +84,14 @@ namespace IgniteView.Desktop
             ShowWebWindow(WindowIndex);
             return this;
         }
+
+        public override void ExecuteJavaScript(string scriptData)
+        {
+            ExecuteJavaScriptOnWebWindow(WindowIndex, scriptData);
+            base.ExecuteJavaScript(scriptData);
+        }
+
+        #endregion
 
         public DesktopWebWindow() : base() {
             CommandExecuteRequested = new CommandBridgeCallback(OnCommandExecuteRequested);
