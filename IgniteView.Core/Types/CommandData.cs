@@ -23,7 +23,7 @@ namespace IgniteView.Core
         /// <summary>
         /// The parameter passed to the command
         /// </summary>
-        public dynamic Parameter;
+        public object Parameter;
 
 
         public static implicit operator CommandData(string commandString) => new CommandData(commandString);

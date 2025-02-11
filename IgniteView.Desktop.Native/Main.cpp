@@ -73,6 +73,10 @@ extern "C" {
         WindowList[index]->set_title(title);
     }
 
+    EXPORT void SetWebWindowURL(int index, const char* url) {
+        WindowList[index]->set_url(url);
+    }
+
     EXPORT void SetWebWindowDark(int index, bool isDark) {
         WindowList[index]->set_force_dark_mode(isDark);
     }

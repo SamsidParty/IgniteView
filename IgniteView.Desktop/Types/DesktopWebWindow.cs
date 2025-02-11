@@ -30,6 +30,9 @@ namespace IgniteView.Desktop
         [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
         protected static extern int SetWebWindowTitle(int index, string newTitle);
 
+        [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
+        protected static extern int SetWebWindowURL(int index, string newURL);
+
         [DllImport(InteropHelper.DLLName)]
         protected static extern void SetWebWindowDark(int index, bool isDark);
 
@@ -50,6 +53,7 @@ namespace IgniteView.Desktop
         #region Properties
 
         public override string Title { get => InteropHelper.PointerToStringAnsi(GetWebWindowTitle(WindowIndex)); set => SetWebWindowTitle(WindowIndex, value); }
+        public override string URL { get => base.URL; set { base.URL = value; SetWebWindowURL(WindowIndex, base.URL); } }
         public override IntPtr NativeHandle { get => GetWebWindowHandle(WindowIndex); }
 
         public override WindowBounds Bounds { 
@@ -95,7 +99,7 @@ namespace IgniteView.Desktop
 
         public DesktopWebWindow() : base() {
             CommandExecuteRequested = new CommandBridgeCallback(OnCommandExecuteRequested);
-            WindowIndex = NewWebWindow(CurrentAppManager.CurrentServerManager.BaseURL, CommandExecuteRequested);
+            WindowIndex = NewWebWindow(URL, CommandExecuteRequested);
 
             // Enable dev tools if debug mode
             SetWebWindowDevToolsEnabled(WindowIndex, DebugMode.IsDebugMode);

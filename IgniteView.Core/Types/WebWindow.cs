@@ -58,6 +58,51 @@ namespace IgniteView.Core
 
         #endregion
 
+        #region Window URL
+
+        /// <summary>
+        /// Gets the relative URL of this WebWindow
+        /// </summary>
+        public virtual string URL
+        {
+            get
+            {
+                if (_URL == null)
+                {
+                    return CurrentAppManager.CurrentServerManager.BaseURL;
+                }
+
+                if (_URL.StartsWith("http")) // Avoid prepending the base URL to full URLs
+                {
+                    return _URL;
+                }
+
+                return CurrentAppManager.CurrentServerManager.BaseURL + "/" + _URL;
+            }
+            set
+            {
+                if (value.StartsWith("/"))
+                {
+                    value = value.Substring(1);
+                }
+
+                _URL = value;
+            }
+        }
+
+        private string _URL = null;
+
+        /// <summary>
+        /// Sets the relative URL of this WebWindow
+        /// </summary>
+        public virtual WebWindow WithURL(string newURL)
+        {
+            URL = newURL;
+            return this;
+        }
+
+        #endregion
+
         #region Virtual Methods
 
         /// <summary>
@@ -92,7 +137,7 @@ namespace IgniteView.Core
         #region Constructors
 
         public static WebWindow Create() => PlatformManager.Instance.CreateWebWindow();
-        public static WebWindow Create(WindowBounds bounds) => Create().WithBounds(bounds);
+        public static WebWindow Create(string url) => Create().WithURL(url);
 
         /// <summary>
         /// Only inherited classes should call this constructor

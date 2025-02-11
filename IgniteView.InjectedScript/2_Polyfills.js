@@ -1,0 +1,1 @@
+window.open = (url) => window.igniteView.commandBridge.invoke("igniteview_window_open", url);
