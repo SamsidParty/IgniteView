@@ -9,6 +9,7 @@ using WatsonWebserver;
 using WatsonWebserver.Core;
 using System.Text.RegularExpressions;
 using MimeMapping;
+using System.Net.Http;
 
 namespace IgniteView.Core
 {
@@ -49,7 +50,8 @@ namespace IgniteView.Core
             WebserverSettings settings = new WebserverSettings("127.0.0.1", GetFreePort());
             CurrentServer = new Webserver(settings, DefaultRoute);
 
-            CurrentServer.Routes.PreAuthentication.Dynamic.Add(WatsonWebserver.Core.HttpMethod.GET, new Regex(".*"), ResolverRoute);      
+            CurrentServer.Routes.PreAuthentication.Dynamic.Add(WatsonWebserver.Core.HttpMethod.GET, new Regex(".*"), ResolverRoute);
+            CurrentServer.Routes.PreAuthentication.Static.Add(WatsonWebserver.Core.HttpMethod.GET, "/igniteview/injected.js", InjectedJSRoute);
 
             CurrentServer.Start();
         }
@@ -69,6 +71,29 @@ namespace IgniteView.Core
             await ctx.Response.Send("");
         }
 
+        async Task InjectedJSRoute(HttpContextBase ctx)
+        {
+            ctx.Response.StatusCode = 200;
+            ctx.Response.ContentType = "text/javascript";
+            await ctx.Response.Send("alert('test');");
+        }
+
+        async Task HTMLInjectorRoute(HttpContextBase ctx)
+        {
+            // Read the html file content
+            var fileStream = Resolver.OpenFileStream(ctx.Request.Url.RawWithoutQuery);
+            var reader = new StreamReader(fileStream);
+            var htmlContent = reader.ReadToEnd();
+            await fileStream.DisposeAsync();
+
+            var injectedCode = "<script src=\"/igniteview/injected.js\" ></script></head>"; // Loads a script from InjectedJSRoute (the function above)
+            htmlContent = htmlContent.Replace("</head>", injectedCode); // Adds the code inside the head
+
+            ctx.Response.StatusCode = 200;
+            ctx.Response.ContentType = "text/html";
+            await ctx.Response.Send(htmlContent);
+        }
+
         async Task ResolverRoute(HttpContextBase ctx)
         {
             var relativePath = ctx.Request.Url.RawWithoutQuery;
@@ -77,6 +102,12 @@ namespace IgniteView.Core
             if (relativePath == "/")
             {
                 await RedirectToRoot(ctx);
+                return;
+            }
+            else if (relativePath.ToLower().EndsWith(".html") || relativePath.ToLower().EndsWith(".htm"))
+            {
+                // HTML files need to be injected with custom javascript code
+                await HTMLInjectorRoute(ctx);
                 return;
             }
 
