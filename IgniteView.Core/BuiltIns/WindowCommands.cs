@@ -16,5 +16,11 @@ namespace IgniteView.Core
                 .Show()
                 .NativeHandle.ToString();
         }
+
+        [Command("igniteview_window_close")]
+        public static void CloseWindow(WebWindow window, int windowId)
+        {
+            Console.WriteLine("test");
+        }
     }
 }

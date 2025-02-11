@@ -1,1 +1,2 @@
 window.open = (url) => window.igniteView.commandBridge.invoke("igniteview_window_open", url);
+window.close = (windowId) => window.igniteView.commandBridge.invoke("igniteview_window_close", windowId || 0);

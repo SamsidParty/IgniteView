@@ -47,7 +47,21 @@ namespace IgniteView.Core
             var method = Commands[commandData.Function]; // Find the MethodInfo of the command
 
             // Run the method
-            var result = method.Invoke(null, new object[] { commandData.Parameter });
+            var paramList = new List<object>();
+
+            var paramIndex = 0;
+            foreach (var parameter in method.GetParameters()) {
+                if (parameter.ParameterType == typeof(WebWindow)) { 
+                    paramList.Add(target); // Inject the target WebWindow as a parameter
+                }
+                else
+                {
+                    paramList.Add(commandData.Parameters[paramIndex]);
+                    paramIndex++;
+                }
+            }
+
+            var result = method.Invoke(null, paramList.ToArray());
 
             var returnFunction = new JSFunction("window.igniteView.commandQueue.resolve", commandData.CallbackID, result);
             target.ExecuteJavaScript(returnFunction);

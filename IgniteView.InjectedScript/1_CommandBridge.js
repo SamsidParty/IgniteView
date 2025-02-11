@@ -17,10 +17,21 @@ window.igniteView.commandQueue.resolve = (commandId, result) => { // Called by C
     }
 }
 
-window.igniteView.commandBridge.invoke = (command, param) => {
+window.igniteView.commandBridge.invoke = invoke;
+
+function invoke(command) {
+
+    var args = Array.prototype.slice.call(arguments);
+
     // Build the command string in format "command:id;param_json"
+    var commandParamData = {
+        paramList: args.filter((_, i) => i > 0) // Ignore first parameter
+    }
+
+    console.log(commandParamData);
+
     var commandId = crypto.randomUUID();
-    var commandString = `${command}:${commandId};${JSON.stringify(param)}`;
+    var commandString = `${command}:${commandId};${JSON.stringify(commandParamData)}`;
 
     console.log("[COMMAND BRIDGE] Sending command of type " + command + " with id " + commandId);
 

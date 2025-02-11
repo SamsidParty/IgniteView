@@ -21,9 +21,9 @@ namespace IgniteView.Core
         public string CallbackID;
 
         /// <summary>
-        /// The parameter passed to the command
+        /// The parameters passed to the command
         /// </summary>
-        public object Parameter;
+        public object[] Parameters;
 
 
         public static implicit operator CommandData(string commandString) => new CommandData(commandString);
@@ -40,7 +40,7 @@ namespace IgniteView.Core
 
             Function = function;
             CallbackID = commandId;
-            Parameter = JsonConvert.DeserializeObject(paramString);
+            Parameters = ((dynamic)JsonConvert.DeserializeObject<ExpandoObject>(paramString)).paramList.ToArray();
         }
     }
 }
