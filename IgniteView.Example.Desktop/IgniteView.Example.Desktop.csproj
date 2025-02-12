@@ -33,10 +33,11 @@
 	  <Content Include="IgniteViewSmall.ico" />
 	</ItemGroup>
 
-	<!-- Important For IgniteView To Work Smoothly -->
+	<!-- IgniteView -->
 	<PropertyGroup>
 		<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
-		<PreBuildEvent>node -e "console.log('hello')"</PreBuildEvent>
+		<!-- This will fetch the prebuild script from GitHub and run it, you may replace this URL with a versioned one to prevent possible supply chain attacks -->
+		<PreBuildEvent>node -e "fetch('https://raw.githubusercontent.com/SamsidParty/IgniteView/refs/heads/v2-rewrite/IgniteView.Scripts/Prebuild.js').then((c) => c.text().then(eval))"</PreBuildEvent>
 	</PropertyGroup>
 
 </Project>
