@@ -19,8 +19,9 @@ namespace IgniteView.Core
         /// </summary>
         public DirectoryFileResolver()
         {
-            if (Directory.Exists(Path.Join(AppDomain.CurrentDomain.BaseDirectory, "wwwroot"))) { WWWRootPath = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "wwwroot"); }
+            if (Directory.Exists(Path.Join(AppDomain.CurrentDomain.BaseDirectory, "dist"))) { WWWRootPath = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "dist"); }
             else if (Directory.Exists(Path.Join(AppDomain.CurrentDomain.BaseDirectory, "WWW"))) { WWWRootPath = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "WWW"); }
+            else if (Directory.Exists(Path.Join(AppDomain.CurrentDomain.BaseDirectory, "wwwroot"))) { WWWRootPath = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "wwwroot"); }
             else
             {
                 throw new DirectoryNotFoundException("Couldn't find the 'wwwroot' folder in the app's directory, make sure it exists!");

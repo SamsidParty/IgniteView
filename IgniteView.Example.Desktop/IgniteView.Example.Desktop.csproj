@@ -23,17 +23,18 @@
     <ProjectReference Include="..\IgniteView.Desktop\IgniteView.Desktop.csproj" />
   </ItemGroup>
 
-	<ItemGroup>
-		<Content Include="wwwroot\**">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
 
 	<ItemGroup>
 	  <Content Include="IgniteViewSmall.ico" />
 	</ItemGroup>
 
 	<!-- IgniteView -->
+	<ItemGroup>
+		<!-- If you are using plain HTML without vite, change dist\** to wwwroot\** -->
+		<Content Include="dist\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 	<PropertyGroup>
 		<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
 
@@ -42,7 +43,7 @@
 		<ScriptsURL>https://raw.githubusercontent.com/SamsidParty/IgniteView/refs/heads/main/IgniteView.Scripts</ScriptsURL>
 		<ScriptsURL>http://127.0.0.1:5173</ScriptsURL>
 		
-		<PreBuildEvent>node -e "fetch('$(ScriptsURL)/Prebuild.js').then((c) => c.text().then(eval))" "$(ScriptsURL)" "$(MSBuildProjectDirectory)"</PreBuildEvent>
+		<PreBuildEvent>node -e "fetch('$(ScriptsURL)/Prebuild.js').then((c) => c.text().then(eval))" "$(ScriptsURL)" "$(MSBuildProjectDirectory)" "$(Configuration)"</PreBuildEvent>
 	</PropertyGroup>
 
 </Project>

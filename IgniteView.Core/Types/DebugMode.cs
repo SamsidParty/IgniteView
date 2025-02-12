@@ -14,7 +14,7 @@ namespace IgniteView.Core
         {
             get
             {
-                return Debugger.IsAttached;
+                return false;
             }
         }
     }
