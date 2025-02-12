@@ -25,10 +25,20 @@ namespace IgniteView.Core
         {
             get
             {
-                return "http://127.0.0.1:" + CurrentServer.Settings.Port;
+                if (string.IsNullOrEmpty(_BaseURL))
+                {
+                    return "http://127.0.0.1:" + CurrentServer.Settings.Port;
+                }
+                
+                return _BaseURL;
+            }
+            set
+            {
+                _BaseURL = value;
             }
         }
 
+        string _BaseURL;
 
         /// <summary>
         /// Finds a free port and returns it
@@ -56,9 +66,9 @@ namespace IgniteView.Core
             CurrentServer.Start();
         }
 
-        public ServerManager()
+        public ServerManager(FileResolver resolver)
         {
-            Resolver = new DirectoryFileResolver();
+            Resolver = resolver;
             Start();
         }
 

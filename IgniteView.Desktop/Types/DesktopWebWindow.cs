@@ -21,14 +21,23 @@ namespace IgniteView.Desktop
         [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
         protected static extern int NewWebWindow(string url, CommandBridgeCallback commandBridge);
 
-        [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
+        [DllImport(InteropHelper.DLLName)]
         protected static extern void ShowWebWindow(int index);
+
+        [DllImport(InteropHelper.DLLName)]
+        protected static extern void CloseWebWindow(int index);
 
         [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
         protected static extern void ExecuteJavaScriptOnWebWindow(int index, string jsCode);
 
         [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
         protected static extern int SetWebWindowTitle(int index, string newTitle);
+
+        [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
+        protected static extern int SetWebWindowURL(int index, string newURL);
+
+        [DllImport(InteropHelper.DLLName)]
+        protected static extern int SetWebWindowIcon(int index, IntPtr iconPath);
 
         [DllImport(InteropHelper.DLLName)]
         protected static extern void SetWebWindowDark(int index, bool isDark);
@@ -50,6 +59,8 @@ namespace IgniteView.Desktop
         #region Properties
 
         public override string Title { get => InteropHelper.PointerToStringAnsi(GetWebWindowTitle(WindowIndex)); set => SetWebWindowTitle(WindowIndex, value); }
+        public override string IconPath { get => base.IconPath; set { base.IconPath = value; SetWebWindowIcon(WindowIndex, Marshal.StringToCoTaskMemUTF8(IconManager.CloneIcon(base.IconPath))); } }
+        public override string URL { get => base.URL; set { base.URL = value; SetWebWindowURL(WindowIndex, base.URL); } }
         public override IntPtr NativeHandle { get => GetWebWindowHandle(WindowIndex); }
 
         public override WindowBounds Bounds { 
@@ -70,8 +81,8 @@ namespace IgniteView.Desktop
         public CommandBridgeCallback CommandExecuteRequested;
         void OnCommandExecuteRequested(IntPtr param)
         {
-            var paramValue = InteropHelper.PointerToStringUni(param);
-            CommandManager.ExecuteCommand(this, paramValue);
+            var commandString = InteropHelper.PointerToStringUni(param);
+            ExecuteCommand(commandString);
         }
 
         #endregion
@@ -85,6 +96,12 @@ namespace IgniteView.Desktop
             return this;
         }
 
+        public override void Close()
+        {
+            base.Close();
+            CloseWebWindow(WindowIndex);
+        }
+
         public override void ExecuteJavaScript(string scriptData)
         {
             ExecuteJavaScriptOnWebWindow(WindowIndex, scriptData);
@@ -95,7 +112,7 @@ namespace IgniteView.Desktop
 
         public DesktopWebWindow() : base() {
             CommandExecuteRequested = new CommandBridgeCallback(OnCommandExecuteRequested);
-            WindowIndex = NewWebWindow(CurrentAppManager.CurrentServerManager.BaseURL, CommandExecuteRequested);
+            WindowIndex = NewWebWindow(URL, CommandExecuteRequested);
 
             // Enable dev tools if debug mode
             SetWebWindowDevToolsEnabled(WindowIndex, DebugMode.IsDebugMode);

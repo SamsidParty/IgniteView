@@ -51,6 +51,10 @@ extern "C" {
         WindowList[index]->show();
     }
 
+    EXPORT void CloseWebWindow(int index) {
+        WindowList[index]->close();
+    }
+
     EXPORT void ExecuteJavaScriptOnWebWindow(int index, const char* javascriptCode) {
         std::basic_string_view stringView(javascriptCode);
         WindowList[index]->execute(stringView);
@@ -73,6 +77,15 @@ extern "C" {
         WindowList[index]->set_title(title);
     }
 
+    EXPORT void SetWebWindowIcon(int index, char8_t* iconPath) {
+        saucer::icon icon = saucer::icon::from(iconPath).value();
+        WindowList[index]->set_icon(icon);
+    }
+
+    EXPORT void SetWebWindowURL(int index, const char* url) {
+        WindowList[index]->set_url(url);
+    }
+
     EXPORT void SetWebWindowDark(int index, bool isDark) {
         WindowList[index]->set_force_dark_mode(isDark);
     }
@@ -92,7 +105,7 @@ extern "C" {
         return WindowList[index]->window::native().hwnd;
         #endif
 
-        return 0;
+        return &index;
     }
 
     EXPORT void CreateApp(const char* appID) {

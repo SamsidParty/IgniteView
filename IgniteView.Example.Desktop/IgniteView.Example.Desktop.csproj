@@ -7,6 +7,7 @@
     <Nullable>enable</Nullable>
     <PublishAot>true</PublishAot>
     <InvariantGlobalization>true</InvariantGlobalization>
+    <ApplicationIcon>IgniteViewSmall.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -27,5 +28,16 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="IgniteViewSmall.ico" />
+	</ItemGroup>
+
+	<!-- IgniteView -->
+	<PropertyGroup>
+		<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+		<!-- This will fetch the prebuild script from GitHub and run it, you may replace this URL with a versioned one to prevent possible supply chain attacks -->
+		<PreBuildEvent>node -e "fetch('https://raw.githubusercontent.com/SamsidParty/IgniteView/refs/heads/v2-rewrite/IgniteView.Scripts/Prebuild.js').then((c) => c.text().then(eval))"</PreBuildEvent>
+	</PropertyGroup>
 
 </Project>

@@ -9,7 +9,7 @@ namespace IgniteView.Example.Desktop
         static void Main(string[] args)
         {
             DesktopPlatformManager.Activate();
-            var app = new AppManager(new AppIdentity("SamsidParty", "IgniteView Example"));
+            var app = new ViteAppManager();
 
             var mainWindow =
                 WebWindow.Create()
