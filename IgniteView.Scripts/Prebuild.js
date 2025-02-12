@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const exec = require('child_process').exec;
+const spawn = require('child_process').spawn;
 const spawnSync = require('child_process').spawnSync;
 
 const scriptsURL = process.argv[1]; // $(ScriptsURL)
@@ -8,7 +9,11 @@ const projectDirectory = process.argv[2]; // $(MSBuildProjectDirectory)
 const buildConfiguration = process.argv[3]; // $(Configuration)
 process.chdir(projectDirectory); // cd into the project directory
 
-var commandPrefix = "start \"\" cmd.exe /C ";
+var commandPrefix = "/bin/bash -c ";
+
+if (process.platform === "win32") {
+    commandPrefix = "start \"\" cmd.exe /C ";
+}
 
 function CreateViteProject() {
     console.log("No vite project found. Creating a new one...");
@@ -23,7 +28,8 @@ function BuildViteProject() {
 }
 
 function DevViteProject() {
-    
+    console.log("Running vite project in dev mode");
+    spawn(/^win/.test(process.platform) ? 'npx.cmd' : 'npx', ['vite', '.'], { shell: true, detached: true, stdio: "ignore" }).unref();
 }
 
 async function PrebuildVite() {
@@ -34,6 +40,8 @@ async function PrebuildVite() {
         fs.mkdirSync(sourcePath);
     }
 
+    process.chdir(path.join(process.cwd(), "src-vite"));
+
     var packageJsonPath = path.join(sourcePath, 'package.json');
     
     if (!fs.existsSync(packageJsonPath)) {
@@ -42,6 +50,7 @@ async function PrebuildVite() {
 
     if (buildConfiguration.toLowerCase().includes("debug")) {
         console.log("Detected debug mode");
+        DevViteProject();
     }
     else {
         console.log("Detected release mode");
@@ -59,7 +68,6 @@ async function Main() {
         console.log("Detected Project Type: Static HTML");
     }
     else {
-        process.chdir(path.join(process.cwd(), "src-vite"));
         await PrebuildVite();
     }
 }

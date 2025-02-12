@@ -20,7 +20,6 @@ function InstallDependencies() {
 
 async function Main() {
     console.log("\n-------- IgniteView \x1b[96mVite\x1b[0m Wizard --------\n");
-    process.chdir(path.join(process.cwd(), "src-vite"));
     console.log("Working Directory: " + process.cwd() + "\n");
 
     await new Promise((r) => interface.question("Press \x1b[92m\x1b[1menter\x1b[0m to initialize \x1b[96mVite\x1b[0m with this IgniteView project: ", r));

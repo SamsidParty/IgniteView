@@ -41,7 +41,7 @@
 		<!-- This will fetch the latest build scripts from GitHub -->
 		<!-- You may replace this URL with a versioned one to ensure the integrity of the scripts -->
 		<ScriptsURL>https://raw.githubusercontent.com/SamsidParty/IgniteView/refs/heads/main/IgniteView.Scripts</ScriptsURL>
-		<ScriptsURL>http://127.0.0.1:5173</ScriptsURL>
+		<!--<ScriptsURL>http://127.0.0.1:5173</ScriptsURL>-->
 		
 		<PreBuildEvent>node -e "fetch('$(ScriptsURL)/Prebuild.js').then((c) => c.text().then(eval))" "$(ScriptsURL)" "$(MSBuildProjectDirectory)" "$(Configuration)"</PreBuildEvent>
 	</PropertyGroup>
