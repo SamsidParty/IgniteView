@@ -15,6 +15,7 @@ namespace IgniteView.Example.Desktop
                 WebWindow.Create()
                 .WithBounds(new LockedWindowBounds(640, 480))
                 .WithTitle("Main Window")
+                .WithIcon("/favicon.ico")
                 .Show();
 
             var secondWindow =

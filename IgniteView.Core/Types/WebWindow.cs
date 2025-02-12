@@ -113,6 +113,24 @@ namespace IgniteView.Core
 
         #endregion
 
+        #region Window Icon
+
+        /// <summary>
+        /// Gets or sets the relative icon path for this window. This path must be relative to the www root (with a leading /)
+        /// </summary>
+        public virtual string IconPath { get; set; }
+
+        /// <summary>
+        /// Sets the icon of this window. This path must be relative to the www root (with a leading /)
+        /// </summary>
+        public virtual WebWindow WithIcon(string newIconPath)
+        {
+            IconPath = newIconPath;
+            return this;
+        }
+
+        #endregion
+
         #region Virtual Methods
 
         /// <summary>
@@ -148,7 +166,7 @@ namespace IgniteView.Core
 
         #region Constructors
 
-        public static WebWindow Create() => PlatformManager.Instance.CreateWebWindow();
+        public static WebWindow Create() => PlatformManager.Instance.CreateWebWindow().AfterCreate();
         public static WebWindow Create(string url) => Create().WithURL(url);
 
         /// <summary>
@@ -157,8 +175,21 @@ namespace IgniteView.Core
         protected WebWindow() 
         { 
             CurrentAppManager.OpenWindows.Add(this);
+
+            // Create an ID for this window
             AppManager.LastWindowID++;
             ID = AppManager.LastWindowID;
+        }
+
+        private WebWindow AfterCreate()
+        {
+            // Try to use the default favicon.ico if it exists
+            if (CurrentAppManager.CurrentServerManager.Resolver.DoesFileExist("/favicon.ico"))
+            {
+                IconPath = "/favicon.ico";
+            }
+
+            return this;
         }
 
         #endregion
