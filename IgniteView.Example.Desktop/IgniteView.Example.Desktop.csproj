@@ -33,4 +33,10 @@
 	  <Content Include="IgniteViewSmall.ico" />
 	</ItemGroup>
 
+	<!-- Important For IgniteView To Work Smoothly -->
+	<PropertyGroup>
+		<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+		<PreBuildEvent>node -e "console.log('hello')"</PreBuildEvent>
+	</PropertyGroup>
+
 </Project>

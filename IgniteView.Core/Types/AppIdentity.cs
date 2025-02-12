@@ -10,7 +10,7 @@ namespace IgniteView.Core
     /// <summary>
     /// Contains information used to identify the app
     /// </summary>
-    public struct AppIdentity
+    public class AppIdentity
     {
         public required string Name;
         public required string Developer;

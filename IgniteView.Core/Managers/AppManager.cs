@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,15 +21,32 @@ namespace IgniteView.Core
         public static int LastWindowID = 0;
 
         /// <summary>
+        /// Creates the file resolver to be used by the server
+        /// </summary>
+        /// <returns></returns>
+        protected virtual FileResolver CreateFileResolver()
+        {
+            return new DirectoryFileResolver();
+        }
+
+        /// <summary>
         /// Creates an application while defining explicit metadata about the app's identity
         /// </summary>
         public AppManager(AppIdentity identity)
         {
             Instance = this;
 
-            CurrentServerManager = new ServerManager();
-            CurrentIdentity = identity;
+            if (identity != null)
+            {
+                Init(identity);
+            }
+        }
 
+        protected virtual void Init(AppIdentity identity)
+        {
+            if (CurrentServerManager == null) { CurrentServerManager = new ServerManager(CreateFileResolver()); }
+            if (CurrentIdentity == null) { CurrentIdentity = identity; }
+            
             PlatformManager.Instance.Create();
         }
 
