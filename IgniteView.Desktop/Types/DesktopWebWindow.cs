@@ -36,8 +36,8 @@ namespace IgniteView.Desktop
         [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
         protected static extern int SetWebWindowURL(int index, string newURL);
 
-        [DllImport(InteropHelper.DLLName, CharSet = CharSet.Unicode)]
-        protected static extern int SetWebWindowIcon(int index, string iconPath);
+        [DllImport(InteropHelper.DLLName)]
+        protected static extern int SetWebWindowIcon(int index, IntPtr iconPath);
 
         [DllImport(InteropHelper.DLLName)]
         protected static extern void SetWebWindowDark(int index, bool isDark);
@@ -59,7 +59,7 @@ namespace IgniteView.Desktop
         #region Properties
 
         public override string Title { get => InteropHelper.PointerToStringAnsi(GetWebWindowTitle(WindowIndex)); set => SetWebWindowTitle(WindowIndex, value); }
-        public override string IconPath { get => base.IconPath; set { base.IconPath = value; SetWebWindowIcon(WindowIndex, IconManager.CloneIcon(base.IconPath)); } }
+        public override string IconPath { get => base.IconPath; set { base.IconPath = value; SetWebWindowIcon(WindowIndex, Marshal.StringToCoTaskMemUTF8(IconManager.CloneIcon(base.IconPath))); } }
         public override string URL { get => base.URL; set { base.URL = value; SetWebWindowURL(WindowIndex, base.URL); } }
         public override IntPtr NativeHandle { get => GetWebWindowHandle(WindowIndex); }
 

@@ -183,10 +183,10 @@ namespace IgniteView.Core
 
         private WebWindow AfterCreate()
         {
-            // Try to use the default favicon.ico if it exists
-            if (CurrentAppManager.CurrentServerManager.Resolver.DoesFileExist("/favicon.ico"))
+            // Try to use the default favicon if it exists
+            if (CurrentAppManager.CurrentServerManager.Resolver.DoesFileExist("/favicon.png"))
             {
-                IconPath = "/favicon.ico";
+                IconPath = "/favicon.png";
             }
 
             return this;

@@ -77,7 +77,7 @@ extern "C" {
         WindowList[index]->set_title(title);
     }
 
-    EXPORT void SetWebWindowIcon(int index, const wchar_t* iconPath) {
+    EXPORT void SetWebWindowIcon(int index, char8_t* iconPath) {
         saucer::icon icon = saucer::icon::from(iconPath).value();
         WindowList[index]->set_icon(icon);
     }
