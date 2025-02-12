@@ -36,8 +36,13 @@
 	<!-- IgniteView -->
 	<PropertyGroup>
 		<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
-		<!-- This will fetch the prebuild script from GitHub and run it, you may replace this URL with a versioned one to prevent possible supply chain attacks -->
-		<PreBuildEvent>node -e "fetch('https://raw.githubusercontent.com/SamsidParty/IgniteView/refs/heads/v2-rewrite/IgniteView.Scripts/Prebuild.js').then((c) => c.text().then(eval))"</PreBuildEvent>
+
+		<!-- This will fetch the latest build scripts from GitHub -->
+		<!-- You may replace this URL with a versioned one to ensure the integrity of the scripts -->
+		<ScriptsURL>https://raw.githubusercontent.com/SamsidParty/IgniteView/refs/heads/main/IgniteView.Scripts</ScriptsURL>
+		<ScriptsURL>http://127.0.0.1:5173</ScriptsURL>
+		
+		<PreBuildEvent>node -e "fetch('$(ScriptsURL)/Prebuild.js').then((c) => c.text().then(eval))" "$(ScriptsURL)" "$(MSBuildProjectDirectory)"</PreBuildEvent>
 	</PropertyGroup>
 
 </Project>
