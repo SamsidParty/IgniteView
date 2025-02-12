@@ -9,16 +9,10 @@ const projectDirectory = process.argv[2]; // $(MSBuildProjectDirectory)
 const buildConfiguration = process.argv[3]; // $(Configuration)
 process.chdir(projectDirectory); // cd into the project directory
 
-var commandPrefix = "/bin/bash -c ";
-
-if (process.platform === "win32") {
-    commandPrefix = "start \"\" cmd.exe /C ";
-}
-
 function CreateViteProject() {
     console.log("No vite project found. Creating a new one...");
     return new Promise((resolve, reject) => {
-        exec(commandPrefix + `node -e "fetch('${scriptsURL}/CreateViteProject.js').then((c) => c.text().then(eval))"`, (_, stdout, __) => { resolve(stdout); });
+        exec(`node -e "fetch('${scriptsURL}/CreateViteProject.js').then((c) => c.text().then(eval))"`, { shell: true, detached: true, stdio: "ignore" },  (_, stdout, __) => { resolve(stdout); });
     });
 }
 
