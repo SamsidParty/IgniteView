@@ -1,19 +1,25 @@
 const fs = require('fs');
 const path = require('path');
-const exec = require('child_process').exec;
+const execSync = require('child_process').execSync;
 const spawn = require('child_process').spawn;
 const spawnSync = require('child_process').spawnSync;
 
 const scriptsURL = process.argv[1]; // $(ScriptsURL)
 const projectDirectory = process.argv[2]; // $(MSBuildProjectDirectory)
 const buildConfiguration = process.argv[3]; // $(Configuration)
+const jsFramework = process.argv[4]; // $(JSFramework)
 process.chdir(projectDirectory); // cd into the project directory
+
+var supportedFrameworks = ["vanilla", "vanilla-ts", "vue", "vue-ts", "react", "react-ts", "react-swc", "react-swc-ts", "preact", "preact-ts", "lit", "lit-ts", "svelte", "svelte-ts", "solid", "solid-ts", "qwik", "qwik-ts"]
+
+if (!supportedFrameworks.includes(jsFramework)) {
+    console.error(`The JavaScript framework "${jsFramework}" is not supported by IgniteView. Supported frameworks are: ${supportedFrameworks.join(", ")}`);
+    process.exit(1);
+}
 
 function CreateViteProject() {
     console.log("No vite project found. Creating a new one...");
-    return new Promise((resolve, reject) => {
-        exec(`node -e "fetch('${scriptsURL}/CreateViteProject.js').then((c) => c.text().then(eval))"`, { shell: true, detached: true, stdio: "ignore" },  (_, stdout, __) => { resolve(stdout); });
-    });
+    execSync(`node -e "fetch('${scriptsURL}/CreateViteProject.js').then((c) => c.text().then(eval))" "${jsFramework}"`, { stdio: 'inherit' });
 }
 
 function BuildViteProject() {
@@ -39,7 +45,7 @@ async function PrebuildVite() {
     var packageJsonPath = path.join(sourcePath, 'package.json');
     
     if (!fs.existsSync(packageJsonPath)) {
-        await CreateViteProject();
+        CreateViteProject();
     }
 
     if (buildConfiguration.toLowerCase().includes("debug")) {

@@ -1,16 +1,12 @@
-const readline = require('readline');
 const spawnSync = require('child_process').spawnSync;
 const fs = require('fs');
 const path = require('path');
 
-const interface = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-});
+const jsFramework = process.argv[1];
 
 function CreateViteProject() {
     console.clear();
-    spawnSync(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['create', 'vite@latest', "./"], { stdio: 'inherit' });
+    spawnSync(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['create', 'vite@latest', "./", "--", "--template", jsFramework], { stdio: 'inherit' });
 }
 
 function InstallDependencies() {
@@ -19,16 +15,14 @@ function InstallDependencies() {
 }
 
 async function Main() {
-    console.log("\n-------- IgniteView \x1b[96mVite\x1b[0m Wizard --------\n");
+    console.log("\n-------- IgniteView Vite Wizard --------\n");
     console.log("Working Directory: " + process.cwd() + "\n");
-
-    await new Promise((r) => interface.question("Press \x1b[92m\x1b[1menter\x1b[0m to initialize \x1b[96mVite\x1b[0m with this IgniteView project: ", r));
 
     while (!fs.existsSync('./package.json')) {
         CreateViteProject();
     }
 
-    console.log("Created \x1b[96mVite\x1b[0m Project, installing dependencies...");
+    console.log("Created mVite Project, installing dependencies...");
 
     InstallDependencies();
 

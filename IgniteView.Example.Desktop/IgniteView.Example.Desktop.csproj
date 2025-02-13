@@ -38,12 +38,16 @@
 	<PropertyGroup>
 		<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
 
+		<!-- This is required for IgniteView to know what js framework you are using -->
+		<!-- Possible values: vanilla, vanilla-ts, vue, vue-ts, react, react-ts, react-swc, react-swc-ts, preact, preact-ts, lit, lit-ts, svelte, svelte-ts, solid, solid-ts, qwik, qwik-ts -->
+		<JSFramework>react</JSFramework>
+		
 		<!-- This will fetch the latest build scripts from GitHub -->
 		<!-- You may replace this URL with a versioned one to ensure the integrity of the scripts -->
 		<ScriptsURL>https://raw.githubusercontent.com/SamsidParty/IgniteView/refs/heads/main/IgniteView.Scripts</ScriptsURL>
 		<!--<ScriptsURL>http://127.0.0.1:5173</ScriptsURL>-->
 		
-		<PreBuildEvent>node -e "fetch('$(ScriptsURL)/Prebuild.js').then((c) => c.text().then(eval))" "$(ScriptsURL)" "$(MSBuildProjectDirectory)" "$(Configuration)"</PreBuildEvent>
+		<PreBuildEvent>node -e "fetch('$(ScriptsURL)/Prebuild.js').then((c) => c.text().then(eval))" "$(ScriptsURL)" "$(MSBuildProjectDirectory)" "$(Configuration)" "$(JSFramework)"</PreBuildEvent>
 	</PropertyGroup>
 
 </Project>
