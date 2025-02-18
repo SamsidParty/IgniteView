@@ -27,11 +27,6 @@ function BuildViteProject() {
     spawnSync(/^win/.test(process.platform) ? 'npx.cmd' : 'npx', ['vite', 'build', '--emptyOutDir', '--outDir', '../dist'], { stdio: 'inherit' });
 }
 
-function DevViteProject() {
-    console.log("Running vite project in dev mode");
-    spawn(/^win/.test(process.platform) ? 'npx.cmd' : 'npx', ['vite', '.'], { shell: true, detached: true, stdio: "ignore" }).unref();
-}
-
 async function PrebuildVite() {
     console.log("Detected Project Type: Vite");
     var sourcePath = path.join(projectDirectory, 'src-vite');
@@ -50,7 +45,11 @@ async function PrebuildVite() {
 
     if (buildConfiguration.toLowerCase().includes("debug")) {
         console.log("Detected debug mode");
-        DevViteProject();
+        BuildViteProject();
+
+        // Write the .vitedev file to the dist folder
+        // The C# code will read this file and launch the vite dev server
+        fs.writeFileSync(path.join(projectDirectory, 'dist', '.vitedev'), sourcePath);
     }
     else {
         console.log("Detected release mode");
