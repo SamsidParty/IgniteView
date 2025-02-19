@@ -20,6 +20,14 @@ namespace IgniteView.Core
         public List<WebWindow> OpenWindows = new();
         public static int LastWindowID = 0;
 
+        public delegate void CleanUpCallback();
+
+        /// <summary>
+        /// This event is called after all the windows are closed and the application is about to exit.
+        /// There are some situations where this is not called (crash, task manager, etc)
+        /// </summary>
+        public CleanUpCallback OnCleanUp;
+
         /// <summary>
         /// Creates the file resolver to be used by the server
         /// </summary>
@@ -56,6 +64,7 @@ namespace IgniteView.Core
         public void Run()
         {
             PlatformManager.Instance.Run();
+            OnCleanUp?.Invoke();
         }
     }
 }
