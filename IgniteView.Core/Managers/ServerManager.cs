@@ -10,6 +10,7 @@ using WatsonWebserver.Core;
 using System.Text.RegularExpressions;
 using MimeMapping;
 using System.Net.Http;
+using System.Threading;
 
 namespace IgniteView.Core
 {
@@ -53,6 +54,27 @@ namespace IgniteView.Core
         }
 
         /// <summary>
+        /// Checks if a port is open on the local machine
+        /// </summary>
+        public static bool IsPortOpen(int port)
+        {
+            try
+            {
+                using (var client = new TcpClient())
+                {
+                    var result = client.BeginConnect("localhost", port, null, null);
+                    var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromMilliseconds(500));
+                    client.EndConnect(result);
+                    return success;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Starts the web server
         /// </summary>
         public void Start()
@@ -91,10 +113,7 @@ namespace IgniteView.Core
         async Task HTMLInjectorRoute(HttpContextBase ctx)
         {
             // Read the html file content
-            var fileStream = Resolver.OpenFileStream(ctx.Request.Url.RawWithoutQuery);
-            var reader = new StreamReader(fileStream);
-            var htmlContent = reader.ReadToEnd();
-            await fileStream.DisposeAsync();
+            var htmlContent = Resolver.ReadFileAsText(ctx.Request.Url.RawWithoutQuery);
 
             var injectedCode = "<script src=\"/igniteview/injected.js\" ></script>"; // Loads a script from InjectedJSRoute (the function above)
 

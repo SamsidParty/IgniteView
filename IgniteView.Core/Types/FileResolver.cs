@@ -27,5 +27,20 @@ namespace IgniteView.Core
         /// <param name="fileRelativeToRoot">The path of the file, relative to the URL root (eg. /index.html)</param>
         /// <returns>A seekable stream</returns>
         public abstract Stream OpenFileStream(string fileRelativeToRoot);
+
+        /// <summary>
+        /// Reads an entire file as a string
+        /// </summary>
+        /// <param name="fileRelativeToRoot">The path of the file, relative to the URL root (eg. /index.html)</param>
+        /// <returns>The contents of the file</returns>
+        public virtual string ReadFileAsText(string fileRelativeToRoot)
+        {
+            var fileStream = OpenFileStream(fileRelativeToRoot);
+            var reader = new StreamReader(fileStream);
+            var fileContent = reader.ReadToEnd();
+            fileStream.Dispose();
+
+            return fileContent;
+        }
     }
 }

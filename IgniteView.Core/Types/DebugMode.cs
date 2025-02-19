@@ -14,7 +14,12 @@ namespace IgniteView.Core
         {
             get
             {
-                return Debugger.IsAttached;
+                if (AppManager.Instance?.CurrentServerManager?.Resolver == null)
+                {
+                    return false;
+                }
+
+                return AppManager.Instance.CurrentServerManager.Resolver.DoesFileExist("/.vitedev");
             }
         }
     }
