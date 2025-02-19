@@ -1,4 +1,5 @@
 // This file is generated, to edit it you must edit IgniteView.InjectedScript/InjectedScript.cs
+using System.Text;
 
 namespace IgniteView.Core
 {
@@ -24,7 +25,9 @@ namespace IgniteView.Core
             get {
                 var combinedScripts = ScriptData;
                 PreloadScripts.ForEach(script => combinedScripts += "\n" + script);
-                return combinedScripts;
+
+                // Wrap the code in base64, this is because some of the webview implementations don't allow unicode characters
+                return "if (!window.igniteView) { eval(atob('" + Convert.ToBase64String(Encoding.UTF8.GetBytes(combinedScripts)) + "')); }";
             }
         }
     }
