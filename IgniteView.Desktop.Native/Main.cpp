@@ -29,11 +29,19 @@ std::vector<CommandBridgeCallback> CommandBridgeList;
 
 
 extern "C" {
-    EXPORT int NewWebWindow(const char* url, CommandBridgeCallback commandBridge) {
+    EXPORT int NewWebWindow(const char* url, CommandBridgeCallback commandBridge, const char* preloadScript) {
         auto window = std::shared_ptr{ App->make<saucer::smartview<saucer::default_serializer>>(saucer::preferences{.application = App}) };
         WindowList.push_back(window);
         CommandBridgeList.push_back(commandBridge);
         int windowIndex = WindowList.size() - 1;
+
+        if (preloadScript != 0) {
+            window->inject({
+                .code = preloadScript,
+                .time = saucer::load_time::creation,
+                .permanent = true,
+                });
+        }
 
         window->set_url(url);
         window->expose("igniteview_commandbridge", [windowIndex](std::wstring param)

@@ -36,7 +36,7 @@ namespace IgniteView.Core
 
             if (!File.Exists(viteJS)) { return; }
 
-            var psi = new ProcessStartInfo(nodeBinary, new string[] { viteJS, ".", "--port", vitePort.ToString() })
+            var psi = new ProcessStartInfo(nodeBinary, new string[] { viteJS, ".", "--port", vitePort.ToString(), "--strictPort" })
             {
                 WorkingDirectory = viteDevPath,
                 UseShellExecute = false

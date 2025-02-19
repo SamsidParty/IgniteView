@@ -107,7 +107,7 @@ namespace IgniteView.Core
         {
             ctx.Response.StatusCode = 200;
             ctx.Response.ContentType = "text/javascript";
-            await ctx.Response.Send(InjectedScript.ScriptData);
+            await ctx.Response.Send(InjectedScript.CombinedScriptData);
         }
 
         async Task HTMLInjectorRoute(HttpContextBase ctx)
