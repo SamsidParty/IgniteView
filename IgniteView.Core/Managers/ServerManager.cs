@@ -118,7 +118,13 @@ namespace IgniteView.Core
             var injectedCode = "<script src=\"/igniteview/injected.js\" ></script>"; // Loads a script from InjectedJSRoute (the function above)
 
             injectedCode += "</head>";
-            htmlContent = htmlContent.Replace("</head>", injectedCode); // Adds the code inside the head
+
+            // Check whether the script injection mode is server side
+            if (PlatformManager.Instance.GetScriptInjectionMode() == ScriptInjectionMode.ServerSide)
+            {
+                htmlContent = htmlContent.Replace("</head>", injectedCode); // Adds the code inside the head
+            } // Otherwise it will be injected on the client
+            
 
             ctx.Response.StatusCode = 200;
             ctx.Response.ContentType = "text/html";
