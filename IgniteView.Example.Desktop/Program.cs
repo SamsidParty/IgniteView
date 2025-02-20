@@ -1,5 +1,6 @@
 ﻿using IgniteView.Core;
 using IgniteView.Desktop;
+using IgniteView.Desktop.Types;
 
 namespace IgniteView.Example.Desktop
 {
@@ -15,6 +16,14 @@ namespace IgniteView.Example.Desktop
                 WebWindow.Create()
                 .WithBounds(new WindowBounds(900, 720))
                 .WithTitle("Main Window")
+                .With((w) =>
+                {
+                    // Cool acrylic effect on Windows 11
+                    if (w.GetType() == typeof(Win32WebWindow))
+                    {
+                        ((Win32WebWindow)w).BackgroundMode = Win32WebWindow.WindowBackgroundMode.Acrylic;
+                    }
+                })
                 .Show();
 
             app.Run();

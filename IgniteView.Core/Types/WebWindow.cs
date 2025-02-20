@@ -162,6 +162,16 @@ namespace IgniteView.Core
 
         public virtual void ExecuteCommand(CommandData commandData) => CommandManager.ExecuteCommand(this, commandData);
 
+        /// <summary>
+        /// Invokes the function provided with this WebWindow as a parameter,
+        /// Useful for running extra code while chaining methods
+        /// </summary>
+        public virtual WebWindow With(Action<WebWindow> mutatorFunction)
+        {
+            mutatorFunction.Invoke(this);
+            return this;
+        }
+
         #endregion
 
         #region Constructors
