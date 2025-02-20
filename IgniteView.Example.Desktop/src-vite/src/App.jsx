@@ -11,6 +11,9 @@ function App() {
                 <button onClick={() => window.open("https://samsidparty.com/")}>
                     <img src="/Images/PartyIconMono.png"></img>
                 </button>
+                <button onClick={() => window.open("https://github.com/SamsidParty/IgniteView")}>
+                    <img src="/Images/GitHub.png"></img>
+                </button>
             </div>
             <div className="content">
 

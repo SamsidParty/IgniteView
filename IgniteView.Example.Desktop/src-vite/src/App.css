@@ -19,6 +19,7 @@
     --col-tertiary: #f3e7ff;
     --col-contrast: #ebebeb;
     --col-disabled: #251F29;
+    --brightness: 100%;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -34,6 +35,7 @@
         --col-tertiary: #121212;
         --col-contrast: #343434;
         --col-disabled: #251F29;
+        --brightness: 0%;
     }
 }
 
@@ -93,6 +95,7 @@ body {
 
 .navBar > button > img {
     height: 100%;
+    filter: brightness(calc(100% - var(--brightness)));
 }
 
 .navBar > button:hover {
