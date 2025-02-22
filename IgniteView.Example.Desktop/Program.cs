@@ -26,14 +26,7 @@ namespace IgniteView.Example.Desktop
                 })
                 .Show();
 
-            var bounds = new WindowBounds(900, 720)
-            {
-                MinWidth = 400,
-                MinHeight = 400,
-                MaxWidth = 0,
-                MaxHeight = 0,
-            };
-
+            var bounds = new LockedWindowBounds(1280, 720);
             mainWindow.Bounds = bounds;
 
             app.Run();

@@ -27,7 +27,7 @@ var mainWindow =
     .Show();
 ```
 
-# Minimum & Maximum Size
+## Minimum & Maximum Size
 
 The `WindowBounds` object has properties to control the minimum and maximum size of the window:
 - `MinWidth`
@@ -63,4 +63,14 @@ This is the recommended approach as some users with high resolution monitors wil
 // Set the maximum size to 0, which will disable it entirely
 bounds.MaxWidth = 0;
 bounds.MaxHeight = 0;
+```
+
+## Locked Window Bounds
+
+You can set the `Bounds` of a `WebWindow` to a `LockedWindowBounds` object as well, which will disable resizing, maximizing, and minimizing.
+
+```csharp title="Program.cs"
+// The window will be locked to 1280x720
+var bounds = new LockedWindowBounds(1280, 720);
+mainWindow.Bounds = bounds;
 ```
