@@ -30,10 +30,10 @@ var mainWindow =
 # Minimum & Maximum Size
 
 The `WindowBounds` object has properties to control the minimum and maximum size of the window:
-- MinWidth
-- MinHeight
-- MaxWidth
-- MaxHeight
+- `MinWidth`
+- `MinHeight`
+- `MaxWidth`
+- `MaxHeight`
 
 Using them is trivial:
 
@@ -54,4 +54,13 @@ var bounds = new WindowBounds(1280, 720) // 1280x720 represents the initial size
     MaxWidth = 1920,
     MaxHeight = 1080,
 };
+```
+
+You can also disable the maximum size entirely, which allows the window to be as big as the user's monitor.
+This is the recommended approach as some users with high resolution monitors will require large windows.
+
+```csharp title="Program.cs"
+// Set the maximum size to 0, which will disable it entirely
+bounds.MaxWidth = 0;
+bounds.MaxHeight = 0;
 ```
