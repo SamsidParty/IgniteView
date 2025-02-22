@@ -66,7 +66,8 @@ namespace IgniteView.Desktop
         public override WindowBounds Bounds { 
             get => base.Bounds;
             set {
-                SetWebWindowBounds(WindowIndex, value.InitialWidth, value.InitialHeight, value.MinWidth, value.MinHeight, value.MaxWidth, value.MaxHeight);
+                var applied = value.AppliedBounds();
+                SetWebWindowBounds(WindowIndex, applied.InitialWidth, applied.InitialHeight, applied.MinWidth, applied.MinHeight, applied.MaxWidth, applied.MaxHeight);
                 base.Bounds = value;
             } 
         }

@@ -12,6 +12,8 @@ namespace IgniteView.Core
     /// </summary>
     public class WindowBounds
     {
+        private const int MaxValue = 999999;
+
         public int MinWidth;
         public int MinHeight;
         public int MaxWidth;
@@ -20,14 +22,33 @@ namespace IgniteView.Core
         public int InitialHeight;
 
         /// <summary>
+        /// Modifies the provided window bounds to conform to the standards of an actual window.
+        /// For example, this function will replace 0 values with their respective default values
+        /// </summary>
+        public WindowBounds AppliedBounds()
+        {
+            var newBounds = new WindowBounds()
+            {
+                MinWidth = MinWidth,
+                MinHeight = MinHeight,
+                MaxWidth = MaxWidth < 1 ? MaxValue : MaxWidth,
+                MaxHeight = MaxHeight < 1 ? MaxValue : MaxHeight,
+                InitialWidth = InitialWidth < 1 ? 1280 : InitialWidth,
+                InitialHeight = InitialHeight < 1 ? 720 : InitialHeight
+            };
+
+            return newBounds;
+        }
+
+        /// <summary>
         /// Creates new window bounds with the specified width and height (no minimum or maximum dimensions)
         /// </summary>
         public WindowBounds(int width, int height)
         {
             MinHeight = 0;
             MinWidth = 0;
-            MaxHeight = 999999;
-            MaxWidth = 999999;
+            MaxHeight = 0;
+            MaxWidth = 0;
             InitialWidth = width;
             InitialHeight = height;
         }
@@ -39,8 +60,8 @@ namespace IgniteView.Core
         public WindowBounds() {
             MinHeight = 0;
             MinWidth = 0;
-            MaxHeight = 999999;
-            MaxWidth = 999999;
+            MaxHeight = 0;
+            MaxWidth = 0;
             InitialWidth = 1280;
             InitialHeight = 720;
         }
