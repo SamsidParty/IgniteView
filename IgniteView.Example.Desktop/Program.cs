@@ -26,6 +26,14 @@ namespace IgniteView.Example.Desktop
                 })
                 .Show();
 
+            var bounds = new WindowBounds(900, 720);
+            bounds.MinWidth = 400;
+            bounds.MinHeight = 400;
+            bounds.MaxWidth = 0;
+            bounds.MaxHeight = 0;
+
+            mainWindow.Bounds = bounds;
+
             app.Run();
         }
     }
