@@ -161,7 +161,14 @@ namespace IgniteView.Core
         /// </summary>
         public virtual void ExecuteJavaScript(JSFunctionCall functionToExecute) => ExecuteJavaScript(functionToExecute.ToString());
 
-        public virtual void ExecuteCommand(CommandData commandData) => CommandManager.ExecuteCommand(this, commandData);
+        /// <summary>
+        /// Calls a function on the window
+        /// </summary>
+        /// <param name="functionName">The name of the JavaScript function to call, make sure this is available in the global scope</param>
+        /// <param name="parameters">The parameters passed to the JavaScript function</param>
+        public virtual void CallFunction(string functionName, params object[] parameters) => ExecuteJavaScript(new JSFunctionCall(functionName, parameters));
+
+        protected virtual void ExecuteCommand(CommandData commandData) => CommandManager.ExecuteCommand(this, commandData);
 
         /// <summary>
         /// Invokes the function provided with this WebWindow as a parameter,
