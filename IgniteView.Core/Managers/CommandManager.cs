@@ -59,6 +59,12 @@ namespace IgniteView.Core
                 }
                 else
                 {
+                    if (commandData.Parameters.Length <= paramIndex)
+                    {
+                        target.ExecuteJavaScript(new JSFunctionCall("console.error", $"The command bridge couldn't transform parameter {paramIndex + 1} '{parameter.Name}' for command '{commandData.Function}', make sure you have passed this parameter when calling the function"));
+                        return;
+                    }
+
                     var providedParam = commandData.Parameters[paramIndex];
                     var providedParamType = providedParam.GetType();
                     var expectedParamType = parameter.ParameterType;

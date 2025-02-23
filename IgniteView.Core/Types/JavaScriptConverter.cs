@@ -26,7 +26,12 @@ namespace IgniteView.Core
             }
             else if (value is Array)
             {
-                return JsonConvert.SerializeObject(value as Array);
+                try
+                {
+                    // Try converting to JSON array
+                    return JsonConvert.SerializeObject(value as Array);
+                }
+                catch { }
             }
             else if (value is JSLiteral)
             {
@@ -35,6 +40,15 @@ namespace IgniteView.Core
             else if (value == null)
             {
                 return "null";
+            }
+            else
+            {
+                try
+                {
+                    // Try converting to JSON
+                    return JsonConvert.SerializeObject(value);
+                }
+                catch { }
             }
             return "undefined";
         }

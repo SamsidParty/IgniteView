@@ -53,6 +53,11 @@ namespace IgniteView.Core
                 js += value.AsJavaScript() + ",";
             }
 
+            if (js.EndsWith(","))
+            {
+                js = js.Substring(0, js.Length - 1); // Remove trailing comma
+            }
+
             js += ");";
 
             return js;

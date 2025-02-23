@@ -5,7 +5,7 @@ window.igniteView.commandQueue.add = (commandId, resolve) => {
     // Add the command to the command queue, C# will call this function
     window.igniteView.commandQueue[commandId] = (result) => {
         console.log("[COMMAND BRIDGE] Received result for command " + commandId);
-        resolve(JSON.parse(result));
+        resolve(result);
     }
 }
 
@@ -18,6 +18,16 @@ window.igniteView.commandQueue.resolve = (commandId, result) => { // Called by C
 }
 
 window.igniteView.commandBridge.invoke = invoke;
+
+// Finds all available commands and adds them into the command bridge
+window.igniteView.commandBridge.build = async () => {
+    var commandList = await invoke("igniteview_list_commands");
+    commandList.forEach((command) => {
+        window.igniteView.commandBridge[command] = function(...args) {
+            return invoke(command, ...args)
+        };
+    })
+}
 
 function invoke(command) {
 
@@ -43,3 +53,5 @@ function invoke(command) {
         });
     }
 }
+
+window.igniteView.commandBridge.build();
