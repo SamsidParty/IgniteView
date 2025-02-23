@@ -23,5 +23,11 @@ namespace IgniteView.Example.Desktop
         {
             return Environment.UserName;
         }
+
+        [Command("resize")]
+        public static void Resize(WebWindow target, int width, int height)
+        {
+            target.Bounds = new WindowBounds(width, height);
+        }
     }
 }

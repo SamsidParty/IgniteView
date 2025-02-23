@@ -51,3 +51,22 @@ console.log(username);
 ```javascript
 igniteView.commandBridge.getUsername().then(console.log);
 ```
+
+## Command Context
+
+Sometimes, you may need to access the `WebWindow` object from the command. To do this, simply add a `WebWindow` as the first parameter of the method:
+
+```csharp title="Commands.cs"
+[Command("resize")]
+public static void Resize(WebWindow target, int width, int height)
+{
+    target.Bounds = new WindowBounds(width, height);
+}
+```
+
+In this example, the `target` variable will automatically be filled in as the calling window.
+To execute the method, simply call it as usual, but omit the `target` parameter in JavaScript:
+
+```javascript
+igniteView.commandBridge.resize(640, 480);
+```
