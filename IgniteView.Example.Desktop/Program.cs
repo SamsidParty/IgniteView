@@ -11,6 +11,8 @@ namespace IgniteView.Example.Desktop
             DesktopPlatformManager.Activate();
             var app = new ViteAppManager();
 
+            app.CurrentScriptManager.RegisterPreloadScriptFromPath("/preload.js");
+
             var mainWindow =
                 WebWindow.Create()
                 .WithBounds(new WindowBounds(900, 720))

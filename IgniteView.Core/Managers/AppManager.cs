@@ -16,6 +16,7 @@ namespace IgniteView.Core
 
         public AppIdentity CurrentIdentity;
         public ServerManager CurrentServerManager;
+        public ScriptManager CurrentScriptManager;
 
         public List<WebWindow> OpenWindows = new();
         public static int LastWindowID = 0;
@@ -54,6 +55,7 @@ namespace IgniteView.Core
         {
             if (CurrentServerManager == null) { CurrentServerManager = new ServerManager(CreateFileResolver()); }
             if (CurrentIdentity == null) { CurrentIdentity = identity; }
+            if (CurrentScriptManager == null) { CurrentScriptManager = new ScriptManager(); }
             
             PlatformManager.Instance.Create();
         }
