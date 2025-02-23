@@ -159,7 +159,7 @@ namespace IgniteView.Core
         /// <summary>
         /// Executes a JSFunction in the root page of the window
         /// </summary>
-        public virtual void ExecuteJavaScript(JSFunction functionToExecute) => ExecuteJavaScript(functionToExecute.ToString());
+        public virtual void ExecuteJavaScript(JSFunctionCall functionToExecute) => ExecuteJavaScript(functionToExecute.ToString());
 
         public virtual void ExecuteCommand(CommandData commandData) => CommandManager.ExecuteCommand(this, commandData);
 

@@ -8,7 +8,10 @@ using System.Threading.Tasks;
 
 namespace IgniteView.Core
 {
-    public class JSFunction
+    /// <summary>
+    /// Represents a call to a JavaScript function
+    /// </summary>
+    public class JSFunctionCall
     {
         public required string FunctionName;
         public required object[] Parameters;
@@ -32,7 +35,7 @@ namespace IgniteView.Core
         /// Creates a JavaScript function with a name and parameters
         /// </summary>
         [SetsRequiredMembers]
-        public JSFunction(string functionName, params object[] parameters)
+        public JSFunctionCall(string functionName, params object[] parameters)
         {
             FunctionName = functionName;
             Parameters = parameters;

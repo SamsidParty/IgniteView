@@ -42,7 +42,10 @@ namespace IgniteView.Core
 
         public static void ExecuteCommand(WebWindow target, CommandData commandData)
         {
-            if (!Commands.ContainsKey(commandData.Function)) { return; }
+            if (!Commands.ContainsKey(commandData.Function)) {
+                target.ExecuteJavaScript(new JSFunctionCall("console.error", $"The command bridge couldn't locate a binding for command '{commandData.Function}', please ensure the command is correct."));
+                return;
+            }
 
             var method = Commands[commandData.Function]; // Find the MethodInfo of the command
 
@@ -90,7 +93,7 @@ namespace IgniteView.Core
 
             var result = method.Invoke(null, paramList.ToArray());
 
-            var returnFunction = new JSFunction("window.igniteView.commandQueue.resolve", commandData.CallbackID, result);
+            var returnFunction = new JSFunctionCall("window.igniteView.commandQueue.resolve", commandData.CallbackID, result);
             target.ExecuteJavaScript(returnFunction);
         }
     }
