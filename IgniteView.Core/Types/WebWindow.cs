@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -194,7 +195,11 @@ namespace IgniteView.Core
         private WebWindow AfterCreate()
         {
             // Try to use the default favicon if it exists
-            if (CurrentAppManager.CurrentServerManager.Resolver.DoesFileExist("/favicon.png"))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && CurrentAppManager.CurrentServerManager.Resolver.DoesFileExist("/favicon_mac.png"))
+            {
+                IconPath = "/favicon_mac.png"; // Macs use a different icon with a background and rounded corners
+            }
+            else if (CurrentAppManager.CurrentServerManager.Resolver.DoesFileExist("/favicon.png"))
             {
                 IconPath = "/favicon.png";
             }
