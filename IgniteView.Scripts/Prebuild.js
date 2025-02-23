@@ -27,6 +27,12 @@ function BuildViteProject() {
     spawnSync(/^win/.test(process.platform) ? 'npx.cmd' : 'npx', ['vite', 'build', '--emptyOutDir', '--outDir', '../dist'], { stdio: 'inherit' });
 }
 
+function NPMInstall() {
+    console.log("Installing NPM dependencies...");
+    spawnSync(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['install'], { stdio: 'inherit' });
+}
+
+
 async function PrebuildVite() {
     console.log("Detected Project Type: Vite");
     var sourcePath = path.join(projectDirectory, 'src-vite');
@@ -38,9 +44,14 @@ async function PrebuildVite() {
     process.chdir(path.join(process.cwd(), "src-vite"));
 
     var packageJsonPath = path.join(sourcePath, 'package.json');
+    var nodeModulesPath = path.join(sourcePath, 'node_modules');
     
     if (!fs.existsSync(packageJsonPath)) {
         CreateViteProject();
+    }
+
+    if (!fs.existsSync(nodeModulesPath)) {
+        NPMInstall();
     }
 
     if (buildConfiguration.toLowerCase().includes("debug")) {
