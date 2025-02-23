@@ -22,6 +22,7 @@ int main() {
 #endif
 
 #ifdef __APPLE__
+#include <saucer/modules/stable/webkit.hpp>
 #include "MacHelper.h"
 #endif
 
@@ -38,7 +39,11 @@ extern "C" {
         WindowList.push_back(window);
         CommandBridgeList.push_back(commandBridge);
         int windowIndex = WindowList.size() - 1;
-
+        
+        #if __APPLE__
+        MacEnableAcrylic(window->webview::native().webview, window->window::native().window);
+        #endif
+        
         if (preloadScript != 0) {
             window->inject({
                 .code = preloadScript,
@@ -99,10 +104,6 @@ extern "C" {
 
     EXPORT void SetWebWindowDark(int index, bool isDark) {
         WindowList[index]->set_force_dark_mode(isDark);
-        
-        #ifdef __APPLE__
-        MacSetDark(isDark);
-        #endif
     }
 
     EXPORT void SetWebWindowDevToolsEnabled(int index, bool enableDevTools) {

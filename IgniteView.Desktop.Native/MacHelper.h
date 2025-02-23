@@ -1,36 +1,29 @@
-#import <Foundation/Foundation.h>
-#import <AppKit/AppKit.h>
+#include <Foundation/Foundation.h>
+#include <AppKit/AppKit.h>
+#include <WebKit/WebKit.h>
+#include <WebKit/WKWebView.h>
+#include <WebKit/WKWebViewConfiguration.h>
 
 #define EXPORT extern "C"
 
-EXPORT void MacEnableAcrylic() {
-    NSWindow* window = [[NSApplication sharedApplication] mainWindow];
+EXPORT void MacEnableAcrylic(WKWebView* webview, NSWindow* window) {
+    
+    window.appearance = [NSAppearance appearanceNamed:NSAppearanceNameVibrantLight];
     window.titlebarAppearsTransparent = true;
-}
-
-EXPORT void MacSetDark(bool isDark) {
+    [webview setValue:[NSNumber numberWithBool: YES] forKey:@"drawsTransparentBackground"];
     
-    MacEnableAcrylic();
-    
-    NSWindow* window = [[NSApplication sharedApplication] mainWindow];
-    
-    if (isDark) {
-        window.appearance = [NSAppearance appearanceNamed:NSAppearanceNameVibrantDark];
-    }
-    else {
-        window.appearance = [NSAppearance appearanceNamed:NSAppearanceNameVibrantLight];
+    Class vibrantClass=NSClassFromString(@"NSVisualEffectView");
+    if (vibrantClass)
+    {
+        NSVisualEffectView *vibrant=[[vibrantClass alloc] initWithFrame:window.contentView.bounds];
+        [vibrant setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
+        [vibrant setBlendingMode:NSVisualEffectBlendingModeBehindWindow];
+        [window.contentView addSubview:vibrant positioned:NSWindowBelow relativeTo:nil];
     }
 }
 
 EXPORT bool MacIsDark() {
-    if (__builtin_available(macOS 10.14, *))
-    {
-        NSAppearance* appearance = NSAppearance.currentDrawingAppearance;
-        NSAppearanceName basicAppearance = [appearance bestMatchFromAppearancesWithNames:@[
-            NSAppearanceNameAqua,
-            NSAppearanceNameDarkAqua
-        ]];
-        return [basicAppearance isEqualToString:NSAppearanceNameDarkAqua];
-    }
-    return false;
+    NSAppearance* appearance = NSApp.effectiveAppearance;
+    NSString* name = appearance.name;
+    return [appearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]] == NSAppearanceNameDarkAqua;
 }
