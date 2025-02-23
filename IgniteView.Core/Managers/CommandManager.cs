@@ -21,7 +21,7 @@ namespace IgniteView.Core
                     {
                         foreach (Type type in assembly!.GetTypes())
                         {
-                            foreach (var method in type.GetMethods())
+                            foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static))
                             {
                                 var attributes = method.GetCustomAttributes(true).ToList();
                                 attributes = attributes.Where((atr) => atr is CommandAttribute).ToList();

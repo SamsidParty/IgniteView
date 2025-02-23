@@ -10,7 +10,7 @@ namespace IgniteView.Example.Desktop
     class TestCommands
     {
         [Command("beep")]
-        private void BeepBeep()
+        public static void Beep()
         {
             Console.Beep();
         }
