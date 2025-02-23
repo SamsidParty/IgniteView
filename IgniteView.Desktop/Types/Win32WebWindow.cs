@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IgniteView.Desktop.Types
+namespace IgniteView.Desktop
 {
     public class Win32WebWindow : DesktopWebWindow
     {

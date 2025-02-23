@@ -1,6 +1,5 @@
 ﻿using IgniteView.Core;
 using IgniteView.Desktop;
-using IgniteView.Desktop.Types;
 
 namespace IgniteView.Example.Desktop
 {

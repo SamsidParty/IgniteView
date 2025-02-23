@@ -1,5 +1,4 @@
 ﻿using IgniteView.Core;
-using IgniteView.Desktop.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,6 +69,10 @@ namespace IgniteView.Desktop
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 return new Win32WebWindow();
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                return new MacWebWindow();
             }
             return new DesktopWebWindow();
         }

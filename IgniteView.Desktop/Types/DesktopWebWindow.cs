@@ -1,5 +1,4 @@
 ﻿using IgniteView.Core;
-using IgniteView.Desktop.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;

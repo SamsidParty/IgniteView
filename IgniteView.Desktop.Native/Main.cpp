@@ -99,6 +99,10 @@ extern "C" {
 
     EXPORT void SetWebWindowDark(int index, bool isDark) {
         WindowList[index]->set_force_dark_mode(isDark);
+        
+        #ifdef __APPLE__
+        MacSetDark(isDark);
+        #endif
     }
 
     EXPORT void SetWebWindowDevToolsEnabled(int index, bool enableDevTools) {
