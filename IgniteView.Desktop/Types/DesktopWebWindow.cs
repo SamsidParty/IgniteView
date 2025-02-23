@@ -82,7 +82,7 @@ namespace IgniteView.Desktop
         public CommandBridgeCallback CommandExecuteRequested;
         void OnCommandExecuteRequested(IntPtr param)
         {
-            var commandString = InteropHelper.PointerToStringUni(param);
+            var commandString = InteropHelper.PointerToStringBase64(param);
             ExecuteCommand(commandString);
         }
 

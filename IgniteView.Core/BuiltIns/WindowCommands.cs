@@ -11,6 +11,7 @@ namespace IgniteView.Core
         [Command("igniteview_window_open")]
         public static string OpenWindow(string url)
         {
+            Console.WriteLine(url);
             return WebWindow
                 .Create(url)
                 .Show()

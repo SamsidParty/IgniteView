@@ -21,7 +21,7 @@ int main() {
 }
 #endif
 
-typedef void(__stdcall* CommandBridgeCallback)(const wchar_t*);
+typedef void(__stdcall* CommandBridgeCallback)(const char*);
 
 std::shared_ptr<saucer::application> App;
 std::vector<std::shared_ptr<saucer::smartview<saucer::default_serializer>>> WindowList;
@@ -44,10 +44,9 @@ extern "C" {
         }
 
         window->set_url(url);
-        window->expose("igniteview_commandbridge", [windowIndex](std::wstring param)
+        window->expose("igniteview_commandbridge", [windowIndex](std::string param)
             {
-                wchar_t* paramPtr = wcsdup(param.c_str()); // This is freed by the C# code
-                CommandBridgeList[windowIndex](paramPtr);
+                CommandBridgeList[windowIndex](param.c_str());
             });
 
         window->show();

@@ -25,6 +25,15 @@ namespace IgniteView.Desktop
         }
 
         /// <summary>
+        /// Reads a base64 string from a pointer (doesn't free the memory)
+        /// </summary>
+        public static string PointerToStringBase64(IntPtr ptr)
+        {
+            var data = Marshal.PtrToStringAnsi(ptr);
+            return Encoding.UTF8.GetString(Convert.FromBase64String(data));
+        }
+
+        /// <summary>
         /// Reads a unicode string from a pointer and frees its memory
         /// </summary>
         public static string PointerToStringUni(IntPtr ptr)
