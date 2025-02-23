@@ -26,9 +26,6 @@ namespace IgniteView.Example.Desktop
                 })
                 .Show();
 
-            var bounds = new LockedWindowBounds(1280, 720);
-            mainWindow.Bounds = bounds;
-
             app.Run();
         }
     }

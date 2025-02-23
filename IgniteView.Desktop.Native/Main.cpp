@@ -21,6 +21,10 @@ int main() {
 }
 #endif
 
+#ifdef __APPLE__
+#include "MacHelper.h"
+#endif
+
 typedef void(__stdcall* CommandBridgeCallback)(const char*);
 
 std::shared_ptr<saucer::application> App;
