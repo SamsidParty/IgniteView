@@ -27,3 +27,13 @@ EXPORT bool MacIsDark() {
     NSString* name = appearance.name;
     return [appearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]] == NSAppearanceNameDarkAqua;
 }
+
+// Resizes the window without animating
+EXPORT void MacDirectResize(NSWindow* window, int width, int height) {
+    NSRect frame = [window frame];
+
+    frame.size.width = width;
+    frame.size.height = height;
+    
+    [window setFrame:frame display:true animate:false];
+}

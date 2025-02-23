@@ -77,6 +77,13 @@ extern "C" {
     }
 
     EXPORT void SetWebWindowBounds(int index, int w, int h, int minW, int minH, int maxW, int maxH) {
+        
+        #if __APPLE__
+        // On macOS, calling set_size will animate the resizing, which we don't want
+        // So first use the NSWindow API to instantly resize first
+        MacDirectResize(WindowList[index]->window::native().window, w, h);
+        #endif
+        
         WindowList[index]->set_size(w, h);
         WindowList[index]->set_min_size(minW, minH);
         WindowList[index]->set_max_size(maxW, maxH);
