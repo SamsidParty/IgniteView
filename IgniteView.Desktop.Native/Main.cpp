@@ -15,6 +15,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
 #else
 
 #define EXPORT extern "C"
+#define __stdcall
 
 int main() {
   return 0;
@@ -26,7 +27,7 @@ int main() {
 #include "MacHelper.h"
 #endif
 
-typedef void(__stdcall* CommandBridgeCallback)(const char*);
+typedef void(__stdcall *CommandBridgeCallback)(const char*);
 
 std::shared_ptr<saucer::application> App;
 std::vector<std::shared_ptr<saucer::smartview<saucer::default_serializer>>> WindowList;
