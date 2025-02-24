@@ -68,5 +68,12 @@ namespace IgniteView.Core
             PlatformManager.Instance.Run();
             OnCleanUp?.Invoke();
         }
+
+        #region Method Forwarders
+
+        public void RegisterPreloadScriptFromPath(string p) => CurrentScriptManager.RegisterPreloadScriptFromPath(p);
+        public void RegisterPreloadScriptFromString(string p) => CurrentScriptManager.RegisterPreloadScriptFromString(p);
+
+        #endregion
     }
 }

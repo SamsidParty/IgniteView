@@ -11,7 +11,8 @@ namespace IgniteView.Example.Desktop
             DesktopPlatformManager.Activate();
             var app = new ViteAppManager();
 
-            app.CurrentScriptManager.RegisterPreloadScriptFromPath("/preload.js");
+            app.RegisterPreloadScriptFromPath("/preload.js");
+            app.RegisterPreloadScriptFromString(new JSFunctionCall("alert", "Dynamic preload script works!"));
 
             var mainWindow =
                 WebWindow.Create()

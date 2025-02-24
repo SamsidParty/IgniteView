@@ -26,10 +26,10 @@ We recommend simply downloading the [IgniteView macOS icon template](./img/icont
 The recommended way to set the icon of your window is to add a `favicon.png` file to the root of your web content.
 
 For vite projects:
-    - Add the `favicon.png` file to src-vite/public/favicon.png
+    - Add the `favicon.png` file to `src-vite/public/favicon.png`
 
 For raw HTML projects:
-    - Add the `favicon.png` file to wwwroot/favicon.png
+    - Add the `favicon.png` file to `wwwroot/favicon.png`
 
 :::info
 

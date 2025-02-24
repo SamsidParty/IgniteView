@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace IgniteView.Core
 {
@@ -57,10 +58,10 @@ namespace IgniteView.Core
             {
                 js = js.Substring(0, js.Length - 1); // Remove trailing comma
             }
-
             js += ");";
-
             return js;
         }
+
+        public static implicit operator string(JSFunctionCall c) => c.ToString();
     }
 }
