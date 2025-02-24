@@ -34,8 +34,13 @@ std::vector<CommandBridgeCallback> CommandBridgeList;
 
 
 extern "C" {
-    EXPORT int NewWebWindow(const char* url, CommandBridgeCallback commandBridge, const char* preloadScript) {
-        auto window = std::shared_ptr{ App->make<saucer::smartview<saucer::default_serializer>>(saucer::preferences{.application = App}) };
+    EXPORT int NewWebWindow(const char* url, CommandBridgeCallback commandBridge, const char* preloadScript, const char8_t* path) {
+        auto window = std::shared_ptr{ App->make<saucer::smartview<saucer::default_serializer>>(saucer::preferences{
+            .application = App,
+            .persistent_cookies = true,
+            .hardware_acceleration = true,
+            .storage_path = path
+        }) };
         WindowList.push_back(window);
         CommandBridgeList.push_back(commandBridge);
         int windowIndex = WindowList.size() - 1;

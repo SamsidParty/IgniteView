@@ -18,7 +18,7 @@ namespace IgniteView.Desktop
         #region Native Imports
 
         [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
-        protected static extern int NewWebWindow(string url, CommandBridgeCallback commandBridge, string preloadScript);
+        protected static extern int NewWebWindow(string url, CommandBridgeCallback commandBridge, string preloadScript, IntPtr path);
 
         [DllImport(InteropHelper.DLLName)]
         protected static extern void ShowWebWindow(int index);
@@ -112,7 +112,8 @@ namespace IgniteView.Desktop
 
         public DesktopWebWindow() : base() {
             CommandExecuteRequested = new CommandBridgeCallback(OnCommandExecuteRequested);
-            WindowIndex = NewWebWindow(URL, CommandExecuteRequested, InjectedScript.CombinedScriptData);
+            var appPath = Marshal.StringToCoTaskMemUTF8(Path.Join(CurrentAppManager.CurrentIdentity.AppDataPath, "DesktopNative"));
+            WindowIndex = NewWebWindow(URL, CommandExecuteRequested, InjectedScript.CombinedScriptData, appPath);
 
             // Enable dev tools if debug mode
             SetWebWindowDevToolsEnabled(WindowIndex, DebugMode.IsDebugMode);

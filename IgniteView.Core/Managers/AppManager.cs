@@ -56,7 +56,7 @@ namespace IgniteView.Core
             if (CurrentServerManager == null) { CurrentServerManager = new ServerManager(CreateFileResolver()); }
             if (CurrentIdentity == null) { CurrentIdentity = identity; }
             if (CurrentScriptManager == null) { CurrentScriptManager = new ScriptManager(); }
-            
+
             PlatformManager.Instance.Create();
         }
 

@@ -37,7 +37,7 @@ namespace IgniteView.Core
                 packageName = Assembly.GetEntryAssembly()!.GetName().Name;
             }
 
-            return new AppIdentity("IgniteViewApp", packageName);
+            return new AppIdentity(packageName, "IgniteViewApp");
         }
 
         void RunVite()
