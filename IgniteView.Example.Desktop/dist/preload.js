@@ -1,1 +1,1 @@
-alert("loaded");
+console.log("Loaded test preload script");

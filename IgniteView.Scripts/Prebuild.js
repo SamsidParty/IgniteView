@@ -54,9 +54,6 @@ async function PrebuildVite() {
         NPMInstall();
     }
 
-    // Copy and rename the package.json file into the dist folder
-    fs.copyFileSync(path.join(sourcePath, 'package.json'), path.join(projectDirectory, 'dist', 'igniteview_package.json'))
-
     if (buildConfiguration.toLowerCase().includes("debug")) {
         console.log("Detected debug mode");
         BuildViteProject();
@@ -68,7 +65,15 @@ async function PrebuildVite() {
     else {
         console.log("Detected release mode");
         BuildViteProject();
+
+        // Remove the .vitedev file if it exists, we don't want it in production
+        if (fs.existsSync(path.join(projectDirectory, 'dist', '.vitedev'))) {
+            fs.unlinkSync(path.join(projectDirectory, 'dist', '.vitedev'));
+        }
     }
+
+    // Copy and rename the package.json file into the dist folder
+    fs.copyFileSync(path.join(sourcePath, 'package.json'), path.join(projectDirectory, 'dist', 'igniteview_package.json'))
 }
 
 async function Main() {
