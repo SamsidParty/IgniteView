@@ -52,7 +52,7 @@ namespace IgniteView.Desktop
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
-                    libHandle = LoadLibrary(Path.Combine(runtimePath, "linux" + suffix, "native", libraryName + ".so"));
+                    libHandle = LoadLibrary(Path.Combine(runtimePath, "linux" + suffix, "native", "lib" + libraryName + ".so"));
                 }
             }
             return libHandle;
