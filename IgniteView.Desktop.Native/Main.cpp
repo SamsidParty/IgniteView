@@ -40,6 +40,7 @@ extern "C" {
         CommandBridgeList.push_back(commandBridge);
         int windowIndex = WindowList.size() - 1;
         
+
         #if __APPLE__
         MacEnableAcrylic(window->webview::native().webview, window->window::native().window);
         #endif

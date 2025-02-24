@@ -54,6 +54,9 @@ async function PrebuildVite() {
         NPMInstall();
     }
 
+    // Copy and rename the package.json file into the dist folder
+    fs.copyFileSync(path.join(sourcePath, 'package.json'), path.join(projectDirectory, 'dist', 'igniteview_package.json'))
+
     if (buildConfiguration.toLowerCase().includes("debug")) {
         console.log("Detected debug mode");
         BuildViteProject();
