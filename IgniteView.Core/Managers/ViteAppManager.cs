@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -18,7 +21,23 @@ namespace IgniteView.Core
         /// </summary>
         AppIdentity GetImplicitIdentity()
         {
-            return new AppIdentity("SamsidParty", "IgniteView Example");
+            // Find the igniteview_package.json file from the resolver
+            if (!CurrentServerManager?.Resolver?.DoesFileExist("/igniteview_package.json") ?? false)
+            {
+                throw new FileNotFoundException("IgniteView couldn't find the package.json file in the vite output. Please ensure your project has a valid package.json file.");
+            }
+
+            dynamic packageJson;
+            packageJson = JsonConvert.DeserializeObject<ExpandoObject>(CurrentServerManager!.Resolver.ReadFileAsText("/igniteview_package.json"))!;
+
+            var packageName = packageJson.name;
+
+            // In case the name of the app hasn't been changed from "src-vite", use the assembly name
+            if (string.IsNullOrWhiteSpace(packageName) || packageName == "src-vite") {
+                packageName = Assembly.GetEntryAssembly()!.GetName().Name;
+            }
+
+            return new AppIdentity("IgniteViewApp", packageName);
         }
 
         void RunVite()
