@@ -36,7 +36,7 @@ namespace IgniteView.Desktop
 
         static IntPtr ImportResolver(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
         {
-            var runtimePath = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "runtimes");
+            var runtimePath = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "iv2runtime");
             var suffix = RuntimeInformation.ProcessArchitecture == Architecture.Arm64 ? "-arm64" : "-x64";
 
             IntPtr libHandle = IntPtr.Zero;
