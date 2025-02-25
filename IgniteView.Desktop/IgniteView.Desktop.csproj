@@ -4,16 +4,53 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>IgniteView.Desktop</Title>
+    <Authors>SamsidParty</Authors>
+    <Company>SamsidParty</Company>
+    <Description>Desktop runtimes for IgniteView, a Lightweight framework for building cross-platform web apps with .NET</Description>
+    <Copyright>Provided to you under the GPL-3.0 license</Copyright>
+    <PackageProjectUrl>https://github.com/SamsidParty/IgniteView</PackageProjectUrl>
+    <PackageIcon>IgniteView.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/SamsidParty/IgniteView</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>html;css;javascript;web;framework;tooling;igniteview;ignite;view;core;webview;webkit</PackageTags>
+    <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Configurations>Debug;Release;Local Development</Configurations>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\IgniteView.Core\IgniteView.Core.csproj" />
-  </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)'=='Local Development'">
+        <ProjectReference Include="..\IgniteView.Core\IgniteView.Core.csproj" />
+    </ItemGroup>
+
+	<ItemGroup Condition="'$(Configuration)'!='Local Development'">
+		<PackageReference Include="IgniteView.Core" Version="1.0.0" />
+	</ItemGroup>
 
     <ItemGroup>
 	    <Content Include="runtimes\**">
 		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	    </Content>
     </ItemGroup>
+	
+
+    <ItemGroup>
+      <None Include="..\Docs\static\Logos\IgniteView.png">
+        <Pack>True</Pack>
+        <PackagePath>\</PackagePath>
+      </None>
+      <None Include="..\LICENSE">
+        <Pack>True</Pack>
+        <PackagePath>\</PackagePath>
+      </None>
+      <None Include="..\README.md">
+        <Pack>True</Pack>
+        <PackagePath>\</PackagePath>
+      </None>
+    </ItemGroup>
+
+
 
 </Project>

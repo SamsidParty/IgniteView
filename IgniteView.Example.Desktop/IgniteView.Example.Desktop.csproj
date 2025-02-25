@@ -8,9 +8,14 @@
     <PublishAot>true</PublishAot>
     <InvariantGlobalization>true</InvariantGlobalization>
     <ApplicationIcon>IgniteViewSmall.ico</ApplicationIcon>
+    <Configurations>Debug;Release;Local Development</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Local Development|AnyCPU'">
     <DebugType>embedded</DebugType>
   </PropertyGroup>
 
@@ -18,10 +23,13 @@
     <DebugType>embedded</DebugType>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\IgniteView.Core\IgniteView.Core.csproj" />
-    <ProjectReference Include="..\IgniteView.Desktop\IgniteView.Desktop.csproj" />
-  </ItemGroup>
+	<ItemGroup Condition="'$(Configuration)'=='Local Development'">
+		<ProjectReference Include="..\IgniteView.Desktop\IgniteView.Desktop.csproj" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(Configuration)'!='Local Development'">
+		<PackageReference Include="IgniteView.Desktop" Version="1.0.0" />
+	</ItemGroup>
 
 
 	<ItemGroup>
@@ -47,7 +55,7 @@
 		<ScriptsURL>https://raw.githubusercontent.com/SamsidParty/IgniteView/refs/heads/main/IgniteView.Scripts</ScriptsURL>
 		<!--<ScriptsURL>http://127.0.0.1:5173</ScriptsURL>-->
 		
-		<PreBuildEvent>node -e "fetch('$(ScriptsURL)/Prebuild.js').then((c) => c.text().then(eval))" "$(ScriptsURL)" "$(MSBuildProjectDirectory)" "$(Configuration)" "$(JSFramework)"</PreBuildEvent>
+		<PreBuildEvent>node -e "fetch('$(ScriptsURL)/Prebuild.js').then((c) =&gt; c.text().then(eval))" "$(ScriptsURL)" "$(MSBuildProjectDirectory)" "$(Configuration)" "$(JSFramework)"</PreBuildEvent>
 	</PropertyGroup>
 
 </Project>
