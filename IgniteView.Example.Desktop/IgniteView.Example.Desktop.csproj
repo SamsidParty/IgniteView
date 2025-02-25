@@ -33,28 +33,23 @@
 	</ItemGroup>
 
 	<!-- IgniteView -->
-	<ItemGroup>
-		<!-- If you are using plain HTML without vite, change dist\** to wwwroot\** -->
-		<Content Include="dist\**">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
 	<ItemGroup Condition="'$(Configuration)'!='Local Development'">
 		<PackageReference Include="IgniteView.Desktop" Version="1.0.0" />
 	</ItemGroup>
 	<PropertyGroup>
 		<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
-
-		<!-- This is required for IgniteView to know what js framework you are using -->
-		<!-- Possible values: vanilla, vanilla-ts, vue, vue-ts, react, react-ts, react-swc, react-swc-ts, preact, preact-ts, lit, lit-ts, svelte, svelte-ts, solid, solid-ts, qwik, qwik-ts -->
 		<JSFramework>react</JSFramework>
-		
-		<!-- This will fetch the latest build scripts from GitHub -->
-		<!-- You may replace this URL with a versioned one to ensure the integrity of the scripts -->
 		<ScriptsURL>https://raw.githubusercontent.com/SamsidParty/IgniteView/refs/heads/main/IgniteView.Scripts</ScriptsURL>
-		<!--<ScriptsURL>http://127.0.0.1:5173</ScriptsURL>-->
-		
-		<PreBuildEvent>node -e "fetch('$(ScriptsURL)/Prebuild.js').then((c) =&gt; c.text().then(eval))" "$(ScriptsURL)" "$(MSBuildProjectDirectory)" "$(Configuration)" "$(JSFramework)"</PreBuildEvent>
+		<ScriptsURL>http://127.0.0.1:5173</ScriptsURL>
+
+		<PreBuildCommand>node -e "fetch('$(ScriptsURL)/Prebuild.js').then((c) =&gt; c.text().then(eval))" "$(ScriptsURL)" "$(MSBuildProjectDirectory.Replace('\', '\\'))" "$(Configuration)" "$(JSFramework)"</PreBuildCommand>
+		<PostBuildCommand>node -e "fetch('$(ScriptsURL)/Postbuild.js').then((c) =&gt; c.text().then(eval))" "$(ScriptsURL)" "$(MSBuildProjectDirectory.Replace('\', '\\'))" "$(Configuration)" "$(JSFramework)"</PostBuildCommand>
 	</PropertyGroup>
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+		<Exec Command="$(PreBuildCommand) &quot;$(OutputPath.Replace('\', '\\'))&quot;" />
+	</Target>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="$(PostBuildCommand) &quot;$(OutputPath.Replace('\', '\\'))&quot;" />
+	</Target>
 
 </Project>

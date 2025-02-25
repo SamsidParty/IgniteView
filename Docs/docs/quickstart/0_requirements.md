@@ -2,7 +2,7 @@
 
 IgniteView needs a few dependencies to be installed when developing your app:
 - .NET 9.0 or later
-- Node.JS version 22 or later, along with NPM
+- Node.JS version 22.3.0 or later, along with NPM
 
 ## Windows Requirements
 

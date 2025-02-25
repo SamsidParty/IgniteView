@@ -78,10 +78,16 @@ async function PrebuildVite() {
 
 async function Main() {
 
-    console.log("\n-------- IgniteView Prebuild Version 0.0.1 --------\n");
+    console.log("\n-------- IgniteView Prebuild Version 2.0.0 --------\n");
 
     // Determine the project type
-    if (fs.existsSync(path.join(projectDirectory, 'wwwroot'))) {
+    if (jsFramework == "raw" || jsFramework == "") {
+
+        if (!fs.existsSync(path.join(process.cwd(), "wwwroot"))) {
+            console.error("Couldn't find the wwwroot directory! Make sure it exists.");
+            process.exit(1);
+        }
+
         process.chdir(path.join(process.cwd(), "wwwroot"));
         console.log("Detected Project Type: Static HTML");
     }
