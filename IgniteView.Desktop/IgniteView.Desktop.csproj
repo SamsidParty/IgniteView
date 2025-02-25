@@ -19,17 +19,17 @@
     <PackageTags>html;css;javascript;web;framework;tooling;igniteview;ignite;view;core;webview;webkit</PackageTags>
     <PackageReleaseNotes>Fix runtimes not being copied</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Configurations>Debug;Release;Local Development</Configurations>
+    <Configurations>Debug;Release;Local Debug</Configurations>
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
     <FileVersion>$(VersionPrefix).0</FileVersion>
   </PropertyGroup>
 
-    <ItemGroup Condition="'$(Configuration)'=='Local Development'">
+    <ItemGroup Condition="'$(Configuration)'=='Local Debug'">
         <ProjectReference Include="..\IgniteView.Core\IgniteView.Core.csproj" />
     </ItemGroup>
 
-	<ItemGroup Condition="'$(Configuration)'!='Local Development'">
-		<PackageReference Include="IgniteView.Core" Version="1.0.0" />
+	<ItemGroup Condition="'$(Configuration)'!='Local Debug'">
+		<PackageReference Include="IgniteView.Core" Version="*" />
 	</ItemGroup>
 
     <ItemGroup>

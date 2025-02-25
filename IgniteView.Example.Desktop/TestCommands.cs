@@ -24,6 +24,12 @@ namespace IgniteView.Example.Desktop
             return Environment.UserName;
         }
 
+        [Command("jsonTest")]
+        public static string JsonTest()
+        {
+            return "{}";
+        }
+
         [Command("resize")]
         public static void Resize(WebWindow target, int width, int height)
         {

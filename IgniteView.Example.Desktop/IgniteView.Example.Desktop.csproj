@@ -8,14 +8,14 @@
     <PublishAot>true</PublishAot>
     <InvariantGlobalization>true</InvariantGlobalization>
     <ApplicationIcon>IgniteViewSmall.ico</ApplicationIcon>
-    <Configurations>Debug;Release;Local Development</Configurations>
+    <Configurations>Debug;Release;Local Debug</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>embedded</DebugType>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Local Development|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Local Debug|AnyCPU'">
     <DebugType>embedded</DebugType>
   </PropertyGroup>
 
@@ -23,7 +23,7 @@
     <DebugType>embedded</DebugType>
   </PropertyGroup>
 
-	<ItemGroup Condition="'$(Configuration)'=='Local Development'">
+	<ItemGroup Condition="'$(Configuration)'=='Local Debug'">
 		<ProjectReference Include="..\IgniteView.Desktop\IgniteView.Desktop.csproj" />
 	</ItemGroup>
 
@@ -33,14 +33,13 @@
 	</ItemGroup>
 
 	<!-- IgniteView -->
-	<ItemGroup Condition="'$(Configuration)'!='Local Development'">
-		<PackageReference Include="IgniteView.Desktop" Version="1.0.0" />
+	<ItemGroup Condition="'$(Configuration)'!='Local Debug'">
+		<PackageReference Include="IgniteView.Desktop" Version="*" />
 	</ItemGroup>
 	<PropertyGroup>
 		<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
 		<JSFramework>react</JSFramework>
 		<ScriptsURL>https://raw.githubusercontent.com/SamsidParty/IgniteView/refs/heads/main/IgniteView.Scripts</ScriptsURL>
-		<ScriptsURL>http://127.0.0.1:5173</ScriptsURL>
 
 		<PreBuildCommand>node -e "fetch('$(ScriptsURL)/Prebuild.js').then((c) =&gt; c.text().then(eval))" "$(ScriptsURL)" "$(MSBuildProjectDirectory.Replace('\', '\\'))" "$(Configuration)" "$(JSFramework)"</PreBuildCommand>
 		<PostBuildCommand>node -e "fetch('$(ScriptsURL)/Postbuild.js').then((c) =&gt; c.text().then(eval))" "$(ScriptsURL)" "$(MSBuildProjectDirectory.Replace('\', '\\'))" "$(Configuration)" "$(JSFramework)"</PostBuildCommand>

@@ -20,7 +20,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <SignAssembly>False</SignAssembly>
     <AssemblyOriginatorKeyFile></AssemblyOriginatorKeyFile>
-    <Configurations>Debug;Release;Local Development</Configurations>
+    <Configurations>Debug;Release;Local Debug</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

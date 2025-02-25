@@ -104,7 +104,7 @@ namespace IgniteView.Desktop
 
         public override void ExecuteJavaScript(string scriptData)
         {
-            ExecuteJavaScriptOnWebWindow(WindowIndex, scriptData);
+            ExecuteJavaScriptOnWebWindow(WindowIndex, JavaScriptConverter.WrapCode(scriptData));
             base.ExecuteJavaScript(scriptData);
         }
 

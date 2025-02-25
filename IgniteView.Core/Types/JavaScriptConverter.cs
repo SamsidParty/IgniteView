@@ -53,6 +53,13 @@ namespace IgniteView.Core
             return "undefined";
         }
 
+        /// <summary>
+        /// Converts raw JavaScript code into a wrapped version that doesn't use any non-standard characters
+        /// </summary>
+        public static string WrapCode(string code)
+        {
+            return "eval(atob('" + Convert.ToBase64String(Encoding.UTF8.GetBytes(code)) + "'));";
+        }
 
         static bool IsNumeric(this object x) => (x == null ? false : IsNumeric(x.GetType()));
         static bool IsNumeric(Type type) => IsNumeric(type, Type.GetTypeCode(type));
