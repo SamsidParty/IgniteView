@@ -6,7 +6,7 @@ const jsFramework = process.argv[1];
 
 function CreateViteProject() {
     console.clear();
-    spawnSync(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['create', 'vite@latest', "./", "--", "--template", jsFramework], { stdio: 'inherit' });
+    spawnSync(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['create', 'vite@latest', "--yes", "./", "--", "--template", jsFramework], { stdio: 'inherit' });
 }
 
 function InstallDependencies() {
@@ -22,7 +22,7 @@ async function Main() {
         CreateViteProject();
     }
 
-    console.log("Created mVite Project, installing dependencies...");
+    console.log("Created Vite Project, installing dependencies...");
 
     InstallDependencies();
 

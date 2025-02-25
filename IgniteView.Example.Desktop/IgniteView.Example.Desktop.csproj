@@ -27,10 +27,6 @@
 		<ProjectReference Include="..\IgniteView.Desktop\IgniteView.Desktop.csproj" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(Configuration)'!='Local Development'">
-		<PackageReference Include="IgniteView.Desktop" Version="1.0.0" />
-	</ItemGroup>
-
 
 	<ItemGroup>
 	  <Content Include="IgniteViewSmall.ico" />
@@ -42,6 +38,9 @@
 		<Content Include="dist\**">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
+	</ItemGroup>
+	<ItemGroup Condition="'$(Configuration)'!='Local Development'">
+		<PackageReference Include="IgniteView.Desktop" Version="1.0.0" />
 	</ItemGroup>
 	<PropertyGroup>
 		<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
