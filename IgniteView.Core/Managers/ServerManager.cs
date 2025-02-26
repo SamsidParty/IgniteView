@@ -19,6 +19,8 @@ namespace IgniteView.Core
         public Webserver CurrentServer;
         public FileResolver Resolver;
 
+        #region Networking
+
         /// <summary>
         /// Gets the URL where the server is listening (excluding a trailing slash)
         /// </summary>
@@ -74,6 +76,10 @@ namespace IgniteView.Core
             }
         }
 
+        #endregion
+
+        #region Constructor
+
         /// <summary>
         /// Starts the web server
         /// </summary>
@@ -85,6 +91,12 @@ namespace IgniteView.Core
             CurrentServer.Routes.PreAuthentication.Dynamic.Add(WatsonWebserver.Core.HttpMethod.GET, new Regex(".*"), ResolverRoute);
             CurrentServer.Routes.PreAuthentication.Static.Add(WatsonWebserver.Core.HttpMethod.GET, "/igniteview/injected.js", InjectedJSRoute);
 
+            // Tells the JS code what URL to use (in case it's coming from another origin)
+            AppManager.Instance.OnBeforeMainWindowCreated += () =>
+            {
+                AppManager.Instance.RegisterPreloadScriptFromString(new JSAssignment("igniteView.resolverURL", BaseURL));
+            };
+
             CurrentServer.Start();
         }
 
@@ -93,6 +105,10 @@ namespace IgniteView.Core
             Resolver = resolver;
             Start();
         }
+
+        #endregion
+
+        #region Routing
 
         async Task DefaultRoute(HttpContextBase ctx) => ctx.Response.Headers.Set("Location", Resolver.GetIndexFile());
 
@@ -163,5 +179,32 @@ namespace IgniteView.Core
             ctx.Response.StatusCode = 404;
             await ctx.Response.Send("404 Not Found");
         }
+
+        #endregion
+
+        #region User Dynamic Routing
+
+        /// <summary>
+        /// Allows you to register a custom file route to return dynamic data easily.
+        /// </summary>
+        /// <param name="relativeURL">The relative URL of the route (eg. "/hello.txt")</param>
+        /// <param name="route">The function called when the route is navigated to</param>
+        public void RegisterDynamicFileRoute(string relativeURL, Func<HttpContextBase, Task> route)
+        {
+            // Always have a leading "/"
+            if (!relativeURL.StartsWith("/"))
+            {
+                relativeURL = "/" + relativeURL;
+            }
+
+            // Make sure the server is running
+            if (CurrentServer == null || !CurrentServer.IsListening) {
+                throw new Exception("The IgniteView file server is not currently running! Please make sure the app has initialized first.");
+            }
+
+            CurrentServer.Routes.PreAuthentication.Static.Add(WatsonWebserver.Core.HttpMethod.GET, "/dynamic" + relativeURL, route);
+        }
+
+        #endregion
     }
 }

@@ -40,8 +40,15 @@ namespace IgniteView.Core
             return new AppIdentity(packageName, "IgniteViewApp");
         }
 
+        void SetEnvironmentVariables()
+        {
+            Environment.SetEnvironmentVariable("IGNITEVIEW_RESOLVER_URL", CurrentServerManager.BaseURL);
+        }
+
         void RunVite()
         {
+            SetEnvironmentVariables();
+
             // Try to read the vite dev path from the file
             var viteDevPath = CurrentServerManager.Resolver.ReadFileAsText("/.vitedev").Trim();
 

@@ -212,19 +212,34 @@ namespace IgniteView.Core
 
         #region Constructors
 
-        public static WebWindow Create() => PlatformManager.Instance.CreateWebWindow().AfterCreate();
+        public static WebWindow Create() => BeforeCreate().CreateWebWindow().AfterCreate();
         public static WebWindow Create(string url) => Create().WithURL(url);
 
         /// <summary>
         /// Only inherited classes should call this constructor
         /// </summary>
         protected WebWindow() 
-        { 
+        {
+            if (CurrentAppManager.MainWindow == null)
+            {
+                CurrentAppManager.MainWindow = this;
+            }
+
             CurrentAppManager.OpenWindows.Add(this);
 
             // Create an ID for this window
             AppManager.LastWindowID++;
             ID = AppManager.LastWindowID;
+        }
+
+        private static PlatformManager BeforeCreate()
+        {
+            if (AppManager.Instance.MainWindow == null)
+            {
+                AppManager.Instance.OnBeforeMainWindowCreated?.Invoke();
+            }
+
+            return PlatformManager.Instance;
         }
 
         private WebWindow AfterCreate()
@@ -238,6 +253,8 @@ namespace IgniteView.Core
             {
                 IconPath = "/favicon.png";
             }
+
+            CurrentAppManager.OnMainWindowCreated?.Invoke(this);
 
             return this;
         }

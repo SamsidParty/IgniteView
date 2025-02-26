@@ -12,6 +12,8 @@ namespace IgniteView.Example.Desktop
             DesktopPlatformManager.Activate();
             var app = new ViteAppManager();
 
+            app.RegisterDynamicFileRoute("/hello.txt", RoutingUtilities.TextRoute("Hello from IgniteView!"));
+
             app.RegisterPreloadScriptFromPath("/preload.js");
 
             var mainWindow =
