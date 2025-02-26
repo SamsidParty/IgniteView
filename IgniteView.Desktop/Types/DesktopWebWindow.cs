@@ -1,4 +1,5 @@
 ﻿using IgniteView.Core;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,9 @@ namespace IgniteView.Desktop
         [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
         protected static extern int SetWebWindowTitle(int index, string newTitle);
 
+        [DllImport(InteropHelper.DLLName)]
+        protected static extern int SetWebWindowTitleBar(int index, bool visible);
+
         [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]
         protected static extern int SetWebWindowURL(int index, string newURL);
 
@@ -61,6 +65,7 @@ namespace IgniteView.Desktop
         public override string IconPath { get => base.IconPath; set { base.IconPath = value; SetWebWindowIcon(WindowIndex, Marshal.StringToCoTaskMemUTF8(IconManager.CloneIcon(base.IconPath))); } }
         public override string URL { get => base.URL; set { base.URL = value; SetWebWindowURL(WindowIndex, base.URL); } }
         public override IntPtr NativeHandle { get => GetWebWindowHandle(WindowIndex); }
+        protected override bool TitleBarVisible { get => false; set => SetWebWindowTitleBar(WindowIndex, value); }
 
         public override WindowBounds Bounds { 
             get => base.Bounds;

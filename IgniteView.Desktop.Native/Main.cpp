@@ -1,4 +1,5 @@
 #include <saucer/smartview.hpp>
+#include <saucer/window.hpp>
 #include <iostream>
 #include <vector>
 
@@ -105,6 +106,15 @@ extern "C" {
 
     EXPORT void SetWebWindowTitle(int index, const char* title) {
         WindowList[index]->set_title(title);
+    }
+    
+    EXPORT void SetWebWindowTitleBar(int index, bool visible) {
+        if (visible) {
+            WindowList[index]->set_decoration(saucer::window_decoration::full);
+        }
+        else {
+            WindowList[index]->set_decoration(saucer::window_decoration::partial);
+        }
     }
 
     EXPORT void SetWebWindowIcon(int index, char8_t* iconPath) {

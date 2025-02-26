@@ -51,6 +51,34 @@ namespace IgniteView.Core
 
         #endregion
 
+        #region Window Titlebar
+
+        /// <summary>
+        /// Sets whether the window titlebar is visible
+        /// </summary>
+        protected virtual bool TitleBarVisible { get; set; }
+
+        /// <summary>
+        /// Enables or disables the titlebar on the window
+        /// </summary>
+        public virtual WebWindow WithTitleBar(bool visible)
+        {
+            TitleBarVisible = visible;
+            return this;
+        }
+
+        /// <summary>
+        /// Enables the titlebar on the window
+        /// </summary>
+        public virtual WebWindow WithTitleBar() => WithTitleBar(true);
+
+        /// <summary>
+        /// Disables the titlebar on the window
+        /// </summary>
+        public virtual WebWindow WithoutTitleBar() => WithTitleBar(false);
+
+        #endregion
+
         #region Window Handle
 
         /// <summary>
