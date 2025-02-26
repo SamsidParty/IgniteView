@@ -1,5 +1,6 @@
 ﻿using IgniteView.Core;
 using IgniteView.Desktop;
+using System.Runtime.InteropServices;
 
 namespace IgniteView.Example.Desktop
 {
@@ -17,7 +18,7 @@ namespace IgniteView.Example.Desktop
                 WebWindow.Create()
                 .WithBounds(new WindowBounds(900, 720))
                 .WithTitle("Main Window")
-                .WithoutTitleBar()
+                .WithTitleBar(RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) // Only show the titlebar on windows
                 .With((w) =>
                 {
                     // Cool acrylic effect on Windows 11
