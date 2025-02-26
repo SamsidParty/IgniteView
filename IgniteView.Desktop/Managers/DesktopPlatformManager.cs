@@ -21,16 +21,25 @@ namespace IgniteView.Desktop
 
         #endregion
 
-        public static void Activate()
+        /// <summary>
+        /// Tells IgniteView.Core to use the desktop runtime and facilitates loading of native code
+        /// </summary>
+        public static void Activate() => Activate(Assembly.GetCallingAssembly());
+
+
+        /// <summary>
+        /// Tells IgniteView.Core to use the desktop runtime and facilitates loading of native code.
+        /// This overload takes an extra Assembly parameter, which is used for the native import resolver.
+        /// </summary>
+        public static void Activate(Assembly entryAssembly)
         {
             // Set the environment variables for webview2
             Environment.SetEnvironmentVariable("WEBVIEW2_DEFAULT_BACKGROUND_COLOR", "00FFFFFF");
 
             NativeLibrary.SetDllImportResolver(typeof(DesktopWebWindow).Assembly, ImportResolver);
+            NativeLibrary.SetDllImportResolver(entryAssembly, ImportResolver);
             Instance = new DesktopPlatformManager();
         }
-
-        
 
         #region Import Resolving
 
