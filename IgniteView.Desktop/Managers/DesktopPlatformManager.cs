@@ -48,7 +48,8 @@ namespace IgniteView.Desktop
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                 {
-                    libHandle = LoadLibrary(Path.Combine(runtimePath, "osx" + suffix, "native", "lib" + libraryName + ".dylib"));
+                    // Suffix is ignored on mac, since we can use universal dylibs
+                    libHandle = LoadLibrary(Path.Combine(runtimePath, "osx-universal", "native", "lib" + libraryName + ".dylib"));
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
