@@ -71,6 +71,10 @@ namespace IgniteView.Core
             if (CurrentServerManager == null) { CurrentServerManager = new ServerManager(CreateFileResolver()); }
             if (CurrentIdentity == null) { CurrentIdentity = identity; }
 
+            // Prebuild the command bridge so that the commands are instantly available to the webview
+            var registerCall = new JSFunctionCall("window.igniteView.commandBridge.fillCommandList", (object)InteropCommands.ListCommands());
+            RegisterPreloadScriptFromString(registerCall);
+
             PlatformManager.Instance.Create();
         }
 

@@ -22,12 +22,17 @@ window.igniteView.commandBridge.invoke = invoke;
 // Finds all available commands and adds them into the command bridge
 window.igniteView.commandBridge.build = async () => {
     var commandList = await invoke("igniteview_list_commands");
+    window.igniteView.commandBridge.fillCommandList(commandList);
+}
+
+window.igniteView.commandBridge.fillCommandList = (commandList) => {
     commandList.forEach((command) => {
         window.igniteView.commandBridge[command] = function(...args) {
             return invoke(command, ...args)
         };
     })
 }
+
 
 function invoke(command) {
 
