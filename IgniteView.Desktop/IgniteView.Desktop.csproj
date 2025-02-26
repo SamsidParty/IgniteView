@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<VersionPrefix>1.0.1</VersionPrefix>
+	<VersionPrefix>2.0.0</VersionPrefix>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -29,7 +29,7 @@
     </ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)'!='Local Debug'">
-		<PackageReference Include="IgniteView.Core" Version="*" />
+		<PackageReference Include="IgniteView.Core" Version="2.0.0" />
 	</ItemGroup>
 
     <ItemGroup>
@@ -49,7 +49,11 @@
         <Pack>True</Pack>
         <PackagePath>\</PackagePath>
       </None>
-      <None Include="..\README.md">
+    </ItemGroup>
+	
+
+    <ItemGroup>
+      <None Update="README.md">
         <Pack>True</Pack>
         <PackagePath>\</PackagePath>
       </None>
