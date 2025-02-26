@@ -6,6 +6,8 @@
     box-sizing: border-box;
     color: var(--col-text);
     letter-spacing: -0.02em;
+    user-select: none;
+    -webkit-user-select: none;
 
     --col-bg: transparent;
     --col-overlay: rgba(255, 255, 255, 0.897);
@@ -60,8 +62,8 @@ body {
 
 .navBar {
     background-color: transparent;
-    width: 100%;
-    height: 4.5rem;
+    width: calc(100% - 5rem);
+    height: 6rem;
     display: flex;
     align-items: center;
     padding: 0.5rem;
@@ -70,7 +72,7 @@ body {
 }
 
 .navBar > img {
-    height: 100%;
+    height: 70%;
 }
 
 .navBar > .seperator {

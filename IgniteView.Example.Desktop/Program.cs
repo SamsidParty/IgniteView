@@ -17,6 +17,7 @@ namespace IgniteView.Example.Desktop
                 WebWindow.Create()
                 .WithBounds(new WindowBounds(900, 720))
                 .WithTitle("Main Window")
+                .WithoutTitleBar()
                 .With((w) =>
                 {
                     // Cool acrylic effect on Windows 11
