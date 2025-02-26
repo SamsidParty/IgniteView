@@ -4,7 +4,7 @@ import './App.css'
 function App() {
     return (
         <>
-            <div data-webview-drag className="navBar">
+            <div onMouseOver={igniteView.dragWindow} className="navBar">
                 <img src="/Images/IgniteViewSmall.svg"></img>
                 <h1>IgniteView</h1>
                 <div className="seperator"></div>
@@ -14,9 +14,6 @@ function App() {
                 <button onClick={() => window.open("https://github.com/SamsidParty/IgniteView")}>
                     <img src="/Images/GitHub.png"></img>
                 </button>
-            </div>
-            <div className="content">
-
             </div>
         </>
     )
