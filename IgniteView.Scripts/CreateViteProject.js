@@ -6,12 +6,12 @@ const jsFramework = process.argv[1];
 
 function CreateViteProject() {
     console.clear();
-    spawnSync(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['create', 'vite@latest', "--yes", "./", "--", "--template", jsFramework], { stdio: 'inherit' });
+    spawnSync(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['create', 'vite@latest', "--yes", "./", "--", "--template", jsFramework], { stdio: 'inherit', shell: true });
 }
 
 function InstallDependencies() {
     console.clear();
-    spawnSync(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['i'], { stdio: 'inherit' });
+    spawnSync(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['i'], { stdio: 'inherit', shell: true });
 }
 
 async function Main() {
