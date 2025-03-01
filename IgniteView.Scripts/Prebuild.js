@@ -24,7 +24,7 @@ function CreateViteProject() {
 
 function BuildViteProject() {
     console.log("Building vite project...");
-    spawnSync(/^win/.test(process.platform) ? 'npx.cmd' : 'npx', ['vite', 'build', '--emptyOutDir', '--outDir', '../dist'], { stdio: 'inherit' });
+    spawnSync(/^win/.test(process.platform) ? 'npx.cmd' : 'npx', ['--yes', 'vite', 'build', '--emptyOutDir', '--outDir', '../dist'], { stdio: 'inherit' });
 }
 
 function NPMInstall() {
