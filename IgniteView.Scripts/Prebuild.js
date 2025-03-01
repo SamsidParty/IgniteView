@@ -24,12 +24,12 @@ function CreateViteProject() {
 
 function BuildViteProject() {
     console.log("Building vite project...");
-    spawnSync(/^win/.test(process.platform) ? 'npx.cmd' : 'npx', ['--yes', 'vite', 'build', '--emptyOutDir', '--outDir', '../dist'], { stdio: 'inherit' });
+    spawnSync(/^win/.test(process.platform) ? 'npx.cmd' : 'npx', ['--yes', 'vite', 'build', '--emptyOutDir', '--outDir', '../dist'], { stdio: 'inherit', shell: true });
 }
 
 function NPMInstall() {
     console.log("Installing NPM dependencies...");
-    spawnSync(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['install'], { stdio: 'inherit' });
+    spawnSync(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['install'], { stdio: 'inherit',  shell: true });
 }
 
 
