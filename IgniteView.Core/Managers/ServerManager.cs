@@ -92,9 +92,10 @@ namespace IgniteView.Core
             CurrentServer.Routes.PreAuthentication.Static.Add(WatsonWebserver.Core.HttpMethod.GET, "/igniteview/injected.js", InjectedJSRoute);
 
             // Tells the JS code what URL to use (in case it's coming from another origin)
+            var resolverURL = BaseURL + "/dynamic";
             AppManager.Instance.OnBeforeMainWindowCreated += () =>
             {
-                AppManager.Instance.RegisterPreloadScriptFromString(new JSAssignment("igniteView.resolverURL", BaseURL));
+                AppManager.Instance.RegisterPreloadScriptFromString(new JSAssignment("igniteView.resolverURL", resolverURL));
             };
 
             CurrentServer.Start();

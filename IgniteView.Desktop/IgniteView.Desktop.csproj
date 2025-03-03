@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<VersionPrefix>2.0.2</VersionPrefix>
+	<VersionPrefix>2.0.4</VersionPrefix>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -17,7 +17,7 @@
     <RepositoryUrl>https://github.com/SamsidParty/IgniteView</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>html;css;javascript;web;framework;tooling;igniteview;ignite;view;core;webview;webkit</PackageTags>
-    <PackageReleaseNotes>Implement custom native assembly resolving (for native plugins)</PackageReleaseNotes>
+    <PackageReleaseNotes>Add Windows-on-ARM build</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Configurations>Debug;Release;Local Debug</Configurations>
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
@@ -29,7 +29,7 @@
     </ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)'!='Local Debug'">
-		<PackageReference Include="IgniteView.Core" Version="2.0.2" />
+		<PackageReference Include="IgniteView.Core" Version="2.0.3" />
 	</ItemGroup>
 	
     <ItemGroup>
