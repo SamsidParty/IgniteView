@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,11 +13,42 @@ namespace IgniteView.Core
         [Command("igniteview_window_open")]
         public static string OpenWindow(string url)
         {
-            Console.WriteLine(url);
-            return WebWindow
-                .Create(url)
-                .Show()
-                .ID.ToString();
+            if (!url.Contains("://"))
+            {
+                // Open a new IgniteView window
+                return WebWindow
+                    .Create(url)
+                    .Show()
+                    .ID.ToString();
+            }
+            else
+            {
+                // Open a new browser window
+                // https://stackoverflow.com/a/43232486
+
+                try
+                {
+                    Process.Start(url);
+                }
+                catch
+                {
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    {
+                        url = url.Replace("&", "^&");
+                        Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+                    }
+                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                    {
+                        Process.Start("xdg-open", url);
+                    }
+                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                    {
+                        Process.Start("open", url);
+                    }
+                }
+            }
+
+            return "";
         }
 
         [Command("igniteview_window_close")]

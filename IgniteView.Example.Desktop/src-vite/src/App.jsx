@@ -4,7 +4,7 @@ import './App.css'
 function App() {
     return (
         <>
-            <div onMouseOver={igniteView.dragWindow} className="navBar">
+            <div className="navBar">
                 <img src="/Images/IgniteViewSmall.svg"></img>
                 <h1>IgniteView</h1>
                 <div className="seperator"></div>
