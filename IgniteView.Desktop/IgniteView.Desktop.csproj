@@ -10,7 +10,7 @@
     <Authors>SamsidParty</Authors>
     <Company>SamsidParty</Company>
     <Description>Desktop runtimes for IgniteView, a Lightweight framework for building cross-platform web apps with .NET</Description>
-    <Copyright>Provided to you under the GPL-3.0 license</Copyright>
+    <Copyright>Provided to you under the MIT license</Copyright>
     <PackageProjectUrl>https://github.com/SamsidParty/IgniteView</PackageProjectUrl>
     <PackageIcon>IgniteView.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
