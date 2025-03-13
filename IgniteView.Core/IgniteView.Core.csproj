@@ -21,7 +21,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <SignAssembly>False</SignAssembly>
     <AssemblyOriginatorKeyFile></AssemblyOriginatorKeyFile>
-    <Configurations>Debug;Release;Local Debug</Configurations>
+    <Configurations>Debug;Release;Local Debug;Local Release</Configurations>
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
     <FileVersion>$(VersionPrefix).0</FileVersion>
   </PropertyGroup>

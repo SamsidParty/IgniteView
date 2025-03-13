@@ -19,16 +19,16 @@
     <PackageTags>html;css;javascript;web;framework;tooling;igniteview;ignite;view;core;webview;webkit</PackageTags>
     <PackageReleaseNotes>Add Windows-on-ARM build</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Configurations>Debug;Release;Local Debug</Configurations>
+    <Configurations>Debug;Release;Local Debug;Local Release</Configurations>
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
     <FileVersion>$(VersionPrefix).0</FileVersion>
   </PropertyGroup>
 
-    <ItemGroup Condition="'$(Configuration)'=='Local Debug'">
+    <ItemGroup Condition="'$(Configuration)'=='Local Debug' Or '$(Configuration)'=='Local Release'">
         <ProjectReference Include="..\IgniteView.Core\IgniteView.Core.csproj" />
     </ItemGroup>
 
-	<ItemGroup Condition="'$(Configuration)'!='Local Debug'">
+	<ItemGroup Condition="'$(Configuration)'!='Local Debug' And '$(Configuration)'!='Local Release'">
 		<PackageReference Include="IgniteView.Core" Version="2.0.3" />
 	</ItemGroup>
 	

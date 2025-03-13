@@ -8,7 +8,7 @@
     <PublishAot>true</PublishAot>
     <InvariantGlobalization>true</InvariantGlobalization>
     <ApplicationIcon>IgniteViewSmall.ico</ApplicationIcon>
-    <Configurations>Debug;Release;Local Debug</Configurations>
+    <Configurations>Debug;Release;Local Debug;Local Release</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -23,7 +23,11 @@
     <DebugType>embedded</DebugType>
   </PropertyGroup>
 
-	<ItemGroup Condition="'$(Configuration)'=='Local Debug'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Local Release|AnyCPU'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+	<ItemGroup Condition="'$(Configuration)'=='Local Debug' Or '$(Configuration)'=='Local Release'">
 		<ProjectReference Include="..\IgniteView.Desktop\IgniteView.Desktop.csproj" />
 	</ItemGroup>
 
@@ -33,7 +37,7 @@
 	</ItemGroup>
 
 	<!-- IgniteView -->
-	<ItemGroup Condition="'$(Configuration)'!='Local Debug'">
+	<ItemGroup Condition="'$(Configuration)'!='Local Debug' And '$(Configuration)'!='Local Release'">
 		<PackageReference Include="IgniteView.Desktop" Version="*" />
 	</ItemGroup>
 	<PropertyGroup>
