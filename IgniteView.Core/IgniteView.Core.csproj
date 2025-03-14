@@ -27,7 +27,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\Docs\static\Logos\IgniteView.png">
+    <None Include="..\IgniteView.Documentation\static\Logos\IgniteView.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>

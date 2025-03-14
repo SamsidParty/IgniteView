@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "IgniteView.Example.UWP": {
+      "commandName": "MsixPackage",
+      "remoteDebugEnabled": true,
+      "remoteDebugMachine": "192.168.100.78",
+      "authenticationMode": "Universal"
+    }
+  }
+}

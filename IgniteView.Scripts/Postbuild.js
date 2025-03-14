@@ -28,7 +28,7 @@ function CopyIfExists(folderName) {
 
 async function Main() {
 
-    console.log("\n-------- IgniteView Postbuild Version 2.0.0 --------\n");
+    console.log("\n-------- IgniteView Postbuild Version 2.0.4 --------\n");
 
     CopyIfExists("dist");
     CopyIfExists("wwwroot");
