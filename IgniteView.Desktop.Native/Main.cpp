@@ -28,6 +28,7 @@ int main() {
 #include "MacHelper.h"
 #endif
 
+
 typedef void(__stdcall *CommandBridgeCallback)(const char*);
 
 std::shared_ptr<saucer::application> App;
@@ -46,7 +47,6 @@ extern "C" {
         WindowList.push_back(window);
         CommandBridgeList.push_back(commandBridge);
         int windowIndex = WindowList.size() - 1;
-        
 
         #if __APPLE__
         MacEnableAcrylic(window->webview::native().webview, window->window::native().window);
@@ -57,7 +57,7 @@ extern "C" {
                 .code = preloadScript,
                 .time = saucer::load_time::creation,
                 .permanent = true,
-                });
+            }); 
         }
 
         window->set_url(url);
@@ -65,8 +65,6 @@ extern "C" {
             {
                 CommandBridgeList[windowIndex](param.c_str());
             });
-
-        window->show();
 
         return windowIndex;
     }
