@@ -25,4 +25,4 @@ IgniteView fills this gap by providing a robust toolchain and runtime to get a w
 - Window transparency with acrylic/mica, for a native-looking window
 
 # Documentation 📖
-Working on it...
+Learn how to use IgniteView by reading the [documentation](https://samsidparty.github.io/IgniteView/docs/category/quick-start)
