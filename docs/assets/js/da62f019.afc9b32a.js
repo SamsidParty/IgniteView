@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkigniteview=self.webpackChunkigniteview||[]).push([[914],{886:e=>{e.exports=JSON.parse('{"categoryGeneratedIndex":{"title":"Quick Start","slug":"/category/quick-start","permalink":"/docs/category/quick-start","sidebar":"tutorialSidebar","navigation":{"next":{"title":"Requirements","permalink":"/docs/quickstart/requirements"}}}}')}}]);
