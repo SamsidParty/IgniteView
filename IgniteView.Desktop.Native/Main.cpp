@@ -71,6 +71,13 @@ extern "C" {
 
     EXPORT void ShowWebWindow(int index) {
         WindowList[index]->show();
+
+        #ifdef _WIN32
+		HWND parentHwnd = WindowList[index]->window::native().hwnd;
+		HWND childHwnd = GetWindow(parentHwnd, GW_CHILD);
+		SetForegroundWindow(childHwnd);
+        WindowList[index]->webview::native().controller->MoveFocus(COREWEBVIEW2_MOVE_FOCUS_REASON_NEXT);
+        #endif
     }
 
     EXPORT void CloseWebWindow(int index) {
