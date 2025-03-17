@@ -15,7 +15,7 @@
     <PackageIcon>IgniteView.png</PackageIcon>
     <RepositoryUrl>https://github.com/SamsidParty/IgniteView</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Fix: correct value of igniteView.resolverURL</PackageReleaseNotes>
+    <PackageReleaseNotes>Minor performance optimizations</PackageReleaseNotes>
     <PackageTags>html;css;javascript;web;framework;tooling;igniteview;ignite;view;core;webview;webkit</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
