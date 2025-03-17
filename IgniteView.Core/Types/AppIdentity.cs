@@ -34,6 +34,11 @@ namespace IgniteView.Core
         {
             get
             {
+                if (PlatformManager.Instance.GetType().Name == "UWPPlatformManager")
+                {
+                    return ".\\";
+                }
+
                 var basePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
                 var fullPath = Path.Join(basePath, Developer, Name);
 

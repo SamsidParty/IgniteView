@@ -4,7 +4,6 @@ window.igniteView.commandQueue = {}
 window.igniteView.commandQueue.add = (commandId, resolve) => {
     // Add the command to the command queue, C# will call this function
     window.igniteView.commandQueue[commandId] = (result) => {
-        console.log("[COMMAND BRIDGE] Received result for command " + commandId);
         resolve(result);
     }
 }
@@ -43,12 +42,8 @@ function invoke(command) {
         paramList: args.filter((_, i) => i > 0) // Ignore first parameter
     }
 
-    console.log(commandParamData);
-
     var commandId = crypto.randomUUID();
     var commandString = `${command}:${commandId};${JSON.stringify(commandParamData)}`;
-
-    console.log("[COMMAND BRIDGE] Sending command of type " + command + " with id " + commandId);
 
     // Send the command to C#, differs per platform
     if (!!window.saucer) { // Desktop with saucer webview

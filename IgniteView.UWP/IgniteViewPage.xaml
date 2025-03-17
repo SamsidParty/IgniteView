@@ -10,6 +10,6 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <controls:WebView2 Source="https://samsidparty.com"></controls:WebView2>
+        <controls:WebView2 x:Name="MainWebView" Visibility="Collapsed"></controls:WebView2>
     </Grid>
 </Page>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Data;
 using System;
 using System.Collections.Generic;
@@ -18,8 +19,13 @@ namespace IgniteView.UWP
     /// </summary>
     public sealed partial class IgniteViewPage : Page
     {
+        public static IgniteViewPage Instance;
+
+        public WebView2 WebView => MainWebView;
+
         public IgniteViewPage()
         {
+            Instance = this;
             this.InitializeComponent();
         }
     }
