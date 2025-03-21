@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace IgniteView.Desktop
 {
@@ -22,6 +23,40 @@ namespace IgniteView.Desktop
         public static extern int DwmSetWindowAttribute(IntPtr hwnd, int dwAttribute, ref int pvAttribute, int cbAttribute);
 
         [DllImport("user32.dll")]
+        public static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct WindowCompositionAttributeData
+        {
+            public WindowCompositionAttribute Attribute;
+            public IntPtr Data;
+            public int SizeOfData;
+        }
+
+        public enum WindowCompositionAttribute
+        {
+            WCA_ACCENT_POLICY = 19
+        }
+
+        public enum AccentState
+        {
+            ACCENT_DISABLED = 0,
+            ACCENT_ENABLE_GRADIENT = 1,
+            ACCENT_ENABLE_TRANSPARENTGRADIENT = 2,
+            ACCENT_ENABLE_BLURBEHIND = 3,
+            ACCENT_INVALID_STATE = 4
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct AccentPolicy
+        {
+            public AccentState AccentState;
+            public int AccentFlags;
+            public int GradientColor;
+            public int AnimationId;
+        }
+
+        [DllImport("user32.dll")]
         public static extern int SetWindowLong(IntPtr hWnd, int nIndex, long dwNewLong);
 
         [DllImport("user32.dll")]
@@ -34,7 +69,8 @@ namespace IgniteView.Desktop
             Disabled = 0,
             Mica = 2,
             Acrylic = 3,
-            DarkMica = 4
+            DarkMica = 4,
+            BlurBehind = 5,
         }
 
 
@@ -97,8 +133,27 @@ namespace IgniteView.Desktop
         {
             if (!IsWindows11) { return; }
 
-            int enable = (int)BackgroundMode;
+            int enable = (int)BackgroundMode < 5 ? (int)BackgroundMode : 0;
             DwmSetWindowAttribute(hwnd, 38, ref enable, Marshal.SizeOf(typeof(int)));
+
+            if (BackgroundMode == WindowBackgroundMode.BlurBehind)
+            {
+                var accent = new AccentPolicy();
+                var accentStructSize = Marshal.SizeOf(accent);
+                accent.AccentState = AccentState.ACCENT_ENABLE_BLURBEHIND;
+
+                var accentPtr = Marshal.AllocHGlobal(accentStructSize);
+                Marshal.StructureToPtr(accent, accentPtr, false);
+
+                var data = new WindowCompositionAttributeData();
+                data.Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY;
+                data.SizeOfData = accentStructSize;
+                data.Data = accentPtr;
+
+                SetWindowCompositionAttribute(hwnd, ref data);
+
+                Marshal.FreeHGlobal(accentPtr);
+            }
         }
 
         /// <summary>
