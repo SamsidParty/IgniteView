@@ -25,6 +25,9 @@ namespace IgniteView.Desktop
         protected static extern void ShowWebWindow(int index);
 
         [DllImport(InteropHelper.DLLName)]
+        protected static extern void HideWebWindow(int index);
+
+        [DllImport(InteropHelper.DLLName)]
         protected static extern void CloseWebWindow(int index);
 
         [DllImport(InteropHelper.DLLName, CharSet = CharSet.Ansi)]

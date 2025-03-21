@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<VersionPrefix>2.0.5</VersionPrefix>
+	<VersionPrefix>2.0.6</VersionPrefix>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -17,7 +17,7 @@
     <RepositoryUrl>https://github.com/SamsidParty/IgniteView</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>html;css;javascript;web;framework;tooling;igniteview;ignite;view;core;webview;webkit</PackageTags>
-    <PackageReleaseNotes>Bump core to 2.0.4</PackageReleaseNotes>
+    <PackageReleaseNotes>Experimental efficiency mode support on Windows</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Configurations>Debug;Release;Local Debug;Local Release</Configurations>
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>

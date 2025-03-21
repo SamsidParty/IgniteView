@@ -29,6 +29,7 @@ int main() {
 #endif
 
 
+
 typedef void(__stdcall *CommandBridgeCallback)(const char*);
 
 std::shared_ptr<saucer::application> App;
@@ -41,7 +42,7 @@ extern "C" {
         auto window = std::shared_ptr{ App->make<saucer::smartview<saucer::default_serializer>>(saucer::preferences{
             .application = App,
             .persistent_cookies = true,
-            .hardware_acceleration = true,
+                .hardware_acceleration = true,
             .storage_path = path
         }) };
         WindowList.push_back(window);
@@ -73,10 +74,17 @@ extern "C" {
         WindowList[index]->show();
 
         #ifdef _WIN32
-		HWND parentHwnd = WindowList[index]->window::native().hwnd;
-		HWND childHwnd = GetWindow(parentHwnd, GW_CHILD);
-		SetForegroundWindow(childHwnd);
-        WindowList[index]->webview::native().controller->MoveFocus(COREWEBVIEW2_MOVE_FOCUS_REASON_NEXT);
+        WindowList[index]->webview::native().controller->put_IsVisible(true);
+        SetForegroundWindow(WindowList[index]->window::native().hwnd);
+        #endif
+    }
+
+    EXPORT void HideWebWindow(int index) {
+        WindowList[index]->hide();
+
+        #ifdef _WIN32
+        WindowList[index]->webview::native().controller->put_IsVisible(false);
+        WindowList[index]->webview::native().webview->TrySuspend(nullptr);
         #endif
     }
 

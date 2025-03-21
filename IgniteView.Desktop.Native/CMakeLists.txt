@@ -14,7 +14,7 @@ include(FetchContent)
 
 FetchContent_Declare(
     saucer 
-    GIT_REPOSITORY "https://github.com/saucer/saucer" 
+    GIT_REPOSITORY "https://github.com/SamarthMP/saucer" 
     GIT_BRANCH master
 )
 

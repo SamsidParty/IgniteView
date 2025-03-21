@@ -83,6 +83,16 @@ namespace IgniteView.Desktop
 
         #endregion
 
+        #region Commands
+
+        [Command("igniteview_win32_efficiency")]
+        public static void EfficiencyMode(WebWindow window)
+        {
+            HideWebWindow((window as Win32WebWindow).WindowIndex);
+        }
+
+        #endregion
+
         void EnableMica(IntPtr hwnd)
         {
             if (!IsWindows11) { return; }
@@ -113,11 +123,18 @@ namespace IgniteView.Desktop
                 }
             }
         }
+        bool DarkModeLoopRunning = false;
 
         public override WebWindow Show()
         {
             UpdateDarkModeState();
-            Task.Run(DarkModeCheckLoop);
+
+            if (!DarkModeLoopRunning)
+            {
+                DarkModeLoopRunning = true;
+                Task.Run(DarkModeCheckLoop);
+            }
+
             base.Show();
             EnableMica(NativeHandle);
             return this;
