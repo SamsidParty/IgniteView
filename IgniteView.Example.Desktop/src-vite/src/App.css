@@ -60,52 +60,9 @@ body {
     flex-direction: column;
 }
 
-.navBar {
-    background-color: transparent;
-    width: calc(100% - 5rem);
-    height: 6rem;
-    display: flex;
-    align-items: center;
-    padding: 0.5rem;
-    padding-right: 1rem;
-    gap: 0.5rem;
-}
-
-.navBar > img {
-    height: 70%;
-}
-
-.navBar > .seperator {
-    flex: 1;
-}
-
-.navBar > h1 {
-    font-size: 1.8rem;
-}
-
-
-.navBar > button {
-    transition: opacity 0.3s;
-    width: 2.5rem;
-    aspect-ratio: 1;
-    background-color: transparent;
-    border: none;
-    display: flex;
-    cursor: pointer;
-    padding: 0;
-}
-
-.navBar > button > img {
-    height: 100%;
-    filter: brightness(calc(100% - var(--brightness)));
-}
-
-.navBar > button:hover {
-    opacity: 0.6;
-}
-
-.content {
-    background-color: var(--col-overlay);
+.app {
     width: 100%;
     height: 100%;
+    display: flex;
+    border: none;
 }

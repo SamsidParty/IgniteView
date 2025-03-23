@@ -1,0 +1,57 @@
+.titleBar {
+    height: 40px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 0 0 0.7rem;
+    user-select: none;
+}
+
+.titleBar h1 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.titleBar .dragArea {
+    height: 100%;
+    flex-grow: 1;
+}
+
+.titleBar .windowButtons {
+    display: flex;
+    height: 100%;
+}
+
+.titleBar .windowButtons button {
+    transition: background-color 0.2s;
+    height: 100%;
+    aspect-ratio: 1;
+    background-color: transparent;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.titleBar .windowButtons button:hover {
+    background-color: #00000028;
+}
+
+.titleBar .windowButtons button * {
+    color: white;
+}
+
+.titleBar .windowButtons button svg {
+    transition: opacity 0.2s;
+    height: 40%;
+    width: auto;
+    opacity: 0.5;
+}
+
+.titleBar .windowButtons .closeButton:hover {
+    background-color: rgb(211, 0, 0);
+}
+
+.titleBar .windowButtons .closeButton:hover * {
+    opacity: 1;
+}
