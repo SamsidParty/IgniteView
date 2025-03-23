@@ -1,0 +1,13 @@
+{
+    "$schema": "http://json.schemastore.org/template",
+    "author": "SamsidParty",
+    "classifications": [ "Common", "IgniteView", "Desktop", "GUI" ],
+    "identity": "IgniteView.Template.DesktopVite",
+    "name": "IgniteView desktop app with Vite",
+    "shortName": "igniteview-desktop-vite",
+    "sourceName":"igniteview-desktop-vite",
+    "tags": {
+        "language": "C#",
+        "type": "project"
+    }
+  }
