@@ -80,7 +80,7 @@ extern "C" {
     }
 
     EXPORT void HideWebWindow(int index) {
-        WindowList[index]->hide();
+        WindowList[index]->set_minimized(true);
 
         #ifdef _WIN32
         WindowList[index]->webview::native().controller->put_IsVisible(false);

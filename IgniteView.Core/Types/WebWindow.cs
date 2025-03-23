@@ -180,6 +180,11 @@ namespace IgniteView.Core
         public virtual void Close() => CurrentAppManager.OpenWindows.Remove(this);
 
         /// <summary>
+        /// Hides or suspends the WebWindow
+        /// </summary>
+        public virtual void Hide() { }
+
+        /// <summary>
         /// Executes raw JavaScript code in the root page of the window
         /// </summary>
         public virtual void ExecuteJavaScript(string scriptData) { }

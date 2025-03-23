@@ -110,6 +110,12 @@ namespace IgniteView.Desktop
             CloseWebWindow(WindowIndex);
         }
 
+        public override void Hide()
+        {
+            base.Hide();
+            HideWebWindow(WindowIndex);
+        }
+
         public override void ExecuteJavaScript(string scriptData)
         {
             ExecuteJavaScriptOnWebWindow(WindowIndex, JavaScriptConverter.WrapCode(scriptData));

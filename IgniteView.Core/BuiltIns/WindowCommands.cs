@@ -63,5 +63,19 @@ namespace IgniteView.Core
             var windowToClose = window.CurrentAppManager.OpenWindows.Where((w) => w.ID == windowId);
             windowToClose.FirstOrDefault(window).Close();
         }
+
+        [Command("igniteview_window_hide")]
+        public static void HideWindow(WebWindow window, int windowId)
+        {
+            if (windowId == -1)
+            {
+                window.Hide(); // Hide the calling window
+                return;
+            }
+
+            // Hide the window with id windowId
+            var windowToHide = window.CurrentAppManager.OpenWindows.Where((w) => w.ID == windowId);
+            windowToHide.FirstOrDefault(window).Hide();
+        }
     }
 }
