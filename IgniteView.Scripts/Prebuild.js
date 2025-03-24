@@ -22,9 +22,9 @@ function CreateViteProject() {
     execSync(`node -e "fetch('${scriptsURL}/CreateViteProject.js').then((c) => c.text().then(eval))" "${jsFramework}"`, { stdio: 'inherit' });
 }
 
-function BuildViteProject() {
+function BuildViteProject(outDir) {
     console.log("Building vite project...");
-    spawnSync(/^win/.test(process.platform) ? 'npx.cmd' : 'npx', ['--yes', 'vite', 'build', '--emptyOutDir', '--outDir', '../dist'], { stdio: 'inherit', shell: true });
+    spawnSync(/^win/.test(process.platform) ? 'npx.cmd' : 'npx', ['--yes', 'vite', 'build', '--emptyOutDir', '--outDir', `"${outDir}"`], { stdio: 'inherit', shell: true });
 }
 
 function NPMInstall() {
@@ -36,12 +36,14 @@ function NPMInstall() {
 async function PrebuildVite() {
     console.log("Detected Project Type: Vite");
     var sourcePath = path.join(projectDirectory, 'src-vite');
+    var outDir = path.join(projectDirectory, 'dist');
 
     if (!fs.existsSync(sourcePath)) {
         fs.mkdirSync(sourcePath);
     }
 
-    process.chdir(path.join(process.cwd(), "src-vite"));
+    process.chdir(fs.realpathSync(sourcePath)); // Follows symlinks
+    sourcePath = process.cwd();
 
     var packageJsonPath = path.join(sourcePath, 'package.json');
     var nodeModulesPath = path.join(sourcePath, 'node_modules');
@@ -56,24 +58,24 @@ async function PrebuildVite() {
 
     if (buildConfiguration.toLowerCase().includes("debug")) {
         console.log("Detected debug mode");
-        BuildViteProject();
+        BuildViteProject(outDir);
 
         // Write the .vitedev file to the dist folder
         // The C# code will read this file and launch the vite dev server
-        fs.writeFileSync(path.join(projectDirectory, 'dist', '.vitedev'), sourcePath);
+        fs.writeFileSync(path.join(outDir, '.vitedev'), sourcePath);
     }
     else {
         console.log("Detected release mode");
-        BuildViteProject();
+        BuildViteProject(outDir);
 
         // Remove the .vitedev file if it exists, we don't want it in production
-        if (fs.existsSync(path.join(projectDirectory, 'dist', '.vitedev'))) {
-            fs.unlinkSync(path.join(projectDirectory, 'dist', '.vitedev'));
+        if (fs.existsSync(path.join(outDir, '.vitedev'))) {
+            fs.unlinkSync(path.join(outDir, '.vitedev'));
         }
     }
 
     // Copy and rename the package.json file into the dist folder
-    fs.copyFileSync(path.join(sourcePath, 'package.json'), path.join(projectDirectory, 'dist', 'igniteview_package.json'))
+    fs.copyFileSync(path.join(sourcePath, 'package.json'), path.join(outDir, 'igniteview_package.json'))
 }
 
 async function Main() {

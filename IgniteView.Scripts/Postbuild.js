@@ -9,7 +9,7 @@ const outputDirectory = path.join(projectDirectory, process.argv[5]); // $(Outpu
 process.chdir(projectDirectory); // cd into the project directory
 
 // Copies a folder to the output directory if it exists
-function CopyIfExists(folderName) {
+function CopyIfExists(folderName, deleteOriginal) {
     var folderPath = path.join(projectDirectory, folderName);
     var targetPath = path.join(outputDirectory, folderName);
 
@@ -24,13 +24,17 @@ function CopyIfExists(folderName) {
         console.log("Copying new output folder: " + folderName);
         fs.cpSync(folderPath, targetPath, { recursive: true });
     }
+
+    if (!!deleteOriginal && fs.existsSync(folderPath)) {
+        fs.rmdirSync(folderPath, { recursive: true, force: true });
+    }
 }
 
 async function Main() {
 
-    console.log("\n-------- IgniteView Postbuild Version 2.0.4 --------\n");
+    console.log("\n-------- IgniteView Postbuild Version 2.1.0 --------\n");
 
-    CopyIfExists("dist");
+    CopyIfExists("dist", true);
     CopyIfExists("wwwroot");
     CopyIfExists("WWW");
 }
