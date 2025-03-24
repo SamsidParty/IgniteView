@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 
 namespace IgniteView.UWP
@@ -45,7 +46,21 @@ namespace IgniteView.UWP
         public override WebWindow Show()
         {
             base.Show();
-            IgniteViewPage.Instance.WebView.Visibility = Visibility.Visible;
+
+            if (IgniteViewPage.Instance != null) {
+                IgniteViewPage.Instance.WebView.Visibility = Visibility.Visible;
+                IgniteViewPage.Instance.WebView.Source = new Uri(CurrentAppManager.CurrentServerManager.BaseURL);
+            }
+            else
+            {
+                Task.Run(async () =>
+                {
+                    while (IgniteViewPage.Instance == null) { await Task.Delay(100); } // Wait for the main page to be loaded
+                    await IgniteViewPage.Instance.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Show());  
+                });
+            }
+
+
             return this;
         }
 

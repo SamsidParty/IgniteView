@@ -36,6 +36,12 @@ To install IgniteView and setup the scripts needed, simply insert the following 
 <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="$(PostBuildCommand) &quot;$(OutputPath.Replace('\', '\\'))&quot;" />
 </Target>
+<ItemGroup>
+    <Content Include="iv2runtime\**">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+</ItemGroup>
 ```
 
 ## Snippet Explanation

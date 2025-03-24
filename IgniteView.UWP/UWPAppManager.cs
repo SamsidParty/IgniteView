@@ -9,8 +9,14 @@ namespace IgniteView.UWP
 {
     public class UWPAppManager : AppManager
     {
+        protected override FileResolver CreateFileResolver()
+        {
+            return new UWPFileResolver();
+        }
+
         public UWPAppManager(AppIdentity identity) : base(identity)
         {
+            
         }
     }
 }

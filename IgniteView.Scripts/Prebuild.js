@@ -78,7 +78,7 @@ async function PrebuildVite() {
 
 async function Main() {
 
-    console.log("\n-------- IgniteView Prebuild Version 2.0.4 --------\n");
+    console.log("\n-------- IgniteView Prebuild Version 2.1.0 --------\n");
 
     // Determine the project type
     if (jsFramework == "raw" || jsFramework == "") {
@@ -88,12 +88,22 @@ async function Main() {
             process.exit(1);
         }
 
-        process.chdir(path.join(process.cwd(), "wwwroot"));
-        console.log("Detected Project Type: Static HTML");
+        fs.cpSync(path.join(process.cwd(), "wwwroot"), path.join(process.cwd(), "dist"));
+        process.chdir(path.join(process.cwd(), "dist"));
+        console.log("Detected project type: Static HTML");
     }
     else {
         await PrebuildVite();
     }
+
+    // Generate the main.igniteview file
+    if (!fs.existsSync(path.join(projectDirectory, "iv2runtime"))) {
+        fs.mkdirSync(path.join(projectDirectory, "iv2runtime"));
+    }
+
+    console.log("Creating main.igniteview file")
+    process.chdir(path.join(projectDirectory, "dist"));
+    spawnSync('tar', ['-cf', `"${path.join(projectDirectory, "iv2runtime", "main.igniteview")}"`, `"."`], { stdio: 'inherit', shell: true });
 }
 
 Main();

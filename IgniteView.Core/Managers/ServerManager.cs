@@ -7,16 +7,31 @@ using System.Text;
 using System.Threading.Tasks;
 using WatsonWebserver;
 using WatsonWebserver.Core;
+using WatsonWebserver.Lite;
 using System.Text.RegularExpressions;
 using MimeMapping;
 using System.Net.Http;
 using System.Threading;
+using System.Diagnostics;
 
 namespace IgniteView.Core
 {
     public class ServerManager
     {
-        public Webserver CurrentServer;
+        private WebserverBase CurrentServer;
+
+        /// <summary>
+        /// In lite mode, the TCP based Watson.Lite server will be used, otherwise the HttpListener based Watson server will be used
+        /// Watson.Lite has better compatibility but Watson has better performance
+        /// </summary>
+        private bool LiteMode
+        {
+            get
+            {
+                return PlatformManager.Instance.GetServerListenMode() == ServerListenMode.Tcp;
+            }
+        }
+
         public FileResolver Resolver;
 
         #region Networking
@@ -86,7 +101,16 @@ namespace IgniteView.Core
         public void Start()
         {
             WebserverSettings settings = new WebserverSettings("127.0.0.1", GetFreePort());
-            CurrentServer = new Webserver(settings, DefaultRoute);
+
+            if (LiteMode)
+            {
+                CurrentServer = new WebserverLite(settings, DefaultRoute);
+            }
+            else
+            {
+                CurrentServer = new Webserver(settings, DefaultRoute);
+            }
+            
 
             CurrentServer.Routes.PreAuthentication.Dynamic.Add(WatsonWebserver.Core.HttpMethod.GET, new Regex(".*"), ResolverRoute);
             CurrentServer.Routes.PreAuthentication.Static.Add(WatsonWebserver.Core.HttpMethod.GET, "/igniteview/injected.js", InjectedJSRoute);

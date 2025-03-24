@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net9.0-windows10.0.26100.0</TargetFramework>
@@ -21,9 +21,35 @@
 	<GenerateTestArtifacts>True</GenerateTestArtifacts>
 	<AppxBundle>Never</AppxBundle>
 	<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+	<Configurations>Debug;Release;Local Debug;Local Release</Configurations>
   </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\IgniteView.Example.Desktop\IgniteView.Example.Desktop.csproj" />
-    <ProjectReference Include="..\IgniteView.UWP\IgniteView.UWP.csproj" />
-  </ItemGroup>
+
+	<ItemGroup Condition="'$(Configuration)'=='Local Debug' Or '$(Configuration)'=='Local Release'">
+		<ProjectReference Include="..\IgniteView.UWP\IgniteView.UWP.csproj" />
+	</ItemGroup>
+
+	<!-- IgniteView -->
+	<ItemGroup Condition="'$(Configuration)'!='Local Debug' And '$(Configuration)'!='Local Release'">
+		<PackageReference Include="IgniteView.UWP" Version="*" />
+	</ItemGroup>
+	<PropertyGroup>
+		<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+		<JSFramework>react</JSFramework>
+		<ScriptsURL>http://127.0.0.1:5173</ScriptsURL>
+
+		<PreBuildCommand>node -e "fetch('$(ScriptsURL)/Prebuild.js').then((c) =&gt; c.text().then(eval))" "$(ScriptsURL)" "$(MSBuildProjectDirectory.Replace('\', '\\'))" "$(Configuration)" "$(JSFramework)"</PreBuildCommand>
+		<PostBuildCommand>node -e "fetch('$(ScriptsURL)/Postbuild.js').then((c) =&gt; c.text().then(eval))" "$(ScriptsURL)" "$(MSBuildProjectDirectory.Replace('\', '\\'))" "$(Configuration)" "$(JSFramework)"</PostBuildCommand>
+	</PropertyGroup>
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+		<Exec Command="$(PreBuildCommand) &quot;$(OutputPath.Replace('\', '\\'))&quot;" />
+	</Target>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="$(PostBuildCommand) &quot;$(OutputPath.Replace('\', '\\'))&quot;" />
+	</Target>
+	<ItemGroup>
+		<Content Include="iv2runtime\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<PackageCopyToOutput>true</PackageCopyToOutput>
+		</Content>
+	</ItemGroup>
 </Project>

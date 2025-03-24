@@ -32,6 +32,11 @@ namespace IgniteView.Core
         public abstract ScriptInjectionMode GetScriptInjectionMode();
 
         /// <summary>
+        /// Gets the ServerListenMode for this platform
+        /// </summary>
+        public abstract ServerListenMode GetServerListenMode();
+
+        /// <summary>
         /// Gets the current PlatformManager
         /// </summary>
         public static PlatformManager Instance

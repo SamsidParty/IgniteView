@@ -41,6 +41,7 @@
     <PackageReference Include="MimeMapping" Version="3.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Watson" Version="6.3.5" />
+    <PackageReference Include="Watson.Lite" Version="6.3.6" />
   </ItemGroup>
 
   <ItemGroup>

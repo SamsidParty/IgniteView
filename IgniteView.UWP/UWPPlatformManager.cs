@@ -14,6 +14,7 @@ namespace IgniteView.UWP
 
         public static Type Activate()
         {
+            Instance = new UWPPlatformManager();
             var app = new UWPAppManager(new AppIdentity(Windows.ApplicationModel.Package.Current.PublisherDisplayName, Windows.ApplicationModel.Package.Current.DisplayName));
             ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
 
@@ -21,9 +22,9 @@ namespace IgniteView.UWP
         }
 
         public override void Create() {
-            /*var mainWindow =
+            var mainWindow =
                 WebWindow.Create()
-                .Show();*/
+                .Show();
         }
 
         public override WebWindow CreateWebWindow()
@@ -37,6 +38,7 @@ namespace IgniteView.UWP
         }
 
         public override ScriptInjectionMode GetScriptInjectionMode() => ScriptInjectionMode.ServerSide;
+        public override ServerListenMode GetServerListenMode() => ServerListenMode.Tcp;
 
         public override void Run() { }
     }

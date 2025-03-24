@@ -90,6 +90,7 @@ extern "C" {
 
     EXPORT void CloseWebWindow(int index) {
         WindowList[index]->close();
+        WindowList[index] = nullptr;
     }
 
     EXPORT void ExecuteJavaScriptOnWebWindow(int index, const char* javascriptCode) {

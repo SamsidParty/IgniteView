@@ -90,5 +90,6 @@ namespace IgniteView.Desktop
         public override void Create() => CreateApp(AppManager.Instance.CurrentIdentity.IDString);
 
         public override ScriptInjectionMode GetScriptInjectionMode() => ScriptInjectionMode.ClientSide;
+        public override ServerListenMode GetServerListenMode() => ServerListenMode.Http;
     }
 }
