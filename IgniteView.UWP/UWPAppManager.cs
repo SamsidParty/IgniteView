@@ -11,7 +11,7 @@ namespace IgniteView.UWP
     {
         protected override FileResolver CreateFileResolver()
         {
-            return new UWPFileResolver();
+            return new TarFileResolver();
         }
 
         public UWPAppManager(AppIdentity identity) : base(identity)
