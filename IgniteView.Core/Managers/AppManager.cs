@@ -49,7 +49,7 @@ namespace IgniteView.Core
         /// <returns></returns>
         protected virtual FileResolver CreateFileResolver()
         {
-            return new DirectoryFileResolver();
+            return new TarFileResolver();
         }
 
         /// <summary>
