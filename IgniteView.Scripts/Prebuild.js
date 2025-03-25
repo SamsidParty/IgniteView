@@ -10,7 +10,7 @@ const buildConfiguration = process.argv[3]; // $(Configuration)
 const jsFramework = process.argv[4]; // $(JSFramework)
 process.chdir(projectDirectory); // cd into the project directory
 
-var supportedFrameworks = ["vanilla", "vanilla-ts", "vue", "vue-ts", "react", "react-ts", "react-swc", "react-swc-ts", "preact", "preact-ts", "lit", "lit-ts", "svelte", "svelte-ts", "solid", "solid-ts", "qwik", "qwik-ts"]
+var supportedFrameworks = ["raw", "vanilla", "vanilla-ts", "vue", "vue-ts", "react", "react-ts", "react-swc", "react-swc-ts", "preact", "preact-ts", "lit", "lit-ts", "svelte", "svelte-ts", "solid", "solid-ts", "qwik", "qwik-ts"]
 
 if (!supportedFrameworks.includes(jsFramework)) {
     console.error(`The JavaScript framework "${jsFramework}" is not supported by IgniteView. Supported frameworks are: ${supportedFrameworks.join(", ")}`);
