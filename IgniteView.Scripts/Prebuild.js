@@ -98,14 +98,15 @@ async function Main() {
         await PrebuildVite();
     }
 
-    // Generate the main.igniteview file
+    // Generate the tar file (with .igniteview extension)
     if (!fs.existsSync(path.join(projectDirectory, "iv2runtime"))) {
         fs.mkdirSync(path.join(projectDirectory, "iv2runtime"));
     }
 
     console.log("Creating main.igniteview file")
     process.chdir(path.join(projectDirectory, "dist"));
-    spawnSync('tar', ['-cf', `"${path.join(projectDirectory, "iv2runtime", "main.igniteview")}"`, `"."`], { stdio: 'inherit', shell: true });
+    var fileName = path.dirname(projectDirectory) + ".igniteview";
+    spawnSync('tar', ['-cf', `"${path.join(projectDirectory, "iv2runtime", fileName)}"`, `"."`], { stdio: 'inherit', shell: true });
 }
 
 Main();
