@@ -40,7 +40,7 @@ namespace IgniteView.Core
 
         static Dictionary<string, MethodInfo> _Commands;
 
-        public static void ExecuteCommand(WebWindow target, CommandData commandData)
+        public static async Task ExecuteCommand(WebWindow target, CommandData commandData)
         {
             if (!Commands.ContainsKey(commandData.Function)) {
                 target.ExecuteJavaScript(new JSFunctionCall("console.error", $"The command bridge couldn't locate a binding for command '{commandData.Function}', please ensure the command is correct."));
@@ -98,6 +98,13 @@ namespace IgniteView.Core
             }
 
             var result = method.Invoke(null, paramList.ToArray());
+
+            // Handle async commands
+            if (result is Task)
+            {
+                await (Task)result;
+                result = ((dynamic)result).Result;
+            }
 
             var returnFunction = new JSFunctionCall("window.igniteView.commandQueue.resolve", commandData.CallbackID, result);
             target.ExecuteJavaScript(returnFunction);

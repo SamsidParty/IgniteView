@@ -24,6 +24,13 @@ namespace IgniteView.Example.Desktop
             return Environment.UserName;
         }
 
+        [Command("getUsernameAsync")]
+        public static async Task<string> GetUsernameAsync()
+        {
+            await Task.Delay(1000);
+            return Environment.UserName;
+        }
+
         [Command("jsonTest")]
         public static string JsonTest()
         {
