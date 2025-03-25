@@ -26,7 +26,7 @@ function CopyIfExists(folderName, deleteOriginal) {
     }
 
     if (!!deleteOriginal && fs.existsSync(folderPath)) {
-        fs.rmdirSync(folderPath, { recursive: true, force: true });
+        fs.rmSync(folderPath, { recursive: true });
     }
 }
 

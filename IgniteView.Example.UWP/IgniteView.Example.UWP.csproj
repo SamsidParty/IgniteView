@@ -52,4 +52,7 @@
 			<PackageCopyToOutput>true</PackageCopyToOutput>
 		</Content>
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="iv2runtime\" />
+	</ItemGroup>
 </Project>

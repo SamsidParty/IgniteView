@@ -105,7 +105,7 @@ async function Main() {
 
     console.log("Creating main.igniteview file")
     process.chdir(path.join(projectDirectory, "dist"));
-    var fileName = path.dirname(projectDirectory) + ".igniteview";
+    var fileName = path.basename(projectDirectory) + ".igniteview";
     spawnSync('tar', ['-cf', `"${path.join(projectDirectory, "iv2runtime", fileName)}"`, `"."`], { stdio: 'inherit', shell: true });
 }
 
