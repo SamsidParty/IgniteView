@@ -90,7 +90,7 @@ async function Main() {
             process.exit(1);
         }
 
-        fs.cpSync(path.join(process.cwd(), "wwwroot"), path.join(process.cwd(), "dist"));
+        fs.cpSync(path.join(process.cwd(), "wwwroot"), path.join(process.cwd(), "dist"), {recursive: true});
         process.chdir(path.join(process.cwd(), "dist"));
         console.log("Detected project type: Static HTML");
     }
