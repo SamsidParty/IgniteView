@@ -13,7 +13,9 @@ namespace IgniteView.Core
     public class TarFileResolver : FileResolver
     {
         TarReader Reader;
-        public Dictionary<string, TarEntry> Files = new Dictionary<string, TarEntry>();
+
+        Dictionary<string, TarEntry> Files = new Dictionary<string, TarEntry>();
+        Dictionary<string, string> FileContainerPaths = new Dictionary<string, string>();
 
         public TarFileResolver()
         {
@@ -30,6 +32,7 @@ namespace IgniteView.Core
                 if (!name.StartsWith("/")) { name = "/" + name; }
 
                 Files[name] = entry;
+                FileContainerPaths[name] = tarFilePath;
             }
         }
 
@@ -47,17 +50,7 @@ namespace IgniteView.Core
         {
             if (DoesFileExist(fileRelativeToRoot))
             {
-                var stream = Files[fileRelativeToRoot].DataStream; // Do not dispose this stream otherwise it will crash the whole TarReader
-
-                lock (Files)
-                {
-                    var tempStream = new MemoryStream((int)stream.Length);
-                    stream.Seek(0, SeekOrigin.Begin);
-                    stream.CopyTo(tempStream);
-                    tempStream.Seek(0, SeekOrigin.Begin);
-                    return tempStream;
-                }
-
+                return new TarStream(Files[fileRelativeToRoot], File.Open(FileContainerPaths[fileRelativeToRoot], FileMode.Open, FileAccess.Read, FileShare.Read));
             }
 
             return new MemoryStream();
