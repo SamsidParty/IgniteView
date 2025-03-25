@@ -110,10 +110,13 @@ namespace IgniteView.Core
                 {
                     return CurrentAppManager.CurrentServerManager.BaseURL;
                 }
-
-                if (_URL.StartsWith("http")) // Avoid prepending the base URL to full URLs
+                else if (_URL.Contains("://")) // Avoid prepending the base URL to full URLs
                 {
                     return _URL;
+                }
+                else if (_URL.StartsWith("igniteview/") || _URL.StartsWith("dynamic/")) // Avoid sending certain requests to vite
+                {
+                    return CurrentAppManager.CurrentServerManager.LocalBaseURL + "/" + _URL;
                 }
 
                 return CurrentAppManager.CurrentServerManager.BaseURL + "/" + _URL;

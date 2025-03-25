@@ -127,7 +127,7 @@ namespace IgniteView.Desktop
         public DesktopWebWindow() : base() {
             CommandExecuteRequested = new CommandBridgeCallback(OnCommandExecuteRequested);
             var appPath = Marshal.StringToCoTaskMemUTF8(Path.Join(CurrentAppManager.CurrentIdentity.AppDataPath, "DesktopNative"));
-            WindowIndex = NewWebWindow(URL, CommandExecuteRequested, InjectedScript.CombinedScriptData, appPath);
+            WindowIndex = NewWebWindow(URL, CommandExecuteRequested, ScriptManager.CombinedScriptData, appPath);
 
             // Enable dev tools if debug mode
             SetWebWindowDevToolsEnabled(WindowIndex, DebugMode.IsDebugMode);

@@ -1,0 +1,1 @@
+alert("Injected Script Works!");

@@ -9,6 +9,26 @@ namespace IgniteView.Core
     public class ScriptManager
     {
         /// <summary>
+        /// List of scripts that are loaded into the WebView before page load, you must set this before any windows are created
+        /// </summary>
+        public static List<string> PreloadScripts = new List<string>();
+
+        /// <summary>
+        /// JS code string containing all the preload scripts merged into one
+        /// </summary>
+        public static string CombinedScriptData
+        {
+            get
+            {
+                var combinedScripts = "";
+                PreloadScripts.ForEach(script => combinedScripts += "\n" + script);
+
+                // Wrap the code in base64, this is because some of the webview implementations don't allow unicode characters
+                return "if (!window.igniteView) { eval(atob('" + Convert.ToBase64String(Encoding.UTF8.GetBytes(combinedScripts)) + "')); }";
+            }
+        }
+
+        /// <summary>
         /// Registers a script to load as soon as any WebWindow loads.
         /// This function MUST be called BEFORE any WebWindows are created.
         /// </summary>
@@ -36,7 +56,7 @@ namespace IgniteView.Core
                 throw new InvalidOperationException("Registering preload scripts must happen BEFORE any windows are created.");
             }
 
-            InjectedScript.PreloadScripts.Add(scriptContent);
+            PreloadScripts.Add(scriptContent);
         }
     }
 }

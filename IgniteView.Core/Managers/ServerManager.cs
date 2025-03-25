@@ -37,7 +37,8 @@ namespace IgniteView.Core
         #region Networking
 
         /// <summary>
-        /// Gets the URL where the server is listening (excluding a trailing slash)
+        /// Gets the URL where the server is listening (excluding a trailing slash).
+        /// If the vite dev server is running, this will return that URL
         /// </summary>
         public string BaseURL
         {
@@ -53,6 +54,18 @@ namespace IgniteView.Core
             set
             {
                 _BaseURL = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the URL where the server is listening (excluding a trailing slash).
+        /// This will always return the URL of the local server, never the vite dev server
+        /// </summary>
+        public string LocalBaseURL
+        {
+            get
+            {
+                return "http://127.0.0.1:" + CurrentServer.Settings.Port;
             }
         }
 
@@ -148,7 +161,7 @@ namespace IgniteView.Core
         {
             ctx.Response.StatusCode = 200;
             ctx.Response.ContentType = "text/javascript";
-            await ctx.Response.Send(InjectedScript.CombinedScriptData);
+            await ctx.Response.Send(ScriptManager.CombinedScriptData);
         }
 
         async Task HTMLInjectorRoute(HttpContextBase ctx)
