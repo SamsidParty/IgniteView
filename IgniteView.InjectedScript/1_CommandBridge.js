@@ -42,8 +42,15 @@ function invoke(command) {
         paramList: args.filter((_, i) => i > 0) // Ignore first parameter
     }
 
+    try {
+        var paramDataString = JSON.stringify(commandParamData);
+    }
+    catch {
+        var paramDataString = `{"paramList":[]}`;
+    }
+
     var commandId = crypto.randomUUID();
-    var commandString = `${command}:${commandId};${JSON.stringify(commandParamData)}`;
+    var commandString = `${command}:${commandId};${paramDataString}`;
 
     // Send the command to C#, differs per platform
     if (!!window.saucer) { // Desktop with saucer webview

@@ -3,13 +3,14 @@
     width: 100%;
     display: flex;
     align-items: center;
-    padding: 0 0 0 0.7rem;
     user-select: none;
+    background-color: var(--col-overlay);
 }
 
 .titleBar h1 {
-    margin: 0;
-    font-size: 1.2rem;
+    margin: 0 4px 0 12px;
+    font-size: 18px;
+    color: var(--col-text);
 }
 
 .titleBar .dragArea {
@@ -22,7 +23,7 @@
     height: 100%;
 }
 
-.titleBar .windowButtons button {
+.titleBar button {
     transition: background-color 0.2s;
     height: 100%;
     aspect-ratio: 1;
@@ -33,19 +34,23 @@
     align-items: center;
 }
 
-.titleBar .windowButtons button:hover {
+.titleBar button:hover {
     background-color: #00000028;
 }
 
-.titleBar .windowButtons button * {
-    color: white;
+.titleBar button * {
+    color: var(--col-text);
 }
 
-.titleBar .windowButtons button svg {
+.titleBar button svg, .titleBar button i {
     transition: opacity 0.2s;
     height: 40%;
     width: auto;
     opacity: 0.5;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 16px;
+    text-align: center;
 }
 
 .titleBar .windowButtons .closeButton:hover {

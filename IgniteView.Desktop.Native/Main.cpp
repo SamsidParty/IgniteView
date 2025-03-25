@@ -71,6 +71,8 @@ extern "C" {
     }
 
     EXPORT void ShowWebWindow(int index) {
+        if (WindowList[index] == nullptr) { return; }
+
         WindowList[index]->show();
 
         #ifdef _WIN32
@@ -80,6 +82,8 @@ extern "C" {
     }
 
     EXPORT void HideWebWindow(int index) {
+        if (WindowList[index] == nullptr) { return; }
+
         WindowList[index]->set_minimized(true);
 
         #ifdef _WIN32
@@ -89,16 +93,22 @@ extern "C" {
     }
 
     EXPORT void CloseWebWindow(int index) {
+        if (WindowList[index] == nullptr) { return; }
+
         WindowList[index]->close();
+        WindowList[index].reset();
         WindowList[index] = nullptr;
     }
 
     EXPORT void ExecuteJavaScriptOnWebWindow(int index, const char* javascriptCode) {
+        if (WindowList[index] == nullptr) { return; }
+
         std::basic_string_view stringView(javascriptCode);
         WindowList[index]->execute(stringView);
     }
 
     EXPORT void SetWebWindowBounds(int index, int w, int h, int minW, int minH, int maxW, int maxH) {
+        if (WindowList[index] == nullptr) { return; }
         
         #if __APPLE__
         // On macOS, calling set_size will animate the resizing, which we don't want
@@ -119,10 +129,14 @@ extern "C" {
     }
 
     EXPORT void SetWebWindowTitle(int index, const char* title) {
+        if (WindowList[index] == nullptr) { return; }
+
         WindowList[index]->set_title(title);
     }
     
     EXPORT void SetWebWindowTitleBar(int index, bool visible) {
+        if (WindowList[index] == nullptr) { return; }
+
         if (visible) {
             WindowList[index]->set_decoration(saucer::window_decoration::full);
         }
@@ -132,29 +146,41 @@ extern "C" {
     }
 
     EXPORT void SetWebWindowIcon(int index, char8_t* iconPath) {
+        if (WindowList[index] == nullptr) { return; }
+
         saucer::icon icon = saucer::icon::from(iconPath).value();
         WindowList[index]->set_icon(icon);
     }
 
     EXPORT void SetWebWindowURL(int index, const char* url) {
+        if (WindowList[index] == nullptr) { return; }
+
         WindowList[index]->set_url(url);
     }
 
     EXPORT void SetWebWindowDark(int index, bool isDark) {
+        if (WindowList[index] == nullptr) { return; }
+
         WindowList[index]->set_force_dark_mode(isDark);
     }
 
     EXPORT void SetWebWindowDevToolsEnabled(int index, bool enableDevTools) {
+        if (WindowList[index] == nullptr) { return; }
+
         WindowList[index]->set_dev_tools(enableDevTools);
     }
 
     EXPORT const char* GetWebWindowTitle(int index) {
+        if (WindowList[index] == nullptr) { return ""; }
+
         auto title = WindowList[index]->title(); // This is freed by the C# code
         auto titlePtr = strdup(title.c_str());
         return (const char*)titlePtr;
     }
 
     EXPORT const void* GetWebWindowHandle(int index) {
+        if (WindowList[index] == nullptr) { return 0; }
+
         #ifdef _WIN32
         return WindowList[index]->window::native().hwnd;
         #endif
