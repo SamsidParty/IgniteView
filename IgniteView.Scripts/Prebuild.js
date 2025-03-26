@@ -12,14 +12,14 @@ process.chdir(projectDirectory); // cd into the project directory
 
 var supportedFrameworks = ["raw", "vanilla", "vanilla-ts", "vue", "vue-ts", "react", "react-ts", "react-swc", "react-swc-ts", "preact", "preact-ts", "lit", "lit-ts", "svelte", "svelte-ts", "solid", "solid-ts", "qwik", "qwik-ts"]
 
-if (!supportedFrameworks.includes(jsFramework)) {
+if (!supportedFrameworks.includes(jsFramework) && !jsFramework.startsWith("library/")) {
     console.error(`The JavaScript framework "${jsFramework}" is not supported by IgniteView. Supported frameworks are: ${supportedFrameworks.join(", ")}`);
     process.exit(1);
 }
 
 function CreateViteProject() {
     console.log("No vite project found. Creating a new one...");
-    execSync(`node -e "fetch('${scriptsURL}/CreateViteProject.js').then((c) => c.text().then(eval))" "${jsFramework}"`, { stdio: 'inherit' });
+    execSync(`node -e "fetch('${scriptsURL}/CreateViteProject.js').then((c) => c.text().then(eval))" "${!jsFramework.includes("/") ? jsFramework : "vanilla"}"`, { stdio: 'inherit' });
 }
 
 function BuildViteProject(outDir) {
@@ -105,6 +105,23 @@ async function Main() {
 
     console.log("Creating main.igniteview file")
     process.chdir(path.join(projectDirectory, "dist"));
+
+    // If needed, move files into a subdirectory
+    if (jsFramework.startsWith("library/")) {
+        process.chdir("../");
+        var subDir = jsFramework.replace("library/", "./dist/");
+
+        if (fs.existsSync(subDir)) {
+            fs.rmSync(subDir, { recursive: true })
+        }
+
+        fs.renameSync("./dist", "./dist_temp");
+        fs.mkdirSync("./dist");
+        fs.renameSync("./dist_temp", subDir);
+
+        process.chdir(path.join(projectDirectory, "dist"));
+    }
+
     var fileName = path.basename(projectDirectory) + ".igniteview";
     spawnSync('tar', ['-cf', `"${path.join(projectDirectory, "iv2runtime", fileName)}"`, `"."`], { stdio: 'inherit', shell: true });
 }

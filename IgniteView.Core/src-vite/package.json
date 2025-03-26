@@ -1,6 +1,6 @@
 {
-  "name": "src-vite",
-  "private": true,
+  "name": "igniteview-core",
+  "private": false,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
