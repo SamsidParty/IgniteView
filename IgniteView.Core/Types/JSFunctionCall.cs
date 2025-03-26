@@ -20,16 +20,9 @@ namespace IgniteView.Core
         /// <summary>
         /// Ensures the function name is valid
         /// </summary>
-        public static string SanitizeFunctionName(string name)
+        public static bool IsFunctionNameValid(string functionName)
         {
-            Regex rgx = new Regex("[^a-zA-Z0-9._-]");
-
-            if (rgx.IsMatch(name))
-            {
-                Console.WriteLine("An invalid function name " + name + " was provided, it will be sanitized to " + rgx.Replace(name, ""));
-            }
-
-            return rgx.Replace(name, "");
+            return functionName.Contains(".") || Regex.IsMatch(functionName, "^[A-Za-z_$][A-Za-z0-9_$]*$");
         }
 
         /// <summary>
@@ -47,7 +40,9 @@ namespace IgniteView.Core
         /// </summary>
         public override string ToString()
         {
-            var js = SanitizeFunctionName(FunctionName) + "(";
+            if (!IsFunctionNameValid(FunctionName)) { throw new FormatException(FunctionName + " is not a valid name for a JavaScipt function"); }
+
+            var js = FunctionName + "(";
             for (var i = 0; i < Parameters.Length; i++)
             {
                 var value = Parameters[i];

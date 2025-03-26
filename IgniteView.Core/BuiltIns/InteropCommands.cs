@@ -12,7 +12,21 @@ namespace IgniteView.Core
         public static string[] ListCommands()
         {
             var commandList = new string[CommandManager.Commands.Count];
-            CommandManager.Commands.Keys.CopyTo(commandList, 0);
+
+            for (int i = 0; i < commandList.Length; i++)
+            {
+                var command = CommandManager.Commands.ElementAt(i);
+
+                if ((command.Value.ReturnType ?? typeof(void)).IsAssignableFrom(typeof(Stream)))
+                {
+                    commandList[i] = "streamedCommand/" + command.Key;
+                    continue;
+                }
+
+                commandList[i] = command.Key;
+            }
+
+            
             return commandList;
         }
     }

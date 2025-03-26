@@ -78,6 +78,9 @@ namespace IgniteView.Core
             var registerCall = new JSFunctionCall("window.igniteView.commandBridge.fillCommandList", (object)InteropCommands.ListCommands());
             RegisterPreloadScriptFromString(registerCall);
 
+            // Register support for streamed commands
+            RegisterDynamicFileRoute("/streamedCommand", DynamicRoutes.StreamedCommandRoute);
+
             PlatformManager.Instance.Create();
         }
 

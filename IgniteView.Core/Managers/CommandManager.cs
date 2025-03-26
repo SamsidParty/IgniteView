@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace IgniteView.Core
@@ -27,7 +28,18 @@ namespace IgniteView.Core
                                 attributes = attributes.Where((atr) => atr is CommandAttribute).ToList();
                                 if (attributes.Any())
                                 {
-                                    _Commands[(attributes.FirstOrDefault() as CommandAttribute).FunctionName] = method;
+                                    var functionName = (attributes.FirstOrDefault() as CommandAttribute).FunctionName;
+
+                                    if (functionName == null)
+                                    {
+                                        functionName = method.Name;
+                                    }
+                                    else if (!JSFunctionCall.IsFunctionNameValid(functionName))
+                                    {
+                                        throw new FormatException($"Function name {functionName} is not a valid JavaScript function name");
+                                    }
+
+                                    _Commands[functionName] = method;
                                 }
                             }
                         }

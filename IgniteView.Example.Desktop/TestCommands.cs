@@ -42,5 +42,11 @@ namespace IgniteView.Example.Desktop
         {
             target.Bounds = new WindowBounds(width, height);
         }
+
+        [Command("streamedCommandTest")]
+        public static Stream StreamedCommandTest()
+        {
+            return null;
+        }
     }
 }
