@@ -52,11 +52,11 @@ namespace IgniteView.Core
 
         static Dictionary<string, MethodInfo> _Commands;
 
-        public static async Task ExecuteCommand(WebWindow target, CommandData commandData)
+        public static async Task<object> ExecuteCommand(WebWindow? target, CommandData commandData)
         {
             if (!Commands.ContainsKey(commandData.Function)) {
-                target.ExecuteJavaScript(new JSFunctionCall("console.error", $"The command bridge couldn't locate a binding for command '{commandData.Function}', please ensure the command is correct."));
-                return;
+                target?.ExecuteJavaScript(new JSFunctionCall("console.error", $"The command bridge couldn't locate a binding for command '{commandData.Function}', please ensure the command is correct."));
+                return null;
             }
 
             var method = Commands[commandData.Function]; // Find the MethodInfo of the command
@@ -73,8 +73,8 @@ namespace IgniteView.Core
                 {
                     if (commandData.Parameters.Length <= paramIndex)
                     {
-                        target.ExecuteJavaScript(new JSFunctionCall("console.error", $"The command bridge couldn't transform parameter {paramIndex + 1} '{parameter.Name}' for command '{commandData.Function}', make sure you have passed this parameter when calling the function"));
-                        return;
+                        target?.ExecuteJavaScript(new JSFunctionCall("console.error", $"The command bridge couldn't transform parameter {paramIndex + 1} '{parameter.Name}' for command '{commandData.Function}', make sure you have passed this parameter when calling the function"));
+                        return null;
                     }
 
                     var providedParam = commandData.Parameters[paramIndex];
@@ -119,7 +119,8 @@ namespace IgniteView.Core
             }
 
             var returnFunction = new JSFunctionCall("window.igniteView.commandQueue.resolve", commandData.CallbackID, result);
-            target.ExecuteJavaScript(returnFunction);
+            target?.ExecuteJavaScript(returnFunction);
+            return result;
         }
     }
 }

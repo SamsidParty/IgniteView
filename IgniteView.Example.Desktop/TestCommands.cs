@@ -44,9 +44,10 @@ namespace IgniteView.Example.Desktop
         }
 
         [Command("streamedCommandTest")]
-        public static Stream StreamedCommandTest()
+        public static async Task<Stream> StreamedCommandTest()
         {
-            return null;
+            var client = new HttpClient();
+            return await (await client.GetAsync("https://www.samsidparty.com/Resources/Logos/Abstract.mp4")).Content.ReadAsStreamAsync();
         }
     }
 }

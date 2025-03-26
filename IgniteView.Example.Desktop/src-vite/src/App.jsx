@@ -6,7 +6,7 @@ function App() {
     return (
         <>
             <Titlebar></Titlebar>
-            <iframe className="app" src="https://www.samsidparty.com/"></iframe>
+            <video muted controls className="app" src={igniteView.commandBridge.streamedCommandTest()}></video>
         </>
     )
 }

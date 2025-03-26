@@ -26,14 +26,27 @@ window.igniteView.commandBridge.build = async () => {
 
 window.igniteView.commandBridge.fillCommandList = (commandList) => {
     commandList.forEach((command) => {
-        window.igniteView.commandBridge[command] = function(...args) {
-            return invoke(command, ...args)
-        };
+        if (command.startsWith("streamedCommand/")) {
+            window.igniteView.commandBridge[command.replace("streamedCommand/", "")] = function(...args) {
+                return invoke(command, ...args)
+            };
+        }
+        else {
+            window.igniteView.commandBridge[command] = function(...args) {
+                return invoke(command, ...args)
+            };
+        }
     })
 }
 
 
 function invoke(command) {
+
+    // Handle streamed command
+    if (command.startsWith("streamedCommand/")) {
+        var isStreamed = true;
+        command = command.replace("streamedCommand/", "");
+    }
 
     var args = Array.prototype.slice.call(arguments);
 
@@ -53,7 +66,11 @@ function invoke(command) {
     var commandString = `${command}:${commandId};${paramDataString}`;
 
     // Send the command to C#, differs per platform
-    if (!!window.saucer) { // Desktop with saucer webview
+    if (!!isStreamed) { // Streamed command (universal)
+        var commandURL = igniteView.resolverURL + "/streamedCommand?" + btoa(commandString);
+        return commandURL;
+    }
+    else if (!!window.saucer) { // Desktop with saucer webview
         return new Promise(async (resolve, reject) => {
             window.igniteView.commandQueue.add(commandId, resolve);
             await window.saucer.exposed.igniteview_commandbridge(btoa(commandString));

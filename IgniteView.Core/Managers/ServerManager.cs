@@ -126,7 +126,6 @@ namespace IgniteView.Core
             
 
             CurrentServer.Routes.PreAuthentication.Dynamic.Add(WatsonWebserver.Core.HttpMethod.GET, new Regex(".*"), ResolverRoute);
-            CurrentServer.Routes.PreAuthentication.Static.Add(WatsonWebserver.Core.HttpMethod.GET, "/igniteview/injected.js", InjectedJSRoute);
 
             // Tells the JS code what URL to use (in case it's coming from another origin)
             var resolverURL = BaseURL + "/dynamic";
@@ -155,13 +154,6 @@ namespace IgniteView.Core
             ctx.Response.StatusCode = 307; // Temporary redirect
             ctx.Response.Headers.Add("Location", Resolver.GetIndexFile());
             await ctx.Response.Send("");
-        }
-
-        async Task InjectedJSRoute(HttpContextBase ctx)
-        {
-            ctx.Response.StatusCode = 200;
-            ctx.Response.ContentType = "text/javascript";
-            await ctx.Response.Send(ScriptManager.CombinedScriptData);
         }
 
         async Task HTMLInjectorRoute(HttpContextBase ctx)
