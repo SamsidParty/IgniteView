@@ -102,7 +102,7 @@ namespace IgniteView.Core
         public ViteAppManager([CallerFilePath] string currentDirectory = "") : base(null) {
             CurrentServerManager = new ServerManager(CreateFileResolver());
 
-            if (CurrentServerManager.Resolver.DoesFileExist("/.vitedev"))
+            if (CurrentServerManager.Resolver.DoesFileExist("/.vitedev") && PlatformManager.Instance.GetType().Name == "DesktopPlatformManager")
             {
                 RunVite();
             }
