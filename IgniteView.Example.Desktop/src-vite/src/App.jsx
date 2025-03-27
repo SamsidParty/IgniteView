@@ -3,10 +3,13 @@ import './App.css'
 import Titlebar from './Titlebar'
 
 function App() {
+
     return (
         <>
             <Titlebar></Titlebar>
-            <video muted controls className="app" src={igniteView.commandBridge.streamedCommandTest()}></video>
+            <div className="app">
+                <h1>{}</h1>
+            </div>
         </>
     )
 }
