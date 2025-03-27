@@ -52,6 +52,19 @@ console.log(username);
 igniteView.commandBridge.getUsername().then(console.log);
 ```
 
+## Async Commands
+
+Returning a `Task` from a command is also supported:
+
+```csharp title="Commands.cs"
+[Command("getUsernameAsync")]
+public static async Task<string> GetUsernameAsync()
+{
+    await Task.Delay(1000);
+    return Environment.UserName;
+}
+```
+
 ## Command Context
 
 Sometimes, you may need to access the `WebWindow` object from the command. To do this, simply add a `WebWindow` as the first parameter of the method:
