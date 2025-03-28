@@ -77,5 +77,11 @@ namespace IgniteView.Core
             var windowToHide = window.CurrentAppManager.OpenWindows.Where((w) => w.ID == windowId);
             windowToHide.FirstOrDefault(window).Hide();
         }
+
+        [Command("igniteview_window_toggle_maximize")]
+        public static void ToggleMaximize(WebWindow window)
+        {
+            window.WithMaximized(!window.IsMaximized);
+        }
     }
 }

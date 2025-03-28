@@ -31,20 +31,6 @@ namespace IgniteView.Example.Desktop
                 })
                 .Show();
 
-                WebWindow.Create()
-                .WithBounds(new WindowBounds(900, 720))
-                .WithTitle("Second Window")
-                .WithoutTitleBar()
-                .With((w) =>
-                {
-                    // Cool acrylic effect on Windows 11
-                    if (w.GetType() == typeof(Win32WebWindow))
-                    {
-                        ((Win32WebWindow)w).BackgroundMode = Win32WebWindow.WindowBackgroundMode.BlurBehind;
-                    }
-                })
-                .Show();
-
             app.Run();
         }
     }

@@ -122,6 +122,10 @@ extern "C" {
 
         if (minW == maxW && minH == maxH) { // Detect locked window bounds
             WindowList[index]->set_resizable(false);
+
+            // Don't enforce min and max size when bounds are locked
+            WindowList[index]->set_min_size(0, 0);
+            WindowList[index]->set_max_size(9999, 9999);
         }
         else {
             WindowList[index]->set_resizable(true);
@@ -176,6 +180,14 @@ extern "C" {
         auto title = WindowList[index]->title(); // This is freed by the C# code
         auto titlePtr = strdup(title.c_str());
         return (const char*)titlePtr;
+    }
+
+    EXPORT const bool GetWebWindowMaximized(int index) {
+        return WindowList[index]->maximized();
+    }
+
+    EXPORT const void SetWebWindowMaximized(int index, bool isMaximized) {
+        WindowList[index]->set_maximized(isMaximized);
     }
 
     EXPORT const void* GetWebWindowHandle(int index) {

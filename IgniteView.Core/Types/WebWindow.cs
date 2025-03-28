@@ -31,6 +31,25 @@ namespace IgniteView.Core
             return this;
         }
 
+        public virtual bool IsMaximized { get; set; }
+
+        /// <summary>
+        /// Sets the maximized state of this window
+        /// </summary>
+        public WebWindow WithMaximized(bool isMaximized)
+        {
+            IsMaximized = isMaximized;
+            return this;
+        }
+
+        /// <summary>
+        /// Maximizes the window
+        /// </summary>
+        public WebWindow WithMaximized()
+        {
+            return WithMaximized(true);
+        }
+
         #endregion
 
         #region Window Title
