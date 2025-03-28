@@ -22,6 +22,7 @@ To install IgniteView and setup the scripts needed, simply insert the following 
 <!-- IgniteView -->
 <ItemGroup>
     <PackageReference Include="IgniteView.Desktop" Version="*" />
+    <PackageReference Include="IgniteView.Core" Version="*" />
 </ItemGroup>
 <PropertyGroup>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
@@ -50,8 +51,9 @@ Let's break down this snippet, line by line.
 
 ```xml
 <PackageReference Include="IgniteView.Desktop" Version="*" />
+<PackageReference Include="IgniteView.Core" Version="*" />
 ```
-This will include the latest version of `IgniteView.Desktop` from NuGet in the project.
+This will include the latest version of `IgniteView.Core` and `IgniteView.Desktop` from NuGet in the project.
 You may replace `*` with a specific version number.
 
 <br></br>
