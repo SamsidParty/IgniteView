@@ -18,7 +18,7 @@ namespace IgniteView.Example.Desktop
 
             var mainWindow =
                 WebWindow.Create()
-                .WithBounds(new WindowBounds(900, 720))
+                .WithBounds(new LockedWindowBounds(900, 720))
                 .WithTitle("Main Window")
                 .WithoutTitleBar()
                 .With((w) =>
