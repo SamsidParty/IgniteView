@@ -26,7 +26,7 @@ namespace IgniteView.Example.Desktop
                     // Cool acrylic effect on Windows 11
                     if (w.GetType() == typeof(Win32WebWindow))
                     {
-                        ((Win32WebWindow)w).BackgroundMode = Win32WebWindow.WindowBackgroundMode.Acrylic;
+                        ((Win32WebWindow)w).BackgroundMode = Win32WebWindow.WindowBackgroundMode.BlurBehind;
                     }
                 })
                 .Show();

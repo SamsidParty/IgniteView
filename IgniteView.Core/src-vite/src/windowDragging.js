@@ -4,6 +4,7 @@ window.igniteView.dragWindow = (e) => {
     if (!!window.saucer) { // Desktop with saucer webview https://saucer.app/docs/frameless#move--resize
         if (!targetElement.hasAttribute("data-webview-drag")) {
             targetElement.setAttribute("data-webview-drag", "");
+            targetElement.setAttribute("data-webview-maximize", "double");
         }
     }
 }
