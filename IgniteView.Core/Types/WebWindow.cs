@@ -146,6 +146,10 @@ namespace IgniteView.Core
                 {
                     value = value.Substring(1);
                 }
+                else if (value.StartsWith("?"))
+                {
+                    value = "index.html" + value;
+                }
 
                 _URL = value;
             }
