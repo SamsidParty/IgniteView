@@ -15,6 +15,8 @@ namespace IgniteView.UWP
         public static Type Activate()
         {
             Instance = new UWPPlatformManager();
+            PlatformManager.PlatformHints.Add("uwp");
+
             var app = new UWPAppManager(new AppIdentity(Windows.ApplicationModel.Package.Current.PublisherDisplayName, Windows.ApplicationModel.Package.Current.DisplayName));
             ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
 

@@ -276,7 +276,7 @@ namespace IgniteView.Core
         private WebWindow AfterCreate()
         {
             // Try to use the default favicon if it exists
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && CurrentAppManager.CurrentServerManager.Resolver.DoesFileExist("/favicon_mac.png"))
+            if (PlatformManager.HasPlatformHint("macos") && CurrentAppManager.CurrentServerManager.Resolver.DoesFileExist("/favicon_mac.png"))
             {
                 IconPath = "/favicon_mac.png"; // Macs use a different icon with a background and rounded corners
             }

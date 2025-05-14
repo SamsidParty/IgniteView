@@ -70,7 +70,7 @@ namespace IgniteView.Core
 
             ViteProcess = Process.Start(psi);
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if ((PlatformManager.HasPlatformHint("win32")))
             {
                 // Windows Only; Attach the vite process to this process so it closes when this process closes
                 // This is useful because when pressing the stop button in Visual Studio, we can't run OnCleanUp

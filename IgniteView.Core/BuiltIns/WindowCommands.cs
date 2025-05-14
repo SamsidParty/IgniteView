@@ -32,16 +32,16 @@ namespace IgniteView.Core
                 }
                 catch
                 {
-                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    if (PlatformManager.HasPlatformHint("windows"))
                     {
                         url = url.Replace("&", "^&");
                         Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
                     }
-                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                    else if (PlatformManager.HasPlatformHint("linux"))
                     {
                         Process.Start("xdg-open", url);
                     }
-                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                    else if (PlatformManager.HasPlatformHint("macos"))
                     {
                         Process.Start("open", url);
                     }

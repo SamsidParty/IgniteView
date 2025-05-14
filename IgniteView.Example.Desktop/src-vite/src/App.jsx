@@ -9,7 +9,7 @@ function App() {
             <Titlebar></Titlebar>
             <div className="app">
                 <div className="sidebar">
-                    Test
+                    {JSON.stringify(igniteView.withReact(React).useCommandResult("igniteview_list_platform_hints"))}
                 </div>
             </div>
         </>

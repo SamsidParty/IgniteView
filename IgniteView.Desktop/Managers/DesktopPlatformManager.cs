@@ -33,6 +33,13 @@ namespace IgniteView.Desktop
         /// </summary>
         public static void Activate(Assembly entryAssembly)
         {
+            PlatformManager.PlatformHints.Add("desktop");
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                PlatformManager.PlatformHints.Add("win32");
+            }
+            
+            
             // Set the environment variables for webview2
             Environment.SetEnvironmentVariable("WEBVIEW2_DEFAULT_BACKGROUND_COLOR", "00FFFFFF");
 

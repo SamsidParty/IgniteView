@@ -36,5 +36,8 @@ namespace IgniteView.Core
             
             return commandList;
         }
+
+        [Command("igniteview_list_platform_hints")]
+        public static string[] ListPlatformHints() => PlatformManager.PlatformHints.ToArray();
     }
 }
