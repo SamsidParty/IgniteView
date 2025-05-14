@@ -4,7 +4,7 @@
 
 * {
     box-sizing: border-box;
-    color: var(--system-onBackground);
+    color: var(--system-foreground);
     letter-spacing: -0.02em;
     user-select: none;
     -webkit-user-select: none;
@@ -17,7 +17,7 @@ html, body {
 }
 
 body {
-    background-color: var(--system-background);
+    background-color: var(--system-body);
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
@@ -34,15 +34,10 @@ body {
     height: 100%;
     display: flex;
     border: none;
-    background-color: var(--system-surfaceVariant);
+    background-color: var(--system-background2);
 }
 
 .sidebar {
     width: 15rem;
-    background-color: var(--system-background);
     border-right: 1px solid var(--system-outline);
-}
-
-.sidebar * {
-    color: var(--system-onBackground);
 }

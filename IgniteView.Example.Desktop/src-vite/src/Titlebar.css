@@ -5,13 +5,13 @@
     align-items: center;
     user-select: none;
     background-color: var(--system-backgroud);
-    border-bottom: 1px solid var(--system-outline);;
+    border-bottom: 1px solid var(--system-outline);
 }
 
 .titleBar h1 {
     margin: 0 4px 0 12px;
     font-size: 18px;
-    color: var(--system-onBackground);
+    color: var(--system-foreground);
 }
 
 .titleBar .dragArea {
@@ -40,7 +40,7 @@
 }
 
 .titleBar button * {
-    color: var(--system-onBackground);
+    color: var(--system-foreground);
 }
 
 .titleBar button svg, .titleBar button i {

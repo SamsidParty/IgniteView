@@ -28,26 +28,25 @@ namespace IgniteView.Core
             }
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
-                // TODO: Add macOS specific styles based on apple UI guidelines
+                ApplyStylesFromJSON(systemStyles, "macos");
             }
-            else if (File.Exists("/bin/kreadconfig5")) {
-                // Get the styles from the current KDE color scheme
+            else if (File.Exists("/bin/kreadconfig5")) { // KDE Plasma
                 try {
-                    systemStyles.Add(new StyleRule("--system-primary", ReadKDEColor("Colors:Button", "ForegroundLink")));
-                    systemStyles.Add(new StyleRule("--system-primaryContainer", ReadKDEColor("Colors:Button", "ForegroundLink")));
+                    // Get the styles from the current KDE color scheme
+                    systemStyles.Add(new StyleRule("--system-accent", ReadKDEColor("Colors:Button", "ForegroundLink")));
+                    systemStyles.Add(new StyleRule("--system-accent-foreground", ReadKDEColor("Colors:Button", "BackgroundNormal")));
                     systemStyles.Add(new StyleRule("--system-background", ReadKDEColor("Colors:Window", "BackgroundNormal")));
-                    systemStyles.Add(new StyleRule("--system-onBackground", ReadKDEColor("Colors:Window", "ForegroundNormal")));
-                    systemStyles.Add(new StyleRule("--system-surfaceVariant", ReadKDEColor("Colors:View", "BackgroundNormal")));
-                    systemStyles.Add(new StyleRule("--system-onSurfaceVariant", ReadKDEColor("Colors:View", "BackgroundNormal")));
+                    systemStyles.Add(new StyleRule("--system-background2", ReadKDEColor("Colors:View", "BackgroundNormal")));
+                    systemStyles.Add(new StyleRule("--system-foreground", ReadKDEColor("Colors:Window", "ForegroundNormal")));
                     systemStyles.Add(new StyleRule("--system-outline", ReadKDEColor("Colors:View", "ForegroundInactive", 0.2f)));
                 }
                 catch {
-                    ApplyFallbackStyles(systemStyles);
+                    ApplyStylesFromJSON(systemStyles);
                 }
             }
             else {
                 // Fallback for other platforms
-                ApplyFallbackStyles(systemStyles);
+                ApplyStylesFromJSON(systemStyles);
             }
             
             // Combine all the styles into one stylesheet string and return it
@@ -72,9 +71,9 @@ namespace IgniteView.Core
             }
         }
 
-        public static void ApplyFallbackStyles(List<StyleRule> styles) {
-            var light = AppManager.Instance.CurrentServerManager.Resolver.ReadFileAsText("/igniteview/styles/default_light.json");
-            var dark = AppManager.Instance.CurrentServerManager.Resolver.ReadFileAsText("/igniteview/styles/default_dark.json");
+        public static void ApplyStylesFromJSON(List<StyleRule> styles, string prefix = "default") {
+            var light = AppManager.Instance.CurrentServerManager.Resolver.ReadFileAsText($"/igniteview/styles/{prefix}_light.json");
+            var dark = AppManager.Instance.CurrentServerManager.Resolver.ReadFileAsText($"/igniteview/styles/{prefix}_dark.json");
             styles.AddRange(StyleRule.FromJSON(light));
             styles.AddRange(StyleRule.FromJSON(dark, true));
         }
