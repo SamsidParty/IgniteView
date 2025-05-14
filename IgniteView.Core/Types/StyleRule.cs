@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace IgniteView.Core
 {
@@ -37,5 +38,24 @@ namespace IgniteView.Core
 
         public override string ToString() => $"{Selector} {{{Property}: {Value};}}";
         public static implicit operator string(StyleRule r) => r.ToString();
+
+        public static List<StyleRule> FromJSON(string json, bool darkMode = false) 
+        {
+            var styles = new List<StyleRule>();
+            var styleObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+
+            foreach (var property in styleObject.Keys)
+            {
+                if (darkMode) {
+                    styles.Add(new DarkModeStyleRule("--system-" + property, styleObject[property]));
+                }
+                else {
+                    styles.Add(new StyleRule("--system-" + property, styleObject[property]));
+                }
+                
+            }
+
+            return styles;
+        }
     }
 }
