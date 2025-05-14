@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -29,16 +30,53 @@ namespace IgniteView.Core
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
                 // TODO: Add macOS specific styles based on apple UI guidelines
             }
+            else if (File.Exists("/bin/kreadconfig5")) {
+                // Get the styles from the current KDE color scheme
+                try {
+                    systemStyles.Add(new StyleRule("--system-primary", ReadKDEColor("Colors:Button", "ForegroundLink")));
+                    systemStyles.Add(new StyleRule("--system-primaryContainer", ReadKDEColor("Colors:Button", "ForegroundLink")));
+                    systemStyles.Add(new StyleRule("--system-background", ReadKDEColor("Colors:Window", "BackgroundNormal")));
+                    systemStyles.Add(new StyleRule("--system-onBackground", ReadKDEColor("Colors:Window", "ForegroundNormal")));
+                    systemStyles.Add(new StyleRule("--system-surfaceVariant", ReadKDEColor("Colors:View", "BackgroundNormal")));
+                    systemStyles.Add(new StyleRule("--system-onSurfaceVariant", ReadKDEColor("Colors:View", "BackgroundNormal")));
+                    systemStyles.Add(new StyleRule("--system-outline", ReadKDEColor("Colors:View", "ForegroundInactive", 0.2f)));
+                }
+                catch {
+                    ApplyFallbackStyles(systemStyles);
+                }
+            }
             else {
                 // Fallback for other platforms
-                var light = AppManager.Instance.CurrentServerManager.Resolver.ReadFileAsText("/igniteview/styles/default_light.json");
-                var dark = AppManager.Instance.CurrentServerManager.Resolver.ReadFileAsText("/igniteview/styles/default_dark.json");
-                systemStyles.AddRange(StyleRule.FromJSON(light));
-                systemStyles.AddRange(StyleRule.FromJSON(dark, true));
+                ApplyFallbackStyles(systemStyles);
             }
             
             // Combine all the styles into one stylesheet string and return it
             return String.Join("\n\n", systemStyles.Concat(GlobalStyles).Select(x => x.ToString()));
+        }
+
+        /// <summary>
+        /// Reads a color from the KDE color scheme using kreadconfig5,
+        /// This will throw an exception if the command fails
+        /// </summary>
+        static string ReadKDEColor(string group, string key, float opacity = 1) {
+            var command = $"--group {group} --key {key}";
+            var binary = "/bin/kreadconfig5";
+            var psi = new ProcessStartInfo(binary, command) {
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+            using (var process = Process.Start(psi)) {
+                process.WaitForExit();
+                return "rgba(" + process.StandardOutput.ReadToEnd().Trim() + ", " + opacity +  ")";
+            }
+        }
+
+        public static void ApplyFallbackStyles(List<StyleRule> styles) {
+            var light = AppManager.Instance.CurrentServerManager.Resolver.ReadFileAsText("/igniteview/styles/default_light.json");
+            var dark = AppManager.Instance.CurrentServerManager.Resolver.ReadFileAsText("/igniteview/styles/default_dark.json");
+            styles.AddRange(StyleRule.FromJSON(light));
+            styles.AddRange(StyleRule.FromJSON(dark, true));
         }
     }
 }

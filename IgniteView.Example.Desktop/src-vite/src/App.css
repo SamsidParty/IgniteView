@@ -34,4 +34,15 @@ body {
     height: 100%;
     display: flex;
     border: none;
+    background-color: var(--system-surfaceVariant);
+}
+
+.sidebar {
+    width: 15rem;
+    background-color: var(--system-background);
+    border-right: 1px solid var(--system-outline);
+}
+
+.sidebar * {
+    color: var(--system-onBackground);
 }

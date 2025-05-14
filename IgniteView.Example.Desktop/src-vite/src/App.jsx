@@ -8,7 +8,9 @@ function App() {
         <>
             <Titlebar></Titlebar>
             <div className="app">
-                <h1>{igniteView.withReact(React).useCommandResult("getUsernameAsync")}</h1>
+                <div className="sidebar">
+                    Test
+                </div>
             </div>
         </>
     )
