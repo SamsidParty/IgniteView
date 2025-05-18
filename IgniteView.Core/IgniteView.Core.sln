@@ -37,8 +37,8 @@ Global
 		{826F3C94-9E5C-49E6-B189-F46BEEA02927}.Debug|x86.Build.0 = Debug|Any CPU
 		{826F3C94-9E5C-49E6-B189-F46BEEA02927}.Local Debug|Any CPU.ActiveCfg = Local Debug|Any CPU
 		{826F3C94-9E5C-49E6-B189-F46BEEA02927}.Local Debug|Any CPU.Build.0 = Local Debug|Any CPU
-		{826F3C94-9E5C-49E6-B189-F46BEEA02927}.Local Debug|x64.ActiveCfg = Release|Any CPU
-		{826F3C94-9E5C-49E6-B189-F46BEEA02927}.Local Debug|x64.Build.0 = Release|Any CPU
+		{826F3C94-9E5C-49E6-B189-F46BEEA02927}.Local Debug|x64.ActiveCfg = Local Debug|Any CPU
+		{826F3C94-9E5C-49E6-B189-F46BEEA02927}.Local Debug|x64.Build.0 = Local Debug|Any CPU
 		{826F3C94-9E5C-49E6-B189-F46BEEA02927}.Local Debug|x86.ActiveCfg = Release|Any CPU
 		{826F3C94-9E5C-49E6-B189-F46BEEA02927}.Local Debug|x86.Build.0 = Release|Any CPU
 		{826F3C94-9E5C-49E6-B189-F46BEEA02927}.Local Release|Any CPU.ActiveCfg = Local Release|Any CPU
@@ -61,8 +61,8 @@ Global
 		{6A81DCF2-3840-48B6-8243-37819B004193}.Debug|x86.Build.0 = Debug|Any CPU
 		{6A81DCF2-3840-48B6-8243-37819B004193}.Local Debug|Any CPU.ActiveCfg = Local Debug|Any CPU
 		{6A81DCF2-3840-48B6-8243-37819B004193}.Local Debug|Any CPU.Build.0 = Local Debug|Any CPU
-		{6A81DCF2-3840-48B6-8243-37819B004193}.Local Debug|x64.ActiveCfg = Release|Any CPU
-		{6A81DCF2-3840-48B6-8243-37819B004193}.Local Debug|x64.Build.0 = Release|Any CPU
+		{6A81DCF2-3840-48B6-8243-37819B004193}.Local Debug|x64.ActiveCfg = Local Debug|Any CPU
+		{6A81DCF2-3840-48B6-8243-37819B004193}.Local Debug|x64.Build.0 = Local Debug|Any CPU
 		{6A81DCF2-3840-48B6-8243-37819B004193}.Local Debug|x86.ActiveCfg = Release|Any CPU
 		{6A81DCF2-3840-48B6-8243-37819B004193}.Local Debug|x86.Build.0 = Release|Any CPU
 		{6A81DCF2-3840-48B6-8243-37819B004193}.Local Release|Any CPU.ActiveCfg = Local Release|Any CPU
@@ -85,8 +85,8 @@ Global
 		{416F345D-CE44-4A15-8644-9EB7A5DC7F6D}.Debug|x86.Build.0 = Debug|Any CPU
 		{416F345D-CE44-4A15-8644-9EB7A5DC7F6D}.Local Debug|Any CPU.ActiveCfg = Local Debug|Any CPU
 		{416F345D-CE44-4A15-8644-9EB7A5DC7F6D}.Local Debug|Any CPU.Build.0 = Local Debug|Any CPU
-		{416F345D-CE44-4A15-8644-9EB7A5DC7F6D}.Local Debug|x64.ActiveCfg = Release|Any CPU
-		{416F345D-CE44-4A15-8644-9EB7A5DC7F6D}.Local Debug|x64.Build.0 = Release|Any CPU
+		{416F345D-CE44-4A15-8644-9EB7A5DC7F6D}.Local Debug|x64.ActiveCfg = Local Debug|Any CPU
+		{416F345D-CE44-4A15-8644-9EB7A5DC7F6D}.Local Debug|x64.Build.0 = Local Debug|Any CPU
 		{416F345D-CE44-4A15-8644-9EB7A5DC7F6D}.Local Debug|x86.ActiveCfg = Release|Any CPU
 		{416F345D-CE44-4A15-8644-9EB7A5DC7F6D}.Local Debug|x86.Build.0 = Release|Any CPU
 		{416F345D-CE44-4A15-8644-9EB7A5DC7F6D}.Local Release|Any CPU.ActiveCfg = Local Release|Any CPU
@@ -109,8 +109,8 @@ Global
 		{5940C805-286C-4A87-BAEB-EF02C0DEBB7A}.Debug|x86.Build.0 = Debug|Any CPU
 		{5940C805-286C-4A87-BAEB-EF02C0DEBB7A}.Local Debug|Any CPU.ActiveCfg = Local Debug|Any CPU
 		{5940C805-286C-4A87-BAEB-EF02C0DEBB7A}.Local Debug|Any CPU.Build.0 = Local Debug|Any CPU
-		{5940C805-286C-4A87-BAEB-EF02C0DEBB7A}.Local Debug|x64.ActiveCfg = Debug|Any CPU
-		{5940C805-286C-4A87-BAEB-EF02C0DEBB7A}.Local Debug|x64.Build.0 = Debug|Any CPU
+		{5940C805-286C-4A87-BAEB-EF02C0DEBB7A}.Local Debug|x64.ActiveCfg = Local Debug|Any CPU
+		{5940C805-286C-4A87-BAEB-EF02C0DEBB7A}.Local Debug|x64.Build.0 = Local Debug|Any CPU
 		{5940C805-286C-4A87-BAEB-EF02C0DEBB7A}.Local Debug|x86.ActiveCfg = Debug|Any CPU
 		{5940C805-286C-4A87-BAEB-EF02C0DEBB7A}.Local Debug|x86.Build.0 = Debug|Any CPU
 		{5940C805-286C-4A87-BAEB-EF02C0DEBB7A}.Local Release|Any CPU.ActiveCfg = Local Release|Any CPU
@@ -137,9 +137,9 @@ Global
 		{15337C6A-2D63-474F-B762-F24D869CA406}.Local Debug|Any CPU.ActiveCfg = Local Debug|x64
 		{15337C6A-2D63-474F-B762-F24D869CA406}.Local Debug|Any CPU.Build.0 = Local Debug|x64
 		{15337C6A-2D63-474F-B762-F24D869CA406}.Local Debug|Any CPU.Deploy.0 = Local Debug|x64
-		{15337C6A-2D63-474F-B762-F24D869CA406}.Local Debug|x64.ActiveCfg = Debug|x64
-		{15337C6A-2D63-474F-B762-F24D869CA406}.Local Debug|x64.Build.0 = Debug|x64
-		{15337C6A-2D63-474F-B762-F24D869CA406}.Local Debug|x64.Deploy.0 = Debug|x64
+		{15337C6A-2D63-474F-B762-F24D869CA406}.Local Debug|x64.ActiveCfg = Local Debug|x64
+		{15337C6A-2D63-474F-B762-F24D869CA406}.Local Debug|x64.Build.0 = Local Debug|x64
+		{15337C6A-2D63-474F-B762-F24D869CA406}.Local Debug|x64.Deploy.0 = Local Debug|x64
 		{15337C6A-2D63-474F-B762-F24D869CA406}.Local Debug|x86.ActiveCfg = Debug|x86
 		{15337C6A-2D63-474F-B762-F24D869CA406}.Local Debug|x86.Build.0 = Debug|x86
 		{15337C6A-2D63-474F-B762-F24D869CA406}.Local Debug|x86.Deploy.0 = Debug|x86

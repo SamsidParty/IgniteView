@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -24,6 +25,10 @@ namespace IgniteView.Desktop
 
         [DllImport("user32.dll")]
         public static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
+
+
+        [DllImport("dwmapi.dll")]
+        public static extern void DwmGetColorizationColor(ref uint pcrColorization, ref bool pfOpaqueBlend);
 
         [StructLayout(LayoutKind.Sequential)]
         public struct WindowCompositionAttributeData
@@ -170,8 +175,36 @@ namespace IgniteView.Desktop
         }
         bool DarkModeLoopRunning = false;
 
+        void ApplyAccentColors()
+        {
+            var ParseColor = (uint color, bool opaque) => Color.FromArgb(
+                (byte)(opaque ? 255 : color >> 24),
+                (byte)(color >> 16),
+                (byte)(color >> 8),
+                (byte)color
+            );
+
+            try
+            {
+                uint accentVal = 0;
+                bool opaqueBlend = false;
+                DwmGetColorizationColor(ref accentVal, ref opaqueBlend);
+
+                var accent = ParseColor(accentVal, opaqueBlend);
+
+                SystemStyling.GlobalStyles.Add(new StyleRule("--system-accent", $"rgb({accent.R}, {accent.G}, {accent.B}) !important"));
+            }
+            catch { }
+        }
+
         public override WebWindow Show()
         {
+            if (this == AppManager.Instance.MainWindow)
+            {
+                // Only has to be done once for all windows
+                ApplyAccentColors();
+            }
+
             UpdateDarkModeState();
 
             if (!DarkModeLoopRunning)
