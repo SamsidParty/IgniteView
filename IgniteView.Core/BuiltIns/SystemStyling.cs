@@ -27,7 +27,11 @@ namespace IgniteView.Core
                 systemStyles.Add(new StyleRule("--system-font", "-apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, Cantarell, Ubuntu, roboto, noto, helvetica, arial, sans-serif"));
             }
 
-            if (PlatformManager.HasPlatformHint("macos")) {
+            if (PlatformManager.HasPlatformHint("win32"))
+            {
+                ApplyStylesFromJSON(systemStyles, "windows");
+            }
+            else if (PlatformManager.HasPlatformHint("macos")) {
                 ApplyStylesFromJSON(systemStyles, "macos");
             }
             else if (PlatformManager.HasPlatformHint("kde") && File.Exists("/bin/kreadconfig5")) { // KDE Plasma

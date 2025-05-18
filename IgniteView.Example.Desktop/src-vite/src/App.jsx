@@ -11,6 +11,9 @@ function App() {
                 <div className="sidebar">
                     {JSON.stringify(igniteView.withReact(React).useCommandResult("igniteview_list_platform_hints"))}
                 </div>
+                <div className="content">
+                    
+                </div>
             </div>
         </>
     )

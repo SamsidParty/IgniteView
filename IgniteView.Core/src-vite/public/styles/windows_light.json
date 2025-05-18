@@ -1,0 +1,9 @@
+{
+    "body": "transparent",
+    "accent": "rgb(0, 130, 230)",
+    "accent-foreground": "rgb(255, 255, 255)",
+    "background": "rgba(243, 243, 243, 0.7)",
+    "background2": "rgb(251, 251, 251)",
+    "foreground": "rgb(27, 27, 27)",
+    "outline": "rgb(229, 229, 229)"
+}

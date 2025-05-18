@@ -34,10 +34,16 @@ body {
     height: 100%;
     display: flex;
     border: none;
-    background-color: var(--system-background2);
+}
+
+.content {
+    background-color: var(--system-background);
+    flex-grow: 1;
+    border-top: 1px solid var(--system-outline);
 }
 
 .sidebar {
     width: 15rem;
     border-right: 1px solid var(--system-outline);
+    color: var(--system-accent);
 }
