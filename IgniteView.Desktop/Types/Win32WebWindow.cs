@@ -102,7 +102,7 @@ namespace IgniteView.Desktop
         /// <summary>
         /// Returns true if the system is in dark mode
         /// </summary>
-        public bool IsDarkMode
+        public static bool IsDarkMode
         {
             get
             {
