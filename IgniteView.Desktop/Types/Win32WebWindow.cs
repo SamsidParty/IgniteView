@@ -86,7 +86,7 @@ namespace IgniteView.Desktop
         /// <summary>
         /// Returns true if the system is running windows 11 or later
         /// </summary>
-        public bool IsWindows11
+        public static bool IsWindows11
         {
             get
             {
