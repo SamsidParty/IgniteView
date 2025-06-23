@@ -96,7 +96,7 @@ namespace IgniteView.Desktop
         public CommandBridgeCallback CommandExecuteRequested;
         void OnCommandExecuteRequested(IntPtr param)
         {
-            var commandString = InteropHelper.PointerToStringUTF8(param);
+            var commandString = Marshal.PtrToStringUTF8(param)
             ExecuteCommand(commandString);
         }
 
