@@ -38,12 +38,17 @@ std::vector<CommandBridgeCallback> CommandBridgeList;
 
 
 extern "C" {
-    EXPORT int NewWebWindow(const char* url, CommandBridgeCallback commandBridge, const char* preloadScript, const char8_t* path) {
+    EXPORT int NewWebWindow(const char* url, CommandBridgeCallback commandBridge, const char* preloadScript, const char* path) {
+
+        std::string urlToSet(url, strlen(url));
+        std::string preloadToRun(preloadScript, strlen(preloadScript));
+        std::string pathToSet(path, strlen(path));
+
         auto window = std::shared_ptr{ App->make<saucer::smartview<saucer::default_serializer>>(saucer::preferences{
             .application = App,
             .persistent_cookies = true,
                 .hardware_acceleration = true,
-            .storage_path = path
+            .storage_path = pathToSet
         }) };
         WindowList.push_back(window);
         CommandBridgeList.push_back(commandBridge);
@@ -53,15 +58,15 @@ extern "C" {
         MacEnableAcrylic(window->webview::native().webview, window->window::native().window);
         #endif
         
-        if (preloadScript != 0) {
+        if (!preloadToRun.empty()) {
             window->inject({
-                .code = preloadScript,
+                .code = preloadToRun,
                 .time = saucer::load_time::creation,
                 .permanent = true,
             }); 
         }
 
-        window->set_url(url);
+        window->set_url(urlToSet);
         window->expose("igniteview_commandbridge", [windowIndex](std::string param)
             {
                 CommandBridgeList[windowIndex](param.c_str());
@@ -88,7 +93,8 @@ extern "C" {
 
         #ifdef _WIN32
         WindowList[index]->webview::native().controller->put_IsVisible(false);
-        WindowList[index]->webview::native().webview->TrySuspend(nullptr);
+        ICoreWebView2_3* webView2_3 = static_cast<ICoreWebView2_3*>(WindowList[index]->webview::native().webview);
+        webView2_3->TrySuspend(nullptr);
         #endif
     }
 
@@ -100,11 +106,10 @@ extern "C" {
         WindowList[index] = nullptr;
     }
 
-    EXPORT void ExecuteJavaScriptOnWebWindow(int index, const char* javascriptCode) {
-        if (WindowList[index] == nullptr) { return; }
-
-        std::basic_string_view stringView(javascriptCode);
-        WindowList[index]->execute(stringView);
+    EXPORT void ExecuteJavaScriptOnWebWindow(int index, char* javascriptCode) {  
+        if (WindowList[index] == nullptr) { return; }  
+        std::string codeToExecute(javascriptCode, strlen(javascriptCode));
+        WindowList[index]->execute(codeToExecute);
     }
 
     EXPORT void SetWebWindowBounds(int index, int w, int h, int minW, int minH, int maxW, int maxH) {
@@ -134,8 +139,8 @@ extern "C" {
 
     EXPORT void SetWebWindowTitle(int index, const char* title) {
         if (WindowList[index] == nullptr) { return; }
-
-        WindowList[index]->set_title(title);
+        std::string titleToSet(title, strlen(title));
+        WindowList[index]->set_title(titleToSet);
     }
     
     EXPORT void SetWebWindowTitleBar(int index, bool visible) {
@@ -149,17 +154,19 @@ extern "C" {
         }
     }
 
-    EXPORT void SetWebWindowIcon(int index, char8_t* iconPath) {
+    EXPORT void SetWebWindowIcon(int index, const char* iconPath) {
         if (WindowList[index] == nullptr) { return; }
 
-        saucer::icon icon = saucer::icon::from(iconPath).value();
+        std::string strIconPath(iconPath, strlen(iconPath));
+        saucer::icon icon = saucer::icon::from(strIconPath).value();
         WindowList[index]->set_icon(icon);
     }
 
     EXPORT void SetWebWindowURL(int index, const char* url) {
         if (WindowList[index] == nullptr) { return; }
 
-        WindowList[index]->set_url(url);
+        std::string urlToSet(url, strlen(url));
+        WindowList[index]->set_url(urlToSet);
     }
 
     EXPORT void SetWebWindowDark(int index, bool isDark) {
@@ -177,8 +184,8 @@ extern "C" {
     EXPORT const char* GetWebWindowTitle(int index) {
         if (WindowList[index] == nullptr) { return ""; }
 
-        auto title = WindowList[index]->title(); // This is freed by the C# code
-        auto titlePtr = strdup(title.c_str());
+        auto title = WindowList[index]->title();
+        auto titlePtr = strdup(title.c_str()); // This is freed by the C# code
         return (const char*)titlePtr;
     }
 
@@ -201,8 +208,9 @@ extern "C" {
     }
 
     EXPORT void CreateApp(const char* appID) {
+        std::string appIDToSet(appID, strlen(appID));
         App = saucer::application::init({
-            .id = appID,
+            .id = appIDToSet,
         });
     }
 

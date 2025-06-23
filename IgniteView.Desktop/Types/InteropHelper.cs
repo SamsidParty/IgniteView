@@ -42,5 +42,15 @@ namespace IgniteView.Desktop
             Free(ptr);
             return data;
         }
+
+        /// <summary>
+        /// Reads a UTF8 string from a pointer and frees its memory
+        /// </summary>
+        public static string PointerToStringUTF8(IntPtr ptr)
+        {
+            var data = Marshal.PtrToStringUTF8(ptr);
+            Free(ptr);
+            return data;
+        }
     }
 }

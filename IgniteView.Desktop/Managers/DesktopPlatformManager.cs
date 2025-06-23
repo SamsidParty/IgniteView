@@ -14,7 +14,7 @@ namespace IgniteView.Desktop
         #region Native Imports
 
         [DllImport(InteropHelper.DLLName, CharSet = CharSet.Unicode)]
-        static extern void CreateApp(string appID);
+        static extern void CreateApp(IntPtr appID);
 
         [DllImport(InteropHelper.DLLName)]
         static extern void RunApp();
@@ -94,7 +94,7 @@ namespace IgniteView.Desktop
             return new DesktopWebWindow();
         }
         public override void Run() => RunApp();
-        public override void Create() => CreateApp(AppManager.Instance.CurrentIdentity.IDString);
+        public override void Create() => CreateApp(Marshal.StringToCoTaskMemUTF8(AppManager.Instance.CurrentIdentity.IDString));
 
         public override ScriptInjectionMode GetScriptInjectionMode() => ScriptInjectionMode.ClientSide;
         public override ServerListenMode GetServerListenMode() => ServerListenMode.Http;

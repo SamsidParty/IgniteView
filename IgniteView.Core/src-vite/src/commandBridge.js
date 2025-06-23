@@ -73,7 +73,7 @@ function invoke(command) {
     else if (!!window.saucer) { // Desktop with saucer webview
         return new Promise(async (resolve, reject) => {
             window.igniteView.commandQueue.add(commandId, resolve);
-            await window.saucer.exposed.igniteview_commandbridge(btoa(commandString));
+            await window.saucer.exposed.igniteview_commandbridge(commandString);
         });
     }
 }
