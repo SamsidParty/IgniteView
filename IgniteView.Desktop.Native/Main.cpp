@@ -1,4 +1,5 @@
 #include <saucer/smartview.hpp>
+#include <saucer/webview.hpp>
 #include <saucer/window.hpp>
 #include <iostream>
 #include <vector>
@@ -109,7 +110,7 @@ extern "C" {
     EXPORT void ExecuteJavaScriptOnWebWindow(int index, char* javascriptCode) {  
         if (WindowList[index] == nullptr) { return; }  
         std::string codeToExecute(javascriptCode, strlen(javascriptCode));
-        WindowList[index]->execute(codeToExecute);
+        WindowList[index]->webview::execute(codeToExecute);
     }
 
     EXPORT void SetWebWindowBounds(int index, int w, int h, int minW, int minH, int maxW, int maxH) {

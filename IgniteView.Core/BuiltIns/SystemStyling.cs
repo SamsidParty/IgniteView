@@ -53,7 +53,7 @@ namespace IgniteView.Core
                 // Fallback for other platforms
                 ApplyStylesFromJSON(systemStyles);
             }
-            
+
             // Combine all the styles into one stylesheet string and return it
             return String.Join("\n\n", systemStyles.Concat(GlobalStyles).Select(x => x.ToString()));
         }
