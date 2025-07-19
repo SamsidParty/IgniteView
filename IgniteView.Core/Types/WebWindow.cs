@@ -107,12 +107,17 @@ namespace IgniteView.Core
 
         #endregion
 
-        #region Window ID
+        #region Window Context
 
         /// <summary>
         /// Gets the unique ID for this window
         /// </summary>
         public int ID;
+
+        /// <summary>
+        /// Shared context for this window, allows you to attach arbritrary data to the window that can be accessed later from both C# and JavaScript.
+        /// </summary>
+        public Dictionary<string, object> SharedContext = new Dictionary<string, object>();
 
         #endregion
 
