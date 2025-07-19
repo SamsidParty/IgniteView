@@ -10,6 +10,7 @@ function App() {
             <div className="app">
                 <div className="sidebar">
                     {JSON.stringify(igniteView.withReact(React).useCommandResult("igniteview_list_platform_hints"))}
+                    {igniteView.withReact(React).useSharedContext("Test").value}
                 </div>
                 <div className="content">
 
