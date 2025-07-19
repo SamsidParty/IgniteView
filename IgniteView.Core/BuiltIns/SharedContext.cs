@@ -24,5 +24,11 @@ namespace IgniteView.Core
         {
             window.SharedContext[key] = value;
         }
+
+        [Command("igniteview_get_all_context_values")]
+        public static Dictionary<string, object> GetAllContextValues(WebWindow window)
+        {
+            return window.SharedContext;
+        }
     }
 }

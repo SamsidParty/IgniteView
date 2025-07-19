@@ -7,3 +7,7 @@ window.igniteView.sharedContext.getItem = async (key) => {
 window.igniteView.sharedContext.setItem = async (key, value) => {
     await window.igniteView.commandBridge.invoke("igniteview_set_context_value", key, value);
 }
+
+window.igniteView.sharedContext.getAllItems = async () => {
+    return await window.igniteView.commandBridge.invoke("igniteview_get_all_context_values");
+}
