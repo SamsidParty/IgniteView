@@ -1,7 +1,7 @@
 {
     "body": "rgb(242, 242, 247)",
     "accent": "rgb(165, 200, 255)",
-    "accent-foreground": "rgb(0, 49, 95)",
+    "accent-foreground": "rgb(255, 255, 255)",
     "background": "rgb(242, 242, 247)",
     "foreground": "rgb(28, 28, 30)",
     "background2": "rgb(229, 229, 234)",
