@@ -67,7 +67,7 @@ function invoke(command) {
 
     // Send the command to C#, differs per platform
     if (!!isStreamed) { // Streamed command (universal)
-        var commandURL = igniteView.resolverURL + "/streamedCommand?" + btoa(commandString);
+        var commandURL = igniteView.resolverURL + "/streamedCommand?" + encodeURIComponent(commandString);
         return commandURL;
     }
     else if (!!window.saucer) { // Desktop with saucer webview

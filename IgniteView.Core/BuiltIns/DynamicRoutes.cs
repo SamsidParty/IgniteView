@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using WatsonWebserver.Core;
 
 namespace IgniteView.Core
@@ -11,7 +12,7 @@ namespace IgniteView.Core
     {
         public static async Task StreamedCommandRoute(HttpContextBase ctx)
         {
-            var commandString = Encoding.UTF8.GetString(Convert.FromBase64String(ctx.Request.Query.Querystring));
+            var commandString = HttpUtility.UrlDecode(ctx.Request.Query.Querystring);
             var commandData = new CommandData(commandString);
             var commandResult = await CommandManager.ExecuteCommand(null, commandData);
 

@@ -21,6 +21,7 @@ namespace IgniteView.Example.Desktop
                 .WithBounds(new WindowBounds(900, 720))
                 .WithTitle("Main Window")
                 .WithoutTitleBar()
+                .WithSharedContext("Test", "Hello, world")
                 .With((w) =>
                 {
                     // Cool acrylic effect on Windows 11

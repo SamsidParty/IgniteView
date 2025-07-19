@@ -119,6 +119,17 @@ namespace IgniteView.Core
         /// </summary>
         public Dictionary<string, object> SharedContext = new Dictionary<string, object>();
 
+        /// <summary>
+        /// Attaches a value to the shared context of this window, this value can be accessed later from both C# and JavaScript.
+        /// </summary>
+        /// <param name="key">The key of the shared object</param>
+        /// <param name="">The value of the shared object</param>
+        public WebWindow WithSharedContext(string key, object value)
+        {
+            SharedContext[key] = value;
+            return this;
+        }
+
         #endregion
 
         #region Window URL
