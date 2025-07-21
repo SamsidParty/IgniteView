@@ -40,6 +40,8 @@ namespace IgniteView.Example.Desktop
         [Command("resize")]
         public static async Task<string> Resize(WebWindow target, int width, int height)
         {
+            await Task.Delay(1000);
+
             await AppManager.Instance.InvokeOnMainThread(async () =>
             {
                 target.Bounds = new WindowBounds(width, height);

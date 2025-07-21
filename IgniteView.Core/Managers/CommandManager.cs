@@ -1,5 +1,6 @@
 ﻿using IgniteView.Core.Types;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,13 +12,13 @@ namespace IgniteView.Core
 {
     public class CommandManager
     {
-        public static Dictionary<string, MethodInfo> Commands
+        public static ConcurrentDictionary<string, MethodInfo> Commands
         {
             get
             {
                 if (_Commands == null)
                 {
-                    _Commands = new Dictionary<string, MethodInfo>();
+                    _Commands = new ConcurrentDictionary<string, MethodInfo>();
 
                     // Find all commands through reflection
                     foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
@@ -52,7 +53,8 @@ namespace IgniteView.Core
             }
         }
 
-        internal static Dictionary<string, MethodInfo> _Commands;
+        internal static ConcurrentDictionary<string, MethodInfo> _Commands;
+        internal static ConcurrentDictionary<string, object> _CommandTargets = new();
 
         public static async Task<object> ExecuteCommand(WebWindow? target, CommandData commandData)
         {
@@ -131,7 +133,8 @@ namespace IgniteView.Core
                     }
                 }
 
-                var result = method.Invoke(null, paramList.ToArray());
+                var methodTarget = _CommandTargets!.GetValueOrDefault(commandData.Function, null); // For non static methods
+                var result = method.Invoke(methodTarget, paramList.ToArray());
                 var resultType = result?.GetType() ?? typeof(void);
 
                 // Handle async commands

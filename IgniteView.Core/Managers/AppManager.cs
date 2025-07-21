@@ -129,13 +129,15 @@ namespace IgniteView.Core
                     completion.SetResult();
                 };
 
+                CommandManager._CommandTargets[temporaryCommandID] = callbackWrapper.Target;
                 CommandManager._Commands[temporaryCommandID] = callbackWrapper.Method;
 
                 hostWindow.CallFunction("window.igniteView.commandBridge.invoke", temporaryCommandID);
                 await Task.WhenAny(completion.Task); // Wait until the callback is executed
 
                 // Clean up
-                CommandManager._Commands.Remove(temporaryCommandID);
+                CommandManager._Commands.TryRemove(temporaryCommandID, out _);
+                CommandManager._CommandTargets.TryRemove(temporaryCommandID, out _);
             }
         }
 
