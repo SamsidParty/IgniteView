@@ -13,12 +13,13 @@ using MimeMapping;
 using System.Net.Http;
 using System.Threading;
 using System.Diagnostics;
+using HttpMethod = WatsonWebserver.Core.HttpMethod;
 
 namespace IgniteView.Core
 {
     public class ServerManager
     {
-        private WebserverBase CurrentServer;
+        public WebserverBase CurrentServer;
 
         /// <summary>
         /// In lite mode, the TCP based Watson.Lite server will be used, otherwise the HttpListener based Watson server will be used
@@ -156,6 +157,35 @@ namespace IgniteView.Core
             await ctx.Response.Send("");
         }
 
+        // Needed for CORS preflight requests
+        async Task PreflightRoute(HttpContextBase ctx)
+        {
+            if (ctx.Request.Method == HttpMethod.OPTIONS)
+            {
+                var origin = ctx.Request.Headers.Get("Origin")!;
+                var originUri = new Uri(origin);
+
+                // Will only allow requests from localhost and 127.0.0.1
+                // This will prevent requests from actual websites, but allow requests from the vite dev server
+                if (originUri.DnsSafeHost.ToLower() == "127.0.0.1" || originUri.DnsSafeHost.ToLower() == "localhost")
+                {
+                    ctx.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                    ctx.Response.Headers.Add("Access-Control-Allow-Headers", "*");
+                    ctx.Response.Headers.Add("Access-Control-Expose-Headers", "*");
+                    ctx.Response.Headers.Add("Access-Control-Allow-Methods", "*");
+                    ctx.Response.Headers.Add("Access-Control-Allow-Credentials", "true");
+                    ctx.Response.StatusCode = 200;
+                }
+                else
+                {
+                    ctx.Response.StatusCode = 403;
+                }
+
+                await ctx.Response.Send();
+                return;
+            }
+        }
+
         async Task HTMLInjectorRoute(HttpContextBase ctx)
         {
             // Read the html file content
@@ -219,7 +249,7 @@ namespace IgniteView.Core
         /// </summary>
         /// <param name="relativeURL">The relative URL of the route (eg. "/hello.txt")</param>
         /// <param name="route">The function called when the route is navigated to</param>
-        public void RegisterDynamicFileRoute(string relativeURL, Func<HttpContextBase, Task> route)
+        public void RegisterDynamicFileRoute(string relativeURL, Func<HttpContextBase, Task> route, HttpMethod httpMethod = HttpMethod.GET)
         {
             // Always have a leading "/"
             if (!relativeURL.StartsWith("/"))
@@ -232,7 +262,8 @@ namespace IgniteView.Core
                 throw new Exception("The IgniteView file server is not currently running! Please make sure the app has initialized first.");
             }
 
-            CurrentServer.Routes.PreAuthentication.Static.Add(WatsonWebserver.Core.HttpMethod.GET, "/dynamic" + relativeURL, route);
+            CurrentServer.Routes.PreAuthentication.Static.Add(httpMethod, "/dynamic" + relativeURL, route);
+            CurrentServer.Routes.PreAuthentication.Static.Add(HttpMethod.OPTIONS, "/dynamic" + relativeURL, PreflightRoute);
         }
 
         #endregion
