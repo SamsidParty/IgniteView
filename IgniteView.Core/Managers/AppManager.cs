@@ -23,6 +23,7 @@ namespace IgniteView.Core
         public WebWindow? MainWindow;
 
         public static int LastWindowID = 0;
+        public static int MainThreadID = 0;
 
         public delegate void LifecycleCallback();
         public delegate void WindowCallback(WebWindow window);
@@ -58,6 +59,7 @@ namespace IgniteView.Core
         public AppManager(AppIdentity identity)
         {
             Instance = this;
+            MainThreadID = Thread.CurrentThread.ManagedThreadId;
 
             if (identity != null)
             {
@@ -91,6 +93,48 @@ namespace IgniteView.Core
         {
             PlatformManager.Instance.Run();
             OnCleanUp?.Invoke();
+        }
+
+        /// <summary>
+        /// Runs a function on the main thread, useful for UI updates or window manipulations.
+        /// If already on the main thread, then the function is executed immediately.
+        /// Note that this function requires at least one WebWindow to be open.
+        /// </summary>
+        public async Task InvokeOnMainThread(Action callback) => await InvokeOnMainThread(async () => { callback(); });
+
+        /// <summary>
+        /// Runs a function on the main thread, useful for UI updates or window manipulations.
+        /// If already on the main thread, then the function is executed immediately.
+        /// Note that this function requires at least one WebWindow to be open.
+        /// </summary>
+        public async Task InvokeOnMainThread(Func<Task> callback)
+        {
+            if (Thread.CurrentThread.ManagedThreadId == MainThreadID)
+            {
+                await callback(); // Already on main thread
+            }
+            else
+            {
+                if (!OpenWindows.Any()) { throw new Exception("Cannot invoke code on the main thread if no windows are open."); }
+
+                var temporaryCommandID = "igniteview_invoke_on_main_thread_" + Guid.NewGuid().ToString();
+                var hostWindow = OpenWindows.FirstOrDefault();
+                var completion = new TaskCompletionSource();
+
+                Func<Task> callbackWrapper = async () =>
+                {
+                    await callback();
+                    completion.SetResult();
+                };
+
+                CommandManager._Commands[temporaryCommandID] = callbackWrapper.Method;
+
+                hostWindow.CallFunction("window.igniteView.commandBridge.invoke", temporaryCommandID);
+                await Task.WhenAny(completion.Task); // Wait until the callback is executed
+
+                // Clean up
+                CommandManager._Commands.Remove(temporaryCommandID);
+            }
         }
 
         #region Method Forwarders

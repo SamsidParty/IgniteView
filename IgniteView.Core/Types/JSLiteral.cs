@@ -20,5 +20,11 @@ namespace IgniteView.Core
 
         public static implicit operator string(JSLiteral l) => l.Value;
         public static implicit operator JSLiteral(string l) => new JSLiteral(l);
+
+        #region Presets
+        public static JSLiteral Undefined = "undefined";
+        public static JSLiteral Null = "null";
+        public static JSLiteral NaN = "NaN";
+        #endregion
     }
 }

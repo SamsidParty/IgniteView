@@ -38,9 +38,14 @@ namespace IgniteView.Example.Desktop
         }
 
         [Command("resize")]
-        public static void Resize(WebWindow target, int width, int height)
+        public static async Task<string> Resize(WebWindow target, int width, int height)
         {
-            target.Bounds = new WindowBounds(width, height);
+            await AppManager.Instance.InvokeOnMainThread(async () =>
+            {
+                target.Bounds = new WindowBounds(width, height);
+            });
+
+            return $"Resized to {target.Bounds.InitialWidth}x{target.Bounds.InitialHeight}";
         }
 
         [Command("streamedCommandTest")]

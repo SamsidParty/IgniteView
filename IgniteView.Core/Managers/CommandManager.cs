@@ -51,7 +51,7 @@ namespace IgniteView.Core
             }
         }
 
-        static Dictionary<string, MethodInfo> _Commands;
+        internal static Dictionary<string, MethodInfo> _Commands;
 
         public static async Task<object> ExecuteCommand(WebWindow? target, CommandData commandData)
         {
@@ -122,12 +122,26 @@ namespace IgniteView.Core
                 }
 
                 var result = method.Invoke(null, paramList.ToArray());
+                var resultType = result?.GetType() ?? typeof(void);
 
                 // Handle async commands
                 if (result is Task)
                 {
                     await (Task)result;
-                    result = ((dynamic)result).Result;
+
+                    if (resultType.GetProperty("Result") != null && !resultType.GetProperty("Result")!.PropertyType.Name.Contains("VoidTaskResult"))
+                    {
+                        result = ((dynamic)result).Result;
+
+                        if (result == null)
+                        {
+                            result = JSLiteral.Undefined; // In JavaScript, an empty function return should be undefined
+                        }
+                    }
+                    else
+                    {
+                        result = JSLiteral.Undefined;
+                    }
                 }
 
                 var returnFunction = new JSFunctionCall("window.igniteView.commandQueue.resolve", commandData.CallbackID, result);
@@ -136,7 +150,7 @@ namespace IgniteView.Core
             }
             catch (Exception ex)
             {
-                target?.ExecuteJavaScript(new JSFunctionCall("console.error", $"The command bridge encountered an error while executing the command '{commandData.Function}': {ex.Message}"));
+                target?.ExecuteJavaScript(new JSFunctionCall("console.error", $"The command bridge encountered an error while executing the command '{commandData.Function}': {ex.ToString()}"));
                 return null;
             }
         }
