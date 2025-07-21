@@ -160,7 +160,7 @@ namespace IgniteView.Core
         /// </summary>
         /// <param name="relativeURL">The relative URL of the route (eg. "/hello.txt")</param>
         /// <param name="route">The function called when the route is navigated to</param>
-        public void RegisterDynamicFileRoute(string relativeURL, Func<HttpContextBase, Task> route, HttpMethod method = HttpMethod.POST) => CurrentServerManager.RegisterDynamicFileRoute(relativeURL, route, method);
+        public void RegisterDynamicFileRoute(string relativeURL, Func<HttpContextBase, Task> route, HttpMethod method = HttpMethod.GET) => CurrentServerManager.RegisterDynamicFileRoute(relativeURL, route, method);
         #endregion
     }
 }
