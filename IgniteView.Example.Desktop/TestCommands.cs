@@ -54,5 +54,15 @@ namespace IgniteView.Example.Desktop
             var client = new HttpClient();
             return File.OpenRead(filePath);
         }
+
+        [Command("uploadTest")]
+        public static async Task<string> UploadTest(Stream stream)
+        {
+            var filePath = "C:\\Users\\Samarth\\Downloads\\Test.txt";
+            var fileStream = File.OpenWrite(filePath);
+            stream.CopyTo(fileStream);
+            fileStream.Close();
+            return filePath;
+        }
     }
 }

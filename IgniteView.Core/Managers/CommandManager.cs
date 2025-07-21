@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IgniteView.Core.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -64,6 +65,7 @@ namespace IgniteView.Core
                 }
 
                 var method = Commands[commandData.Function]; // Find the MethodInfo of the command
+                var cleanUpActions = new List<Action>(); // Some parameter types need to be cleaned up after
 
                 // Run the method
                 var paramList = new List<object>();
@@ -87,7 +89,15 @@ namespace IgniteView.Core
                         var providedParamType = providedParam.GetType();
                         var expectedParamType = parameter.ParameterType;
 
-                        if (providedParamType != expectedParamType)
+                        // If the parameter is a stream, wait for the JS code to upload the blob
+                        if (expectedParamType == typeof(Stream) && providedParamType == typeof(string))
+                        {
+                            var jsBlob = (await JSBlob.WaitForBlobResolution((string)providedParam));
+                            providedParam = jsBlob.Stream;
+
+                            cleanUpActions.Add(jsBlob.Dispose);
+                        }
+                        else if (providedParamType != expectedParamType)
                         {
                             // Try to automatically convert types
                             var recoveredFromTypeError = false;
@@ -146,6 +156,10 @@ namespace IgniteView.Core
 
                 var returnFunction = new JSFunctionCall("window.igniteView.commandQueue.resolve", commandData.CallbackID, result);
                 target?.ExecuteJavaScript(returnFunction);
+
+                // Clean up
+                cleanUpActions.ForEach(action => action());
+
                 return result;
             }
             catch (Exception ex)

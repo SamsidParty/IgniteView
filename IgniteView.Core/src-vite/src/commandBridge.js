@@ -55,6 +55,21 @@ function invoke(command) {
         paramList: args.filter((_, i) => i > 0) // Ignore first parameter
     }
 
+
+    for (let i = 0; i < commandParamData.paramList.length; i++) {
+        const param = commandParamData.paramList[i];
+        if (param instanceof Blob) {
+            var blobId = "blob_" + crypto.randomUUID();
+            commandParamData.paramList[i] = blobId; // Replace Blob with its ID
+
+            // Upload the Blob to the server
+            fetch(window.igniteView.resolverURL + `/blobParameterUpload?blobID=${blobId}`, {
+                method: "POST",
+                body: param
+            });
+        }
+    }
+
     try {
         var paramDataString = JSON.stringify(commandParamData);
     }

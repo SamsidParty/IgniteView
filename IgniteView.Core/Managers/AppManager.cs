@@ -5,6 +5,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using WatsonWebserver.Core;
+using HttpMethod = WatsonWebserver.Core.HttpMethod;
 
 namespace IgniteView.Core
 {
@@ -82,6 +83,7 @@ namespace IgniteView.Core
 
             // Register support for streamed commands
             RegisterDynamicFileRoute("/streamedCommand", DynamicRoutes.StreamedCommandRoute);
+            RegisterDynamicFileRoute("/blobParameterUpload", DynamicRoutes.BlobParameterUploadRoute, HttpMethod.POST);
 
             PlatformManager.Instance.Create();
         }
@@ -158,7 +160,7 @@ namespace IgniteView.Core
         /// </summary>
         /// <param name="relativeURL">The relative URL of the route (eg. "/hello.txt")</param>
         /// <param name="route">The function called when the route is navigated to</param>
-        public void RegisterDynamicFileRoute(string relativeURL, Func<HttpContextBase, Task> route) => CurrentServerManager.RegisterDynamicFileRoute(relativeURL, route);
+        public void RegisterDynamicFileRoute(string relativeURL, Func<HttpContextBase, Task> route, HttpMethod method = HttpMethod.POST) => CurrentServerManager.RegisterDynamicFileRoute(relativeURL, route, method);
         #endregion
     }
 }
