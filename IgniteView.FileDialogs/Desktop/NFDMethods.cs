@@ -1,8 +1,9 @@
+using IgniteView.FileDialogs;
 using System.Runtime.InteropServices;
 
-namespace IgniteView.FileDialogs;
+namespace IgniteView.FileDialogs.Desktop;
 
-internal static class NativeFunctions
+internal static class NFDMethods
 {
     public const string LibraryName = "nfd";
 
@@ -16,13 +17,13 @@ internal static class NativeFunctions
     public static extern NFDResult NFD_OpenDialogU8(out string outPath, FileFilter[] filterList, int filterCount, string defaultPath);
      
     [DllImport(LibraryName)]
-    public static extern NFDResult NFD_OpenDialogMultipleU8(out IntPtr outPaths, FileFilter[] filterList, int filterCount, string defaultPath);
+    public static extern NFDResult NFD_OpenDialogMultipleU8(out nint outPaths, FileFilter[] filterList, int filterCount, string defaultPath);
     
     [DllImport(LibraryName)]
-    public static extern NFDResult NFD_PathSet_GetCount(IntPtr pathSet, out int count);
+    public static extern NFDResult NFD_PathSet_GetCount(nint pathSet, out int count);
     
     [DllImport(LibraryName)]
-    public static extern NFDResult NFD_PathSet_GetPathU8(IntPtr pathSet, int index, out string outPath);   
+    public static extern NFDResult NFD_PathSet_GetPathU8(nint pathSet, int index, out string outPath);   
     
     [DllImport(LibraryName)]
     public static extern NFDResult NFD_SaveDialogU8(out string outPath, FileFilter[] filterList, int filterCount, string defaultPath, string defaultName);

@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IgniteView.FileDialogs;
+namespace IgniteView.FileDialogs.Desktop;
 
-internal class ImportResolver
+internal class NFDImportResolver
 {
     internal static bool IsInitialized = false;
 
@@ -16,20 +16,20 @@ internal class ImportResolver
     {
         if (!IsInitialized)
         { 
-            NativeLibrary.SetDllImportResolver(typeof(FileDialog).Assembly, ImportResolverFunction);
-            NativeFunctions.NFD_Init();
+            NativeLibrary.SetDllImportResolver(typeof(NFDBindings).Assembly, ImportResolverFunction);
+            NFDMethods.NFD_Init();
             IsInitialized = true;
         }
 
         return IsInitialized;
     }
 
-    static IntPtr ImportResolverFunction(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
+    static nint ImportResolverFunction(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
     {
         var runtimePath = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "iv2runtime");
         var suffix = RuntimeInformation.ProcessArchitecture == Architecture.Arm64 ? "-arm64" : "-x64";
 
-        IntPtr libHandle = IntPtr.Zero;
+        nint libHandle = nint.Zero;
         if (libraryName == "nfd")
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -49,7 +49,7 @@ internal class ImportResolver
         return libHandle;
     }
 
-    static IntPtr LoadLibrary(string lib)
+    static nint LoadLibrary(string lib)
     {
         return NativeLibrary.Load(lib);
     }

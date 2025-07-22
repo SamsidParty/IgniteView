@@ -1,4 +1,4 @@
-namespace IgniteView.FileDialogs;
+namespace IgniteView.FileDialogs.Desktop;
 
 internal enum NFDResult
 {
