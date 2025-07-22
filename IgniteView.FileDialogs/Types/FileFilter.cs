@@ -33,4 +33,19 @@ public class FileFilter
         Name = name;
         Pattern = pattern;
     }
+
+    /// <summary>
+    /// Creates a new file filter with a single file extension
+    /// </summary>
+    [SetsRequiredMembers]
+    public FileFilter(string fileExtension)
+    {
+        if (fileExtension.StartsWith("."))
+        {
+            fileExtension = fileExtension[1..]; // Remove leading dot
+        }
+
+        Name = fileExtension.ToUpper() + " Files";
+        Pattern = fileExtension;
+    }
 }

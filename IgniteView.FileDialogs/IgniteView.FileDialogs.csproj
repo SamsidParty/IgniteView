@@ -1,18 +1,46 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	 <VersionPrefix>2.2.2</VersionPrefix>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+	<Nullable>enable</Nullable>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<Title>IgniteView.FileDialogs</Title>
+	<Authors>SamsidParty</Authors>
+	<Company>SamsidParty</Company>
+	<Description>Cross platform file picker dialogs in .NET</Description>
+	<Copyright>Provided to you under the MIT license</Copyright>
+	<PackageProjectUrl>https://github.com/SamsidParty/IgniteView</PackageProjectUrl>
+	<PackageIcon>IgniteView.png</PackageIcon>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<RepositoryUrl>https://github.com/SamsidParty/IgniteView</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+	<PackageTags>file;picker;dialog;native;tooling;windows;macos;linux;arm64;x64</PackageTags>
+	<PackageReleaseNotes>Initial release</PackageReleaseNotes>
+	<PackageLicenseFile>LICENSE</PackageLicenseFile>
 	<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+	<AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
+	<FileVersion>$(VersionPrefix).0</FileVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\IgniteView.Documentation\static\Logos\IgniteView.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\IgniteView.Documentation\static\Logos\IgniteView.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<None Update="README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
 	<ItemGroup>
 		<Content Include="iv2runtime\**">
