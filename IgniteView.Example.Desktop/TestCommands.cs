@@ -39,9 +39,9 @@ namespace IgniteView.Example.Desktop
         }
 
         [Command("fileDialogTest")]
-        public static void FileDialogTest()
+        public static string FileDialogTest()
         {
-            FileDialog.PickFile();
+            return FileDialog.PickFile(new FileFilter("Images", "png,jpg,webp"));
         }
 
         [Command("resize")]

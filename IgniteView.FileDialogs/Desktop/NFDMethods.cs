@@ -14,10 +14,10 @@ internal static class NFDMethods
     public static extern NFDResult NFD_Quit();
     
     [DllImport(LibraryName)]
-    public static extern NFDResult NFD_OpenDialogU8(out string outPath, FileFilter[] filterList, int filterCount, string defaultPath);
+    public static extern NFDResult NFD_OpenDialogU8(out string outPath, NFDFilter[] filterList, int filterCount, string defaultPath);
      
     [DllImport(LibraryName)]
-    public static extern NFDResult NFD_OpenDialogMultipleU8(out nint outPaths, FileFilter[] filterList, int filterCount, string defaultPath);
+    public static extern NFDResult NFD_OpenDialogMultipleU8(out nint outPaths, NFDFilter[] filterList, int filterCount, string defaultPath);
     
     [DllImport(LibraryName)]
     public static extern NFDResult NFD_PathSet_GetCount(nint pathSet, out int count);
@@ -26,7 +26,7 @@ internal static class NFDMethods
     public static extern NFDResult NFD_PathSet_GetPathU8(nint pathSet, int index, out string outPath);   
     
     [DllImport(LibraryName)]
-    public static extern NFDResult NFD_SaveDialogU8(out string outPath, FileFilter[] filterList, int filterCount, string defaultPath, string defaultName);
+    public static extern NFDResult NFD_SaveDialogU8(out string outPath, NFDFilter[] filterList, int filterCount, string defaultPath, string defaultName);
       
     [DllImport(LibraryName)]
     public static extern NFDResult NFD_PickFolderU8(out string outPath, string defaultPath);
@@ -36,4 +36,9 @@ internal static class NFDMethods
     
     [DllImport(LibraryName)]
     public static extern void NFD_ClearError();
+
+    internal static string GetImportName(string baseImportName)
+    {
+        return baseImportName;
+    }
 }

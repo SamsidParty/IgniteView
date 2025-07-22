@@ -65,12 +65,12 @@ internal static class NFDBindings
     }
 
     // Converts dictionary to filter list
-    internal static FileFilter[] ToFilterListU8(this Dictionary<string, string> dict)
+    internal static NFDFilter[] ToFilterListU8(this Dictionary<string, string> dict)
     {
         var list = dict.ToList();
-        var filters = new FileFilter[dict.Count];
+        var filters = new NFDFilter[dict.Count];
         for (var i = 0; i < filters.Length; i++)
-            filters[i] = new FileFilter(list[i].Key, list[i].Value);
+            filters[i] = new NFDFilter { Name = list[i].Key, Spec = list[i].Value };
         return filters;
     }
 
