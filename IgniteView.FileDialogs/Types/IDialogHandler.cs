@@ -8,10 +8,9 @@ namespace IgniteView.FileDialogs
 {
     public interface IDialogHandler
     {
-        #region Base Implementations
-        public abstract string PickFile(FileFilter[] fileFilters, string defaultPath);
-        #endregion
-
-
+        public abstract string PickFile(FileFilter[] fileFilters, string initialPath);
+        public abstract string[] PickMultipleFiles(FileFilter[] fileFilters, string initialPath);
+        public abstract string SaveFile(FileFilter[] fileFilters, string initialName, string initialPath);
+        public abstract string PickFolder(string initialPath);
     }
 }
