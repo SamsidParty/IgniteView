@@ -29,6 +29,7 @@
 
 	<ItemGroup Condition="'$(Configuration)'=='Local Debug' Or '$(Configuration)'=='Local Release'">
 		<ProjectReference Include="..\IgniteView.Desktop\IgniteView.Desktop.csproj" />
+		<ProjectReference Include="..\IgniteView.FileDialogs\IgniteView.FileDialogs.csproj" />
 	</ItemGroup>
 
 
@@ -39,6 +40,7 @@
 	<!-- IgniteView -->
 	<ItemGroup Condition="'$(Configuration)'!='Local Debug' And '$(Configuration)'!='Local Release'">
 		<PackageReference Include="IgniteView.Desktop" Version="*" />
+		<PackageReference Include="IgniteView.FileDialogs" Version="*" />
 	</ItemGroup>
 	<PropertyGroup>
 		<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>

@@ -1,4 +1,5 @@
 ﻿using IgniteView.Core;
+using IgniteView.FileDialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,12 @@ namespace IgniteView.Example.Desktop
         public static string JsonTest()
         {
             return "{}";
+        }
+
+        [Command("fileDialogTest")]
+        public static void FileDialogTest()
+        {
+            FileDialog.PickFile();
         }
 
         [Command("resize")]
