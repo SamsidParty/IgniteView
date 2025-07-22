@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,7 +17,7 @@ namespace IgniteView.FileDialogs
                 if (_Handler == null)
                 {
                     // TODO: Support for more platforms later
-                    _Handler = new DesktopDialogHandler();
+                    _Handler = new DesktopDialogHandler(!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)); // Disable unicode support on Windows because it causes issues
                 }
                 return _Handler;
             }

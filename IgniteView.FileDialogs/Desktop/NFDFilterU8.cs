@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace IgniteView.FileDialogs.Desktop
 {
     [StructLayout(LayoutKind.Sequential)]
-    internal struct NFDFilter
+    internal struct NFDFilterU8
     {
         public string Name;
         public string Spec;
