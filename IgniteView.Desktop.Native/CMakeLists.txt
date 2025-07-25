@@ -6,6 +6,10 @@ add_library(IgniteView.Desktop.Native SHARED)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 23 CXX_EXTENSIONS OFF CXX_STANDARD_REQUIRED ON)
 
+if(UNIX AND NOT APPLE)
+    set(saucer_backend "Qt6")
+endif()
+
 set(saucer_serializer "Rflpp")
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
