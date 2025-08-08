@@ -9,7 +9,7 @@ namespace IgniteView.Core
 {
     public class ScriptManager
     {
-        private static List<string> PreloadScripts = new List<string>();
+        private static List<string> StaticPreloadScripts = new List<string>();
         private static List<Func<string>> DynamicPreloadScripts = new List<Func<string>>();
 
         /// <summary>
@@ -19,9 +19,20 @@ namespace IgniteView.Core
         {
             get
             {
+                return $"if (!window.igniteView) {{ \n\n {StaticScriptData} \n\n {DynamicScriptData} \n\n }}";
+            }
+        }
+
+        /// <summary>
+        /// JS code string containing all the static preload scripts merged into one
+        /// </summary>
+        public static string StaticScriptData
+        {
+            get
+            {
                 var combinedScripts = "";
-                PreloadScripts.ForEach(script => combinedScripts += "\n\n" + script + "\n\n");
-                return "if (!window.igniteView) { \n\n" + combinedScripts + "\n\n }";
+                StaticPreloadScripts.ForEach(script => combinedScripts += "\n\n" + script + "\n\n");
+                return combinedScripts;
             }
         }
 
@@ -66,7 +77,7 @@ namespace IgniteView.Core
                 throw new InvalidOperationException("Registering preload scripts must happen BEFORE any windows are created.");
             }
 
-            PreloadScripts.Add(scriptContent);
+            StaticPreloadScripts.Add(scriptContent);
         }
 
         /// <summary>

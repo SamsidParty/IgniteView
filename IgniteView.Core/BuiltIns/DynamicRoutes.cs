@@ -73,12 +73,12 @@ namespace IgniteView.Core
             await ctx.Response.Send();
         }
 
-        // Used to preload dynamic scripts
-        public static async Task DynamicPreloadRoute(HttpContextBase ctx)
+        // Used to inject code into the webwindow
+        public static async Task PreloadInjectionRoute(HttpContextBase ctx)
         {
             if (ctx.Request.Url != null)
             {
-                var dynamicScriptData = Encoding.UTF8.GetBytes(ScriptManager.DynamicScriptData);
+                var dynamicScriptData = Encoding.UTF8.GetBytes(ScriptManager.CombinedScriptData);
 
                 ctx.Response.ContentLength = dynamicScriptData.Length;
                 ctx.Response.StatusCode = 200;

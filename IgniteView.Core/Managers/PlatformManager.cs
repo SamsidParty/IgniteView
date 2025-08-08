@@ -28,11 +28,6 @@ namespace IgniteView.Core
         public abstract void Create();
 
         /// <summary>
-        /// Gets the ScriptInjectionMode for this platform
-        /// </summary>
-        public abstract ScriptInjectionMode GetScriptInjectionMode();
-
-        /// <summary>
         /// Gets the ServerListenMode for this platform
         /// </summary>
         public abstract ServerListenMode GetServerListenMode();

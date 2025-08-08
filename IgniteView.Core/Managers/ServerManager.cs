@@ -50,7 +50,7 @@ namespace IgniteView.Core
                     return "http://127.0.0.1:" + CurrentServer.Settings.Port;
                 }
                 
-                return _BaseURL;
+                return new Uri(_BaseURL).ToString().TrimEnd('/'); // Validation
             }
             set
             {
@@ -133,7 +133,6 @@ namespace IgniteView.Core
             AppManager.Instance.OnBeforeMainWindowCreated += () =>
             {
                 AppManager.Instance.RegisterPreloadScriptFromString(new JSAssignment("igniteView.resolverURL", resolverURL));
-                AppManager.Instance.RegisterPreloadScriptFromString(new JSFunctionCall("igniteView.loadScript", resolverURL + "/preload"));
             };
 
             CurrentServer.Start();
@@ -192,16 +191,11 @@ namespace IgniteView.Core
             // Read the html file content
             var htmlContent = Resolver.ReadFileAsText(ctx.Request.Url.RawWithoutQuery);
 
-            var injectedCode = "<script src=\"/igniteview/injected.js\" ></script>"; // Loads a script from InjectedJSRoute (the function above)
+            var injectedCode = $"<script src=\"{BaseURL}/dynamic/preload.js\" ></script>"; // Loads the injected/preload scripts
 
             injectedCode += "</head>";
 
-            // Check whether the script injection mode is server side
-            if (PlatformManager.Instance.GetScriptInjectionMode() == ScriptInjectionMode.ServerSide)
-            {
-                htmlContent = htmlContent.Replace("</head>", injectedCode); // Adds the code inside the head
-            } // Otherwise it will be injected on the client
-            
+            htmlContent = htmlContent.Replace("</head>", injectedCode); // Adds the code inside the head
 
             ctx.Response.StatusCode = 200;
             ctx.Response.ContentType = "text/html";

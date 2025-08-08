@@ -39,7 +39,6 @@ namespace IgniteView.UWP
             throw new Exception("Only one window is permitted on UWP");
         }
 
-        public override ScriptInjectionMode GetScriptInjectionMode() => ScriptInjectionMode.ServerSide;
         public override ServerListenMode GetServerListenMode() => ServerListenMode.Tcp;
 
         public override void Run() { }

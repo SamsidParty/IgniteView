@@ -83,9 +83,9 @@ namespace IgniteView.Core
             RegisterPreloadScriptFromFunction(() => new JSFunctionCall("window._localStorage.hydrate", LocalStorage.GetAllItems()));
 
             // Register routes
+            RegisterDynamicFileRoute("/preload.js", DynamicRoutes.PreloadInjectionRoute);
             RegisterDynamicFileRoute("/streamedCommand", DynamicRoutes.StreamedCommandRoute);
             RegisterDynamicFileRoute("/blobParameterUpload", DynamicRoutes.BlobParameterUploadRoute, HttpMethod.POST);
-            RegisterDynamicFileRoute("/preload", DynamicRoutes.DynamicPreloadRoute);
 
             PlatformManager.Instance.Create();
         }

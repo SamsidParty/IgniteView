@@ -96,7 +96,6 @@ namespace IgniteView.Desktop
         public override void Run() => RunApp();
         public override void Create() => CreateApp(Marshal.StringToCoTaskMemUTF8(AppManager.Instance.CurrentIdentity.IDString));
 
-        public override ScriptInjectionMode GetScriptInjectionMode() => ScriptInjectionMode.ClientSide;
         public override ServerListenMode GetServerListenMode() => ServerListenMode.Http;
     }
 }
