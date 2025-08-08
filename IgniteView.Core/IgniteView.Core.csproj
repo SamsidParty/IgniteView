@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<VersionPrefix>2.2.2</VersionPrefix>
+	<VersionPrefix>2.2.3</VersionPrefix>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -15,7 +15,7 @@
     <PackageIcon>IgniteView.png</PackageIcon>
     <RepositoryUrl>https://github.com/SamsidParty/IgniteView</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Support Stream parameters in commands</PackageReleaseNotes>
+    <PackageReleaseNotes>Refactor script injection system</PackageReleaseNotes>
     <PackageTags>html;css;javascript;web;framework;tooling;igniteview;ignite;view;core;webview;webkit</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
