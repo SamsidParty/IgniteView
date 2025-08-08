@@ -8,7 +8,7 @@ window._localStorage = {
     },
     setItem: (item, value) => {
         window._localStorageCache[item] = value;
-        window.igniteView?.commandBridge?.igniteview_localstorage_set(item, value);
+        window.igniteView?.commandBridge?.igniteview_localstorage_set(item, value.toString());
         return value;
     },
     removeItem: (item) => {
