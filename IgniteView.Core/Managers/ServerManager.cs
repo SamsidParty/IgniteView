@@ -133,6 +133,7 @@ namespace IgniteView.Core
             AppManager.Instance.OnBeforeMainWindowCreated += () =>
             {
                 AppManager.Instance.RegisterPreloadScriptFromString(new JSAssignment("igniteView.resolverURL", resolverURL));
+                AppManager.Instance.RegisterPreloadScriptFromString(new JSFunctionCall("igniteView.loadScript", resolverURL + "/preload"));
             };
 
             CurrentServer.Start();

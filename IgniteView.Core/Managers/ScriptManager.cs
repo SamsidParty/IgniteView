@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WatsonWebserver.Core;
 
 namespace IgniteView.Core
 {
     public class ScriptManager
     {
-        /// <summary>
-        /// List of scripts that are loaded into the WebView before page load, you must set this before any windows are created
-        /// </summary>
-        public static List<string> PreloadScripts = new List<string>();
+        private static List<string> PreloadScripts = new List<string>();
+        private static List<Func<string>> DynamicPreloadScripts = new List<Func<string>>();
 
         /// <summary>
         /// JS code string containing all the preload scripts merged into one
@@ -21,10 +20,21 @@ namespace IgniteView.Core
             get
             {
                 var combinedScripts = "";
-                PreloadScripts.ForEach(script => combinedScripts += "\n" + script);
+                PreloadScripts.ForEach(script => combinedScripts += "\n\n" + script + "\n\n");
+                return "if (!window.igniteView) { \n\n" + combinedScripts + "\n\n }";
+            }
+        }
 
-                // Wrap the code in base64, this is because some of the webview implementations don't allow unicode characters
-                return "if (!window.igniteView) { eval(atob('" + Convert.ToBase64String(Encoding.UTF8.GetBytes(combinedScripts)) + "')); }";
+        /// <summary>
+        /// JS code string containing all the dynamic preload scripts merged into one
+        /// </summary>
+        public static string DynamicScriptData
+        {
+            get
+            {
+                var combinedScripts = "";
+                DynamicPreloadScripts.ForEach(script => combinedScripts += "\n\n" + script.Invoke() + "\n\n");
+                return combinedScripts;
             }
         }
 
@@ -57,6 +67,21 @@ namespace IgniteView.Core
             }
 
             PreloadScripts.Add(scriptContent);
+        }
+
+        /// <summary>
+        /// Registers a dynamic script to load as soon as any WebWindow loads.
+        /// This function MUST be called BEFORE any WebWindows are created.
+        /// </summary>
+        /// <param name="scriptContent">The raw script data</param>
+        public void RegisterPreloadScriptFromFunction(Func<string> preloadFunction)
+        {
+            if (AppManager.Instance.OpenWindows.Count > 0)
+            {
+                throw new InvalidOperationException("Registering preload scripts must happen BEFORE any windows are created.");
+            }
+
+            DynamicPreloadScripts.Add(preloadFunction);
         }
     }
 }

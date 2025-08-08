@@ -15,6 +15,7 @@ namespace IgniteView.Example.Desktop
             app.RegisterDynamicFileRoute("/hello.txt", RoutingUtilities.TextRoute("Hello from IgniteView!"));
 
             app.RegisterPreloadScriptFromPath("/preload.js");
+            app.RegisterPreloadScriptFromFunction(() => $"console.log('{DateTimeOffset.Now.ToUnixTimeSeconds()}');");
 
             var mainWindow =
                 WebWindow.Create()

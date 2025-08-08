@@ -74,16 +74,17 @@ namespace IgniteView.Core
             if (CurrentServerManager == null) { CurrentServerManager = new ServerManager(CreateFileResolver()); }
             if (CurrentIdentity == null) { CurrentIdentity = identity; }
 
-            // Register injected script
+            // Register scripts
             RegisterPreloadScriptFromPath("/igniteview/injected.js");
 
-            // Prebuild the command bridge so that the commands are instantly available to the webview
-            var registerCall = new JSFunctionCall("window.igniteView.commandBridge.fillCommandList", (object)InteropCommands.ListCommands());
-            RegisterPreloadScriptFromString(registerCall);
+            // Hydrate data
+            RegisterPreloadScriptFromString(new JSFunctionCall("window.igniteView.commandBridge.fillCommandList", (object)InteropCommands.ListCommands()));
+            RegisterPreloadScriptFromString(new JSAssignment("window.igniteView.platformHints", PlatformManager.PlatformHints));
 
-            // Register support for streamed commands
+            // Register routes
             RegisterDynamicFileRoute("/streamedCommand", DynamicRoutes.StreamedCommandRoute);
             RegisterDynamicFileRoute("/blobParameterUpload", DynamicRoutes.BlobParameterUploadRoute, HttpMethod.POST);
+            RegisterDynamicFileRoute("/preload", DynamicRoutes.DynamicPreloadRoute);
 
             PlatformManager.Instance.Create();
         }
@@ -156,6 +157,13 @@ namespace IgniteView.Core
         /// </summary>
         /// <param name="scriptContent">The raw script data</param>
         public void RegisterPreloadScriptFromString(string p) => CurrentScriptManager.RegisterPreloadScriptFromString(p);
+
+        /// <summary>
+        /// Registers a script to load as soon as any WebWindow loads.
+        /// This function MUST be called BEFORE any WebWindows are created.
+        /// </summary>
+        /// <param name="scriptContent">A function that will return the raw script data</param>
+        public void RegisterPreloadScriptFromFunction(Func<string> p) => CurrentScriptManager.RegisterPreloadScriptFromFunction(p);
 
         /// <summary>
         /// Allows you to register a custom file route to return dynamic data easily.

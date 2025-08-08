@@ -6,3 +6,20 @@ window.igniteView = { }
 window.igniteView.set = (name, value) => {
     window[name] = value;
 }
+
+window.igniteView.setLocal = (name, value) => {
+    window.igniteView[name] = value;
+}
+
+window.igniteView.loadScript = (url) => {
+    const script = document.createElement('script');
+    script.src = url;
+        
+    if (document.head) {
+        document.head.appendChild(script);
+    } else {
+        document.addEventListener('DOMContentLoaded', function() {
+            document.head.appendChild(script);
+        });
+    }
+}

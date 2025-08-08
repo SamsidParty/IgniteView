@@ -72,5 +72,21 @@ namespace IgniteView.Core
             await jsBlob.ReadCompletionSource.Task.WaitAsync(CancellationToken.None);
             await ctx.Response.Send();
         }
+
+        // Used to preload dynamic scripts
+        public static async Task DynamicPreloadRoute(HttpContextBase ctx)
+        {
+            if (ctx.Request.Url != null)
+            {
+                var dynamicScriptData = Encoding.UTF8.GetBytes(ScriptManager.DynamicScriptData);
+
+                ctx.Response.ContentLength = dynamicScriptData.Length;
+                ctx.Response.StatusCode = 200;
+                ctx.Response.ContentType = "text/javascript";
+                await ctx.Response.Send(dynamicScriptData);
+            }
+
+            ctx.Response.StatusCode = 404;
+        }
     }
 }
