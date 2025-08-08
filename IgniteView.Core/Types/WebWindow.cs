@@ -143,7 +143,7 @@ namespace IgniteView.Core
             {
                 if (_URL == null)
                 {
-                    return CurrentAppManager.CurrentServerManager.BaseURL;
+                    return CurrentAppManager.CurrentServerManager.LocalBaseURL;
                 }
                 else if (_URL.Contains("://")) // Avoid prepending the base URL to full URLs
                 {
@@ -154,7 +154,7 @@ namespace IgniteView.Core
                     return CurrentAppManager.CurrentServerManager.LocalBaseURL + "/" + _URL;
                 }
 
-                return CurrentAppManager.CurrentServerManager.BaseURL + "/" + _URL;
+                return CurrentAppManager.CurrentServerManager.LocalBaseURL + "/" + _URL;
             }
             set
             {

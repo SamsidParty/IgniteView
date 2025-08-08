@@ -129,7 +129,7 @@ namespace IgniteView.Core
             CurrentServer.Routes.PreAuthentication.Dynamic.Add(WatsonWebserver.Core.HttpMethod.GET, new Regex(".*"), ResolverRoute);
 
             // Tells the JS code what URL to use (in case it's coming from another origin)
-            var resolverURL = BaseURL + "/dynamic";
+            var resolverURL = LocalBaseURL + "/dynamic";
             AppManager.Instance.OnBeforeMainWindowCreated += () =>
             {
                 AppManager.Instance.RegisterPreloadScriptFromString(new JSAssignment("igniteView.resolverURL", resolverURL));
@@ -191,11 +191,24 @@ namespace IgniteView.Core
             // Read the html file content
             var htmlContent = Resolver.ReadFileAsText(ctx.Request.Url.RawWithoutQuery);
 
-            var injectedCode = $"<script src=\"{BaseURL}/dynamic/preload.js\" ></script>"; // Loads the injected/preload scripts
+            if (BaseURL != LocalBaseURL)
+            {
+                // We need to read the htmlContent from the origin server
+                using (HttpClient client = new HttpClient())
+                {
+                    htmlContent = await client.GetStringAsync(BaseURL + "/src-vite" + ctx.Request.Url.RawWithoutQuery);
+                }
+            }
 
+            var injectedCode = $"<script src=\"{LocalBaseURL}/dynamic/preload.js\" ></script>"; // Loads the injected/preload scripts
             injectedCode += "</head>";
-
             htmlContent = htmlContent.Replace("</head>", injectedCode); // Adds the code inside the head
+
+            if (BaseURL != LocalBaseURL)
+            {
+                // Redirect all assets
+                htmlContent = htmlContent.Replace("\"/src-vite/", $"\"{BaseURL}/src-vite/");
+            }
 
             ctx.Response.StatusCode = 200;
             ctx.Response.ContentType = "text/html";

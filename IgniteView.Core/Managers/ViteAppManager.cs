@@ -62,7 +62,7 @@ namespace IgniteView.Core
 
             if (!File.Exists(viteJS)) { return; }
 
-            var psi = new ProcessStartInfo(nodeBinary, new string[] { viteJS, ".", "--port", vitePort.ToString(), "--strictPort" })
+            var psi = new ProcessStartInfo(nodeBinary, new string[] { viteJS, ".", "--port", vitePort.ToString(), "--strictPort", "--cors", "--base", "/src-vite/" })
             {
                 WorkingDirectory = viteDevPath,
                 UseShellExecute = false
@@ -96,7 +96,6 @@ namespace IgniteView.Core
             }
 
             CurrentServerManager.BaseURL = "http://localhost:" + vitePort;
-
         }
 
         public ViteAppManager([CallerFilePath] string currentDirectory = "") : base(null) {
