@@ -114,6 +114,16 @@ namespace IgniteView.Core
                                 recoveredFromTypeError = true;
                                 providedParam = Convert.ToInt32(providedParam);
                             }
+                            else if (expectedParamType == typeof(double) && providedParamType == typeof(Int64))
+                            {
+                                recoveredFromTypeError = true;
+                                providedParam = Convert.ToDouble(providedParam);
+                            }
+                            else if (expectedParamType == typeof(Int64) && providedParamType == typeof(double))
+                            {
+                                recoveredFromTypeError = true;
+                                providedParam = Convert.ToInt64(providedParam);
+                            }
                             else if (expectedParamType == typeof(object))
                             {
                                 // No need to do anything
