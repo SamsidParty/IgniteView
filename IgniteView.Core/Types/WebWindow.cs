@@ -224,7 +224,7 @@ namespace IgniteView.Core
         /// <summary>
         /// Hides or suspends the WebWindow
         /// </summary>
-        public virtual void Hide() { }
+        public virtual WebWindow Hide() { return this; }
 
         /// <summary>
         /// Executes raw JavaScript code in the root page of the window
@@ -252,6 +252,45 @@ namespace IgniteView.Core
         public virtual WebWindow With(Action<WebWindow> mutatorFunction)
         {
             mutatorFunction.Invoke(this);
+            return this;
+        }
+
+        #endregion
+
+        #region Customization
+
+
+        /// <summary>
+        /// Adds a style rule to the window.
+        /// Note that this will only apply on page load, either call this method before Show() or reload the page afterwards.
+        /// </summary>
+        public WebWindow WithStyles(StyleRule style)
+        {
+            if (SharedContext.TryGetValue("StyleRules", out var stylesObj) && stylesObj is List<StyleRule> styles)
+            {
+                styles.Add(style);
+            }
+            else
+            {
+                SharedContext["StyleRules"] = new List<StyleRule> { style };
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Adds multiple style rules to the window.
+        /// Note that these will only apply on page load, either call this method before Show() or reload the page afterwards.
+        /// </summary>
+        public WebWindow WithStyles(List<StyleRule> styleRules)
+        {
+            if (SharedContext.TryGetValue("StyleRules", out var stylesObj) && stylesObj is List<StyleRule> styles)
+            {
+                styles.AddRange(styleRules);
+            }
+            else
+            {
+                SharedContext["StyleRules"] = styleRules;
+            }
             return this;
         }
 

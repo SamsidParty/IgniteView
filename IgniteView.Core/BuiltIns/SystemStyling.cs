@@ -15,7 +15,7 @@ namespace IgniteView.Core
         public static List<StyleRule> GlobalStyles = new List<StyleRule>();
 
         [Command("igniteview_get_global_styles")]
-        public static string GetGlobalStyles()
+        public static string GetGlobalStyles(WebWindow ctx)
         {
             var systemStyles = new List<StyleRule>();
 
@@ -52,6 +52,11 @@ namespace IgniteView.Core
             else {
                 // Fallback for other platforms
                 ApplyStylesFromJSON(systemStyles);
+            }
+
+            if (ctx.SharedContext.TryGetValue("StyleRules", out var customStyleRules))
+            {
+                foreach (var csr in (List<StyleRule>)customStyleRules) { systemStyles.Add(csr); }
             }
 
             // Combine all the styles into one stylesheet string and return it

@@ -19,10 +19,13 @@ namespace IgniteView.Core
         public TarFileResolver()
         {
             var runtimeDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "iv2runtime");
-            var tarFiles = Directory.GetFiles(runtimeDirectory).Where((f) => f.EndsWith(".igniteview")); // Can't use "*.igniteview" filter because it doesn't match files with multiple dots (eg IgniteView.Core.igniteview)
+            var isBuiltIn = (string p) => Path.GetFileName(p).StartsWith("IgniteView");
+            var builtInTarFiles = Directory.GetFiles(runtimeDirectory).Where((f) => f.EndsWith(".igniteview") && isBuiltIn(f)).OrderBy((a) => a);
+            var tarFiles = Directory.GetFiles(runtimeDirectory).Where((f) => f.EndsWith(".igniteview") && !isBuiltIn(f)).OrderBy((a) => a);
 
             // Add every .igniteview file in the iv2runtime folder
-            foreach (var tarFile in tarFiles) {
+            // Add the builtin files first, so they can be overridden by the other files
+            foreach (var tarFile in builtInTarFiles.Concat(tarFiles)) {
                 var handle = File.OpenRead(tarFile);
                 var reader = new TarReader(handle);
 

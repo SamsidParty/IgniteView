@@ -27,7 +27,7 @@ namespace IgniteView.Core
         }
 
         /// <summary>
-        /// Creates a style rule with a wildcard selector
+        /// Creates a style rule with a wildcard selector, this is useful for defining CSS variables
         /// </summary>
         public StyleRule(string property, string value)
         {
