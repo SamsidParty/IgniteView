@@ -39,7 +39,7 @@ namespace IgniteView.Core
         public override string ToString() => $"{Selector} {{{Property}: {Value};}}";
         public static implicit operator string(StyleRule r) => r.ToString();
 
-        public static List<StyleRule> FromJSON(string json, bool darkMode = false) 
+        internal static List<StyleRule> FromJSON(string json, bool darkMode = false) 
         {
             var styles = new List<StyleRule>();
             var styleObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);

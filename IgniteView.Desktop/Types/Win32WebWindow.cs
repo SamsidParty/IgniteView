@@ -192,7 +192,7 @@ namespace IgniteView.Desktop
 
                 var accent = ParseColor(accentVal, opaqueBlend);
 
-                SystemStyling.GlobalStyles.Add(new StyleRule("--system-accent", $"rgb({accent.R}, {accent.G}, {accent.B}) !important"));
+                SystemStyling.GlobalStyles.Add(new StyleRule("--system-accent", $"rgb({accent.R}, {accent.G}, {accent.B})"));
             }
             catch { }
         }

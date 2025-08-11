@@ -18,6 +18,13 @@ namespace IgniteView.Core
         public static string GetGlobalStyles(WebWindow ctx)
         {
             var systemStyles = new List<StyleRule>();
+            var localStyles = new List<StyleRule>();
+
+            // Window specific styles
+            if (ctx.SharedContext.TryGetValue("StyleRules", out var customStyleRules))
+            {
+                localStyles = (List<StyleRule>)customStyleRules;
+            }
 
             // System font stack
             if (PlatformManager.HasPlatformHint("xbox")) {
@@ -54,13 +61,9 @@ namespace IgniteView.Core
                 ApplyStylesFromJSON(systemStyles);
             }
 
-            if (ctx.SharedContext.TryGetValue("StyleRules", out var customStyleRules))
-            {
-                foreach (var csr in (List<StyleRule>)customStyleRules) { systemStyles.Add(csr); }
-            }
 
             // Combine all the styles into one stylesheet string and return it
-            return String.Join("\n\n", systemStyles.Concat(GlobalStyles).Select(x => x.ToString()));
+            return String.Join("\n\n", RemoveDuplicateVariables(systemStyles.Concat(GlobalStyles).Concat(localStyles).ToList()).Select(x => x.ToString()));
         }
 
         /// <summary>
@@ -81,11 +84,18 @@ namespace IgniteView.Core
             }
         }
 
-        public static void ApplyStylesFromJSON(List<StyleRule> styles, string prefix = "default") {
+        internal static void ApplyStylesFromJSON(List<StyleRule> styles, string prefix = "default") {
             var light = AppManager.Instance.CurrentServerManager.Resolver.ReadFileAsText($"/igniteview/styles/{prefix}_light.json");
             var dark = AppManager.Instance.CurrentServerManager.Resolver.ReadFileAsText($"/igniteview/styles/{prefix}_dark.json");
             styles.AddRange(StyleRule.FromJSON(light));
             styles.AddRange(StyleRule.FromJSON(dark, true));
+        }
+
+        internal static List<StyleRule> RemoveDuplicateVariables(List<StyleRule> styles)
+        {
+            var variables = styles.Where(s => s.Selector.StartsWith("--")).DistinctBy(s => s.Selector).ToList();
+            var regularSelectors = styles.Where(s => !s.Selector.StartsWith("--")).ToList();
+            return regularSelectors.Concat(variables).ToList();
         }
     }
 }
