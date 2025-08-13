@@ -242,10 +242,23 @@ namespace IgniteView.Core
                 await ctx.Response.Send(fileStream.Length, fileStream);
 
                 await fileStream.DisposeAsync();
+                return;
             }
 
-            ctx.Response.StatusCode = 404;
-            await ctx.Response.Send("404 Not Found");
+            if (BaseURL != LocalBaseURL) // If dev server is running
+            {
+                // Redirect to the vite dev server if the file does not exist
+                ctx.Response.StatusCode = 307; // Temporary redirect
+                UriBuilder builder = new UriBuilder(ctx.Request.Url.Full);
+                var newOrigin = new Uri(BaseURL);
+                builder.Host = newOrigin.Host;
+                builder.Port = newOrigin.Port;
+                builder.Scheme = newOrigin.Scheme;
+                ctx.Response.Headers.Add("Location", builder.Uri.ToString());
+                await ctx.Response.Send("");
+            }
+
+            await RedirectToRoot(ctx);
         }
 
         #endregion
