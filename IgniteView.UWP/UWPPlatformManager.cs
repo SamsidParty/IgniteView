@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using IgniteView.Core;
+using IgniteView.Core.Types;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 
@@ -15,6 +17,7 @@ namespace IgniteView.UWP
         public static Type Activate()
         {
             Instance = new UWPPlatformManager();
+            Instance.Storage = new UWPPersistentStorage();
             PlatformManager.PlatformHints.Add("uwp");
 
             var app = new UWPAppManager(new AppIdentity(Windows.ApplicationModel.Package.Current.PublisherDisplayName, Windows.ApplicationModel.Package.Current.DisplayName));
