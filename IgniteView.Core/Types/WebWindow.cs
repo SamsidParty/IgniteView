@@ -18,6 +18,20 @@ namespace IgniteView.Core
             }
         }
 
+        #region Events
+
+        public delegate void WebWindowEventHandler(object sender, EventArgs e);
+
+        public event WebWindowEventHandler? OnPageLoaded;
+
+        [Command("igniteview_call_load_event")]
+        public static void CallLoadEvent(WebWindow ctx)
+        {
+            ctx.OnPageLoaded?.Invoke(ctx, EventArgs.Empty);
+        }
+
+        #endregion
+
         #region Window Bounds
 
         public virtual WindowBounds Bounds { get; set; }
@@ -312,6 +326,11 @@ namespace IgniteView.Core
             }
 
             CurrentAppManager.OpenWindows.Add(this);
+
+            OnPageLoaded += (_ ,_) =>
+            {
+                ExecuteJavaScript(new JSFunctionCall("window._localStorage.hydrate", LocalStorage.GetAllItems(this)));
+            };
 
             // Create an ID for this window
             AppManager.LastWindowID++;

@@ -80,7 +80,6 @@ namespace IgniteView.Core
             // Hydrate data
             RegisterPreloadScriptFromString(new JSFunctionCall("window.igniteView.commandBridge.fillCommandList", (object)InteropCommands.ListCommands()));
             RegisterPreloadScriptFromString(new JSAssignment("window.igniteView.platformHints", PlatformManager.PlatformHints));
-            RegisterPreloadScriptFromFunction(() => new JSFunctionCall("window._localStorage.hydrate", LocalStorage.GetAllItems()));
 
             // Register routes
             RegisterDynamicFileRoute("/preload.js", DynamicRoutes.PreloadInjectionRoute);

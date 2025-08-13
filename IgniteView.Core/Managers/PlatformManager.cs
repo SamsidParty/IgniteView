@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IgniteView.Core.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -31,6 +32,11 @@ namespace IgniteView.Core
         /// Gets the ServerListenMode for this platform
         /// </summary>
         public abstract ServerListenMode GetServerListenMode();
+
+        /// <summary>
+        /// Gets the persistent storage for this platform
+        /// </summary>
+        public PersistentStorage Storage = new PersistentStorage();
 
         /// <summary>
         /// Gets the current PlatformManager

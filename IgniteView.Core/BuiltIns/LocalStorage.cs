@@ -1,5 +1,9 @@
 ﻿using IgniteView.Core;
+using IgniteView.Core.Types;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,72 +11,85 @@ using System.Threading.Tasks;
 
 namespace IgniteView.Core
 {
+    /// <summary>
+    /// Allows you to access the shared local storage of the application. 
+    /// Warning 1: Modifying the local storage from C# will not automatically update the JavaScript side.  
+    /// Warning 2: This is a synchronous wrapper around PersistentStorage, so it may block the UI thread if used excessively.  
+    /// </summary>
     public class LocalStorage
     {
-        public static string GetBasePath()
+        internal static PersistentStorage Storage => PlatformManager.Instance.Storage;
+        internal static ConcurrentDictionary<string, ConcurrentDictionary<string, string>> Cache = new ConcurrentDictionary<string, ConcurrentDictionary<string, string>>();
+
+        private static string GetPathFromWindow(WebWindow ctx)
         {
-            var basePath = Path.Combine(AppManager.Instance.CurrentIdentity.AppDataPath, "LocalStorage");
-            Directory.CreateDirectory(basePath);
-            return basePath;
+            var url = "http://localhost/";
+            if (ctx != null)
+            {
+                url = ctx.URL;
+            }
+            var host = new Uri(url).Host;
+
+            if (host == "localhost" || host == "127.0.0.1")
+            {
+                host = "default";
+            }
+
+            var path = String.Join("_", host.Split(Path.GetInvalidFileNameChars(), StringSplitOptions.RemoveEmptyEntries)).TrimEnd('.') + ".iv2_ls";
+
+            if (!Cache.ContainsKey(path))
+            {
+                Cache[path] = JsonConvert.DeserializeObject<ConcurrentDictionary<string, string>>(Storage.ReadAllText(path).Result ?? "{}")!;
+            }
+
+            return path;
         }
 
-        public static string GetPathOfItem(string itemName)
+        public static void Save()
         {
-            var sanitized = String.Join("_", itemName.Split(Path.GetInvalidFileNameChars(), StringSplitOptions.RemoveEmptyEntries)).TrimEnd('.');
-            return Path.Join(GetBasePath(), sanitized + ".iv2_ls");
+            foreach (var ls in Cache)
+            {
+                Storage.WriteAllText(ls.Key, JsonConvert.SerializeObject(ls.Value)); // Don't await the task
+            }
         }
 
         [Command("igniteview_localstorage_get")]
-        public static string GetItem(string itemName)
+        public static string GetItem(string itemName, WebWindow ctx)
         {
-            var path = GetPathOfItem(itemName);
-            if (File.Exists(path))
-            {
-                return File.ReadAllText(path);
-            }
-
-            return null;
+            return Cache[GetPathFromWindow(ctx)][itemName];
         }
 
         [Command("igniteview_localstorage_list")]
-        public static string[] GetItemList()
+        public static string[] GetItemList(WebWindow ctx)
         {
-            var basePath = GetBasePath();
-            return Directory.GetFiles(basePath, "*.iv2_ls").Select((f) => Path.GetFileNameWithoutExtension(f)).ToArray();
+            return Cache[GetPathFromWindow(ctx)].Keys.ToArray();
         }
 
         [Command("igniteview_localstorage_get_all")]
-        public static Dictionary<string, string> GetAllItems()
+        public static Dictionary<string, string> GetAllItems(WebWindow ctx)
         {
-            var items = new Dictionary<string, string>();
-            foreach (var key in GetItemList())
-            {
-                items[key] = GetItem(key);
-            }
-            return items;
+            return Cache[GetPathFromWindow(ctx)].ToDictionary();
         }
 
         [Command("igniteview_localstorage_set")]
-        public static void SetItem(string itemName, string value)
+        public static void SetItem(string itemName, string value, WebWindow ctx)
         {
-            var path = GetPathOfItem(itemName);
-            File.WriteAllText(path, value);
+            Cache[GetPathFromWindow(ctx)][itemName] = value;
+            Save();
         }
 
         [Command("igniteview_localstorage_remove")]
-        public static void RemoveItem(string itemName)
+        public static void RemoveItem(string itemName, WebWindow ctx)
         {
-            var path = GetPathOfItem(itemName);
-            File.Delete(path);
+            Cache[GetPathFromWindow(ctx)].TryRemove(itemName, out _);
+            Save();
         }
 
         [Command("igniteview_localstorage_clear")]
-        public static void Clear()
+        public static void Clear(WebWindow ctx)
         {
-            foreach (var item in GetAllItems())
-            {
-                RemoveItem(item.Key);
-            }
+            Cache[GetPathFromWindow(ctx)] = new ConcurrentDictionary<string, string>();
+            Save();
         }
     }
 }
