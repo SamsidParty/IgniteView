@@ -1,4 +1,5 @@
 ﻿using IgniteView.Core;
+using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,16 +31,6 @@ namespace IgniteView.UWP
 
         #endregion
 
-        #region Command Bridge
-
-
-        void OnCommandExecuteRequested(IntPtr param)
-        {
-            //var commandString = InteropHelper.PointerToStringBase64(param);
-            //ExecuteCommand(commandString);
-        }
-
-        #endregion
 
         #region Virtual Method Overrides
 
@@ -48,6 +39,18 @@ namespace IgniteView.UWP
             base.Show();
 
             if (IgniteViewPage.Instance != null) {
+                IgniteViewPage.Instance.WebView.CoreWebView2Initialized += (WebView2 sender, CoreWebView2InitializedEventArgs args) =>
+                {
+                    sender.CoreWebView2.WebMessageReceived += (sender, args) =>
+                    {
+                        var commandString = args.TryGetWebMessageAsString();
+                        if (!string.IsNullOrEmpty(commandString))
+                        {
+                            ExecuteCommand(commandString);
+                        }
+                    };
+                };
+
                 IgniteViewPage.Instance.WebView.Visibility = Visibility.Visible;
                 IgniteViewPage.Instance.WebView.Source = new Uri(CurrentAppManager.CurrentServerManager.BaseURL);
             }

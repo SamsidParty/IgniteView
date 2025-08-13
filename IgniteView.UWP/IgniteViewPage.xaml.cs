@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Controls;
 namespace IgniteView.UWP
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Renders a WebWindow using a WebView2 control.
     /// </summary>
     public sealed partial class IgniteViewPage : Page
     {

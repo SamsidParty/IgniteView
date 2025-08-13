@@ -91,6 +91,12 @@ function invoke(command) {
             await window.saucer.exposed.igniteview_commandbridge(commandString);
         });
     }
+    else if (!!window.chrome.webview) { // Webview2
+        return new Promise(async (resolve, reject) => {
+            window.igniteView.commandQueue.add(commandId, resolve);
+            await window.chrome.webview.postMessage(commandString);
+        });
+    }
 }
 
 window.igniteView.commandBridge.build();
