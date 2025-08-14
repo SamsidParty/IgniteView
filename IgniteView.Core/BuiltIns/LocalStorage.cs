@@ -30,6 +30,19 @@ namespace IgniteView.Core
             }
             var host = new Uri(url).Host;
 
+            return GetPathFromHost(host);
+        }
+
+        private static string GetPathFromHost(string host)
+        {
+            if (string.IsNullOrEmpty(host))
+            {
+                host = "default";
+            }
+            if (host.StartsWith("http:"))
+            {
+                host = (new Uri(host)).Host;
+            }
             if (host == "localhost" || host == "127.0.0.1")
             {
                 host = "default";
@@ -59,10 +72,20 @@ namespace IgniteView.Core
             return Cache[GetPathFromWindow(ctx)][itemName];
         }
 
+        public static string GetItem(string itemName, string host)
+        {
+            return Cache[GetPathFromHost(host)][itemName];
+        }
+
         [Command("igniteview_localstorage_list")]
         public static string[] GetItemList(WebWindow ctx)
         {
             return Cache[GetPathFromWindow(ctx)].Keys.ToArray();
+        }
+
+        public static string[] GetItemList(string host)
+        {
+            return Cache[GetPathFromHost(host)].Keys.ToArray();
         }
 
         [Command("igniteview_localstorage_get_all")]
@@ -71,10 +94,21 @@ namespace IgniteView.Core
             return Cache[GetPathFromWindow(ctx)].ToDictionary();
         }
 
+        public static Dictionary<string, string> GetAllItems(string host)
+        {
+            return Cache[GetPathFromHost(host)].ToDictionary();
+        }
+
         [Command("igniteview_localstorage_set")]
         public static void SetItem(string itemName, string value, WebWindow ctx)
         {
             Cache[GetPathFromWindow(ctx)][itemName] = value;
+            Save();
+        }
+
+        public static void SetItem(string itemName, string value, string host)
+        {
+            Cache[GetPathFromHost(host)][itemName] = value;
             Save();
         }
 
@@ -85,10 +119,22 @@ namespace IgniteView.Core
             Save();
         }
 
+        public static void RemoveItem(string itemName, string host)
+        {
+            Cache[GetPathFromHost(host)].TryRemove(itemName, out _);
+            Save();
+        }
+
         [Command("igniteview_localstorage_clear")]
         public static void Clear(WebWindow ctx)
         {
             Cache[GetPathFromWindow(ctx)] = new ConcurrentDictionary<string, string>();
+            Save();
+        }
+
+        public static void Clear(string host)
+        {
+            Cache[GetPathFromHost(host)] = new ConcurrentDictionary<string, string>();
             Save();
         }
     }

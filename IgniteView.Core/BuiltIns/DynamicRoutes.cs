@@ -78,12 +78,18 @@ namespace IgniteView.Core
         {
             if (ctx.Request.Url != null)
             {
-                var dynamicScriptData = Encoding.UTF8.GetBytes(ScriptManager.CombinedScriptData);
+                var dynamicScriptData = ScriptManager.CombinedScriptData;
 
-                ctx.Response.ContentLength = dynamicScriptData.Length;
+                // LocalStorage
+                var host = ctx.Request.Headers.Get("Origin") ?? "default";
+                var localStorage = LocalStorage.GetAllItems(host);
+                dynamicScriptData += "\n" + (new JSFunctionCall("window._localStorage.hydrate", localStorage)).ToString();
+
+                var bytes = Encoding.UTF8.GetBytes(dynamicScriptData);
+                ctx.Response.ContentLength = bytes.Length;
                 ctx.Response.StatusCode = 200;
                 ctx.Response.ContentType = "text/javascript";
-                await ctx.Response.Send(dynamicScriptData);
+                await ctx.Response.Send(bytes);
             }
 
             ctx.Response.StatusCode = 404;

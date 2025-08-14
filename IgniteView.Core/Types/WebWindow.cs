@@ -327,11 +327,6 @@ namespace IgniteView.Core
 
             CurrentAppManager.OpenWindows.Add(this);
 
-            OnPageLoaded += (_ ,_) =>
-            {
-                ExecuteJavaScript(new JSFunctionCall("window._localStorage.hydrate", LocalStorage.GetAllItems(this)));
-            };
-
             // Create an ID for this window
             AppManager.LastWindowID++;
             ID = AppManager.LastWindowID;
