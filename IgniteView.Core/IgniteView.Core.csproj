@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<VersionPrefix>2.2.4</VersionPrefix>
+	<VersionPrefix>2.2.5</VersionPrefix>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -15,7 +15,7 @@
     <PackageIcon>IgniteView.png</PackageIcon>
     <RepositoryUrl>https://github.com/SamsidParty/IgniteView</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Fixes for persistent storage</PackageReleaseNotes>
+    <PackageReleaseNotes>Improve localStorage hydration time</PackageReleaseNotes>
     <PackageTags>html;css;javascript;web;framework;tooling;igniteview;ignite;view;core;webview;webkit</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
