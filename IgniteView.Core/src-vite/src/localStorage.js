@@ -48,7 +48,7 @@ if (!window._localStorage) {
 
         // Called by C#
         hydrate(values) {
-            Object.entries(values).forEach(([key, value]) => this.setItem(key, value));
+            Object.entries(values).forEach(([key, value]) => this._cache[key] = value);
             console.log("[IgniteView][LocalStorage] Hydrated");
             try {
                 Object.defineProperty(window, "localStorage", { value: window._localStorage })

@@ -134,6 +134,14 @@ namespace IgniteView.Core
         public Dictionary<string, object> SharedContext = new Dictionary<string, object>();
 
         /// <summary>
+        /// Gets the local storage instance for this window, allows you to store key-value pairs that persist across sessions.
+        /// </summary>
+        /// <remarks>
+        /// WARNING: Since the C# side is async and the JavaScript side is synchronous, the values are not guaranteed to update instantly.
+        /// </remarks>
+        public LocalStorage LocalStorage;
+
+        /// <summary>
         /// Attaches a value to the shared context of this window, this value can be accessed later from both C# and JavaScript.
         /// </summary>
         /// <param name="key">The key of the shared object</param>
@@ -182,6 +190,9 @@ namespace IgniteView.Core
                 }
 
                 _URL = value;
+
+                // When the URL changes, so does the host for the local storage
+                this.LocalStorage = new LocalStorage(this);
             }
         }
 
@@ -344,6 +355,7 @@ namespace IgniteView.Core
 
         private WebWindow AfterCreate()
         {
+
             // Try to use the default favicon if it exists
             if (PlatformManager.HasPlatformHint("macos") && CurrentAppManager.CurrentServerManager.Resolver.DoesFileExist("/favicon_mac.png"))
             {
@@ -356,9 +368,12 @@ namespace IgniteView.Core
 
             CurrentAppManager.OnMainWindowCreated?.Invoke(this);
 
+            this.LocalStorage = new LocalStorage(this);
+
             return this;
         }
 
         #endregion
+
     }
 }
