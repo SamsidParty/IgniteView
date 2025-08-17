@@ -14,7 +14,8 @@ namespace IgniteView.UWP.Integrations
             var picker = new Windows.Storage.Pickers.FileOpenPicker();
             picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
             picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
-            
+
+            if (fileFilters == null || fileFilters.Length == 0) picker.FileTypeFilter.Add("*");
             foreach (var filter in fileFilters)
             {
                 foreach (var extension in filter.ExtensionsWithDot)
@@ -23,29 +24,60 @@ namespace IgniteView.UWP.Integrations
                 }
             }
 
-            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
+            var file = await picker.PickSingleFileAsync();
 
-            if (file != null)
-            {
-                return file.Path;
-            }
-
-            return null;
+            return file?.Path;
         }
 
         public async Task<string> PickFolder(string initialPath)
         {
-            throw new NotImplementedException();
+            var picker = new Windows.Storage.Pickers.FolderPicker();
+            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
+
+            var folder = await picker.PickSingleFolderAsync();
+
+            return folder?.Path;
         }
 
         public async Task<string[]> PickMultipleFiles(FileFilter[] fileFilters, string initialPath)
         {
-            throw new NotImplementedException();
+            var picker = new Windows.Storage.Pickers.FileOpenPicker();
+            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
+
+            if (fileFilters == null || fileFilters.Length == 0) picker.FileTypeFilter.Add("*");
+            foreach (var filter in fileFilters)
+            {
+                foreach (var extension in filter.ExtensionsWithDot)
+                {
+                    picker.FileTypeFilter.Add(extension);
+                }
+            }
+
+            var files = await picker.PickMultipleFilesAsync();
+
+            return files.Select((f) => f.Path).ToArray();
         }
 
+
+        // Currently broken on UWP
+        // https://github.com/microsoft/CsWinRT/issues/1998
         public async Task<string> SaveFile(FileFilter[] fileFilters, string initialName, string initialPath)
         {
-            throw new NotImplementedException();
+            var picker = new Windows.Storage.Pickers.FileSavePicker();
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
+
+            if (fileFilters == null || fileFilters.Length == 0) picker.FileTypeChoices.Add("All files", new List<string>() { "*.*" });
+            foreach (var filter in fileFilters)
+            {
+                picker.FileTypeChoices.Add(filter.Name, filter.ExtensionsWithDot.ToList());
+            }
+
+            picker.SuggestedFileName = initialName;
+
+            var file = await picker.PickSaveFileAsync();
+            return file?.Path;
         }
     }
 }

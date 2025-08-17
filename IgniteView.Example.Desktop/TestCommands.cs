@@ -41,7 +41,7 @@ namespace IgniteView.Example.Desktop
         [Command("fileDialogTest")]
         public static async Task<string> FileDialogTest()
         {
-            return await FileDialog.PickFile(new FileFilter("png"));
+            return await FileDialog.PickFolder();
         }
 
         [Command("resize")]
