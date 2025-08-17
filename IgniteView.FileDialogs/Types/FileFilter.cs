@@ -19,6 +19,16 @@ public class FileFilter
     /// </summary>
     public required string Pattern;
 
+    /// <summary>
+    /// Gets the list of file extensions, excluding the leading dot, that this filter applies to.
+    /// </summary>
+    public string[] Extensions => Pattern.Split(",");
+
+    /// <summary>
+    /// Gets the list of file extensions, including the leading dot, that this filter applies to.
+    /// </summary>
+    public string[] ExtensionsWithDot => Extensions.Select((e) => "." + e).ToArray();
+
     // Convert filter to array with 1 element
     public static implicit operator FileFilter[](FileFilter f) => new FileFilter[] { f };
 

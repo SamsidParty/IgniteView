@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using IgniteView.Core;
 using IgniteView.Core.Types;
+using IgniteView.FileDialogs;
+using IgniteView.UWP.Integrations;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 
@@ -18,7 +20,8 @@ namespace IgniteView.UWP
         {
             Instance = new UWPPlatformManager();
             Instance.Storage = new UWPPersistentStorage();
-            PlatformManager.PlatformHints.Add("uwp");
+            FileDialog.Handler = new UWPDialogHandler();
+            PlatformHints.Add("uwp");
 
             var app = new UWPAppManager(new AppIdentity(Windows.ApplicationModel.Package.Current.PublisherDisplayName, Windows.ApplicationModel.Package.Current.DisplayName));
             ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);

@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Loader;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -21,28 +22,31 @@ namespace IgniteView.Core
                     _Commands = new ConcurrentDictionary<string, MethodInfo>();
 
                     // Find all commands through reflection
-                    foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                    foreach (var alc in AssemblyLoadContext.All) 
                     {
-                        foreach (Type type in assembly!.GetTypes())
+                        foreach (var assembly in alc.Assemblies)
                         {
-                            foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static))
+                            foreach (Type type in assembly!.GetTypes())
                             {
-                                var attributes = method.GetCustomAttributes(true).ToList();
-                                attributes = attributes.Where((atr) => atr is CommandAttribute).ToList();
-                                if (attributes.Any())
+                                foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static))
                                 {
-                                    var functionName = (attributes.FirstOrDefault() as CommandAttribute).FunctionName;
-
-                                    if (functionName == null)
+                                    var attributes = method.GetCustomAttributes(true).ToList();
+                                    attributes = attributes.Where((atr) => atr is CommandAttribute).ToList();
+                                    if (attributes.Any())
                                     {
-                                        functionName = method.Name;
-                                    }
-                                    else if (!JSFunctionCall.IsFunctionNameValid(functionName))
-                                    {
-                                        throw new FormatException($"Function name {functionName} is not a valid JavaScript function name");
-                                    }
+                                        var functionName = (attributes.FirstOrDefault() as CommandAttribute).FunctionName;
 
-                                    _Commands[functionName] = method;
+                                        if (functionName == null)
+                                        {
+                                            functionName = method.Name;
+                                        }
+                                        else if (!JSFunctionCall.IsFunctionNameValid(functionName))
+                                        {
+                                            throw new FormatException($"Function name {functionName} is not a valid JavaScript function name");
+                                        }
+
+                                        _Commands[functionName] = method;
+                                    }
                                 }
                             }
                         }

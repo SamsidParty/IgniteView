@@ -1,4 +1,5 @@
 ﻿using IgniteView.Core;
+using IgniteView.Example.Desktop;
 using IgniteView.UWP;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,7 @@ namespace IgniteView.Example.UWP
         /// </summary>
         public App()
         {
+            TestCommands.JsonTest();
             InitializeComponent();
 
             Suspending += OnSuspending;

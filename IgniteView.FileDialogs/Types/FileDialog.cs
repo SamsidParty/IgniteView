@@ -30,22 +30,22 @@ namespace IgniteView.FileDialogs
         private static IDialogHandler? _Handler;
 
         #region Passthrough To Handler
-        public static string PickFile(FileFilter[] fileFilters, string initialPath) => Handler.PickFile(fileFilters, initialPath);
-        public static string[] PickMultipleFiles(FileFilter[] fileFilters, string initialPath) => Handler.PickMultipleFiles(fileFilters, initialPath);
-        public static string SaveFile(FileFilter[] fileFilters, string initialName, string initialPath) => Handler.SaveFile(fileFilters, initialName, initialPath);
-        public static string PickFolder(string initialPath) => Handler.PickFolder(initialPath);
+        public static async Task<string> PickFile(FileFilter[] fileFilters, string initialPath) => await Handler.PickFile(fileFilters, initialPath);
+        public static async Task<string[]> PickMultipleFiles(FileFilter[] fileFilters, string initialPath) => await Handler.PickMultipleFiles(fileFilters, initialPath);
+        public static async Task<string> SaveFile(FileFilter[] fileFilters, string initialName, string initialPath) => await Handler.SaveFile(fileFilters, initialName, initialPath);
+        public static async Task<string> PickFolder(string initialPath) => await Handler.PickFolder(initialPath);
         #endregion
 
         #region Quality Of Life Overloads
-        public static string PickFile() => PickFile(Array.Empty<FileFilter>());
-        public static string PickFile(FileFilter[] fileFilters) => PickFile(fileFilters, string.Empty);
-        public static string[] PickMultipleFiles() => PickMultipleFiles(Array.Empty<FileFilter>());
-        public static string[] PickMultipleFiles(FileFilter[] fileFilters) => PickMultipleFiles(fileFilters, string.Empty);
-        public static string SaveFile() => SaveFile(Array.Empty<FileFilter>());
-        public static string SaveFile(FileFilter[] fileFilters) => SaveFile(fileFilters, string.Empty, string.Empty);
-        public static string SaveFile(FileFilter[] fileFilters, string initialName) => SaveFile(fileFilters, initialName, string.Empty);
-        public static string SaveFile(string initialName) => SaveFile(Array.Empty<FileFilter>(), initialName, string.Empty);
-        public static string PickFolder() => PickFolder(string.Empty);
+        public static async Task<string> PickFile() => await PickFile(Array.Empty<FileFilter>());
+        public static async Task<string> PickFile(FileFilter[] fileFilters) => await PickFile(fileFilters, string.Empty);
+        public static async Task<string[]> PickMultipleFiles() => await PickMultipleFiles(Array.Empty<FileFilter>());
+        public static async Task<string[]> PickMultipleFiles(FileFilter[] fileFilters) => await PickMultipleFiles(fileFilters, string.Empty);
+        public static async Task<string> SaveFile() => await SaveFile(Array.Empty<FileFilter>());
+        public static async Task<string> SaveFile(FileFilter[] fileFilters) => await SaveFile(fileFilters, string.Empty, string.Empty);
+        public static async Task<string> SaveFile(FileFilter[] fileFilters, string initialName) => await SaveFile(fileFilters, initialName, string.Empty);
+        public static async Task<string> SaveFile(string initialName) => await SaveFile(Array.Empty<FileFilter>(), initialName, string.Empty);
+        public static async Task<string> PickFolder() => await PickFolder(string.Empty);
         #endregion
     }
 }

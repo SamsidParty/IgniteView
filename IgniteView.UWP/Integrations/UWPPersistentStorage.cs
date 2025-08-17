@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Windows.Security.Cryptography;
 using Windows.Storage;
 
-namespace IgniteView.UWP
+namespace IgniteView.UWP.Integrations
 {
     public class UWPPersistentStorage : PersistentStorage
     {
@@ -46,7 +46,7 @@ namespace IgniteView.UWP
             try
             {
                 //This Throws If The File Is Empty
-                var buffer = await Windows.Storage.FileIO.ReadBufferAsync(await StorageFile.GetFileFromPathAsync(ApplyPath(file)));
+                var buffer = await FileIO.ReadBufferAsync(await StorageFile.GetFileFromPathAsync(ApplyPath(file)));
                 return buffer.ToArray();
             }
             catch
@@ -60,11 +60,11 @@ namespace IgniteView.UWP
             file = ApplyPath(file);
             if (!await Exists(file))
             {
-                await (await StorageFolder.GetFolderFromPathAsync(Path.GetDirectoryName(file))).CreateFileAsync(Path.GetFileName(file), Windows.Storage.CreationCollisionOption.OpenIfExists);
+                await (await StorageFolder.GetFolderFromPathAsync(Path.GetDirectoryName(file))).CreateFileAsync(Path.GetFileName(file), CreationCollisionOption.OpenIfExists);
             }
 
             var buffer = CryptographicBuffer.CreateFromByteArray(bytes);
-            await Windows.Storage.FileIO.WriteBufferAsync(await StorageFile.GetFileFromPathAsync(file), buffer);
+            await FileIO.WriteBufferAsync(await StorageFile.GetFileFromPathAsync(file), buffer);
         }
 
         public override async Task Delete(string file)

@@ -23,30 +23,30 @@ It is designed to integrate well with the IgniteView framework, however it can s
 
 Pick any file:
 ```csharp
-string filePath = FileDialog.PickFile();
+string filePath = await FileDialog.PickFile();
 ```
 
 Pick PNG file:
 ```csharp
-string filePath = FileDialog.PickFile(new FileFilter("png"));
+string filePath = await FileDialog.PickFile(new FileFilter("png"));
 ```
 
 Pick image:
 ```csharp
-string filePath = FileDialog.PickFile(new FileFilter("Images", "png,jpg,webp,gif"));
+string filePath = await FileDialog.PickFile(new FileFilter("Images", "png,jpg,webp,gif"));
 ```
 
 Pick multiple PNG files:
 ```csharp
-string[] filePaths = FileDialog.PickMultipleFiles(new FileFilter("png"));
+string[] filePaths = await FileDialog.PickMultipleFiles(new FileFilter("png"));
 ```
 
 Save MP4 file:
 ```csharp
-string filePath = FileDialog.SaveFile(new FileFilter("mp4"));
+string filePath = await FileDialog.SaveFile(new FileFilter("mp4"));
 ```
 
 Pick folder:
 ```csharp
-string folderPath = FileDialog.PickFolder();
+string folderPath = await FileDialog.PickFolder();
 ```

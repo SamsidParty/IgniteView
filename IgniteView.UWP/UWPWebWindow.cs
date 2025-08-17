@@ -1,4 +1,5 @@
-﻿using IgniteView.Core;
+﻿
+using IgniteView.Core;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace IgniteView.UWP
 
         public override string Title { get; set; }
         public override string IconPath { get; set; }
-        public override string URL { get => base.URL; set { base.URL = value; IgniteViewPage.Instance.WebView.Source = new Uri(base.URL); } }
+        public override string URL { get => base.URL; set { base.URL = value; IgniteViewPage.MutateWebView((w) => w.Source = new Uri(base.URL)); } }
         public override IntPtr NativeHandle { get => -1; }
         protected override bool TitleBarVisible { get; set; }
 
@@ -38,31 +39,20 @@ namespace IgniteView.UWP
         {
             base.Show();
 
-            if (IgniteViewPage.Instance != null) {
-                IgniteViewPage.Instance.WebView.CoreWebView2Initialized += (WebView2 sender, CoreWebView2InitializedEventArgs args) =>
+            IgniteViewPage.MutateWebView((w) =>
+            {
+                w.CoreWebView2.WebMessageReceived += (sender, args) =>
                 {
-                    sender.CoreWebView2.WebMessageReceived += (sender, args) =>
+                    var commandString = args.TryGetWebMessageAsString();
+                    if (!string.IsNullOrEmpty(commandString))
                     {
-                        var commandString = args.TryGetWebMessageAsString();
-                        if (!string.IsNullOrEmpty(commandString))
-                        {
-                            ExecuteCommand(commandString);
-                        }
-                    };
+                        ExecuteCommand(commandString);
+                    }
                 };
 
-                IgniteViewPage.Instance.WebView.Visibility = Visibility.Visible;
-                IgniteViewPage.Instance.WebView.Source = new Uri(CurrentAppManager.CurrentServerManager.BaseURL);
-            }
-            else
-            {
-                Task.Run(async () =>
-                {
-                    while (IgniteViewPage.Instance == null) { await Task.Delay(100); } // Wait for the main page to be loaded
-                    await IgniteViewPage.Instance.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Show());  
-                });
-            }
-
+                w.Visibility = Visibility.Visible;
+                w.Source = new Uri(CurrentAppManager.CurrentServerManager.BaseURL);
+            });
 
             return this;
         }
@@ -75,7 +65,7 @@ namespace IgniteView.UWP
 
         public override void ExecuteJavaScript(string scriptData)
         {
-            IgniteViewPage.Instance.WebView.CoreWebView2.ExecuteScriptAsync(JavaScriptConverter.WrapCode(scriptData));
+            IgniteViewPage.MutateWebView(async (w) => await w.CoreWebView2.ExecuteScriptAsync(JavaScriptConverter.WrapCode(scriptData)));
             base.ExecuteJavaScript(scriptData);
         }
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace IgniteView.Example.Desktop
 {
-    class TestCommands
+    public class TestCommands
     {
         [Command("beep")]
         public static void Beep(int times)
@@ -39,9 +39,9 @@ namespace IgniteView.Example.Desktop
         }
 
         [Command("fileDialogTest")]
-        public static string FileDialogTest()
+        public static async Task<string> FileDialogTest()
         {
-            return FileDialog.PickFile(new FileFilter("png"));
+            return await FileDialog.PickFile(new FileFilter("png"));
         }
 
         [Command("resize")]

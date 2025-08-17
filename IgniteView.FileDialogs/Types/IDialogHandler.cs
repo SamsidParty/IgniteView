@@ -8,9 +8,9 @@ namespace IgniteView.FileDialogs
 {
     public interface IDialogHandler
     {
-        public abstract string PickFile(FileFilter[] fileFilters, string initialPath);
-        public abstract string[] PickMultipleFiles(FileFilter[] fileFilters, string initialPath);
-        public abstract string SaveFile(FileFilter[] fileFilters, string initialName, string initialPath);
-        public abstract string PickFolder(string initialPath);
+        public abstract Task<string> PickFile(FileFilter[] fileFilters, string initialPath);
+        public abstract Task<string[]> PickMultipleFiles(FileFilter[] fileFilters, string initialPath);
+        public abstract Task<string> SaveFile(FileFilter[] fileFilters, string initialName, string initialPath);
+        public abstract Task<string> PickFolder(string initialPath);
     }
 }

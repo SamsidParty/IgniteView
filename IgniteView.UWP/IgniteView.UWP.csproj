@@ -15,10 +15,12 @@
 
 	<ItemGroup Condition="'$(Configuration)'=='Local Debug' Or '$(Configuration)'=='Local Release'">
 		<ProjectReference Include="..\IgniteView.Core\IgniteView.Core.csproj" />
+		<ProjectReference Include="..\IgniteView.FileDialogs\IgniteView.FileDialogs.csproj" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)'!='Local Debug' And '$(Configuration)'!='Local Release'">
-		<PackageReference Include="IgniteView.Core" Version="2.0.3" />
+		<PackageReference Include="IgniteView.Core" Version="*" />
+		<PackageReference Include="IgniteView.FileDialogs" Version="*" />
 	</ItemGroup>
 
 	<ItemGroup>

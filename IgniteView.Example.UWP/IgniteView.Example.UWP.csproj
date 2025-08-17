@@ -55,4 +55,7 @@
 	<ItemGroup>
 	  <Folder Include="iv2runtime\" />
 	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\IgniteView.Example.Desktop\IgniteView.Example.Desktop.csproj" />
+	</ItemGroup>
 </Project>
