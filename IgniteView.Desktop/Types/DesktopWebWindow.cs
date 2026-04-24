@@ -66,19 +66,12 @@ namespace IgniteView.Desktop
         [DllImport(InteropHelper.DLLName)]
         protected static extern IntPtr GetWebWindowHandle(int index);
 
-        [DllImport(InteropHelper.DLLName)]
-        protected static extern bool GetWebWindowFullscreen(int index);
-
-        [DllImport(InteropHelper.DLLName)]
-        protected static extern void SetWebWindowFullscreen(int index, bool isFullscreen);
-
         #endregion
 
         #region Properties
 
         public override string Title { get => InteropHelper.PointerToStringUTF8(GetWebWindowTitle(WindowIndex)); set => SetWebWindowTitle(WindowIndex, Marshal.StringToCoTaskMemUTF8(value)); }
         public override bool IsMaximized { get => GetWebWindowMaximized(WindowIndex); set => SetWebWindowMaximized(WindowIndex, value); }
-        public override bool IsFullscreen { get => GetWebWindowFullscreen(WindowIndex); set => SetWebWindowFullscreen(WindowIndex, value); }
         public override string IconPath { get => base.IconPath; set { base.IconPath = value; SetWebWindowIcon(WindowIndex, Marshal.StringToCoTaskMemUTF8(IconManager.CloneIcon(base.IconPath))); } }
         public override string URL { get => base.URL; set { base.URL = value; SetWebWindowURL(WindowIndex, Marshal.StringToCoTaskMemUTF8(base.URL)); } }
         public override IntPtr NativeHandle { get => GetWebWindowHandle(WindowIndex); }
