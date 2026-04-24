@@ -21,12 +21,12 @@ namespace IgniteView.Core
     {
         private static PersistentStorage Storage => PlatformManager.Instance.Storage;
 
-        private ConcurrentDictionary<string, string> Cache;
+        private ConcurrentDictionary<string, string> Cache = new ConcurrentDictionary<string, string>();
         private string FileName;
         private Task LoadTask;
-        private WebWindow Host;
+        private WebWindow? Host;
 
-        private static string GetFileNameFromWindow(WebWindow ctx)
+        private static string GetFileNameFromWindow(WebWindow? ctx)
         {
             var url = "http://localhost/";
             if (ctx != null)
@@ -38,7 +38,7 @@ namespace IgniteView.Core
             return GetFileNameFromOrigin(host);
         }
 
-        private static string GetFileNameFromOrigin(string origin)
+        private static string GetFileNameFromOrigin(string? origin)
         {
             if (string.IsNullOrEmpty(origin))
             {
@@ -66,7 +66,7 @@ namespace IgniteView.Core
         /// <summary>
         /// Creates a LocalStorage object from the specified origin. eg. https://samsidparty.com
         /// </summary>
-        public LocalStorage(string origin)
+        public LocalStorage(string? origin)
         {
             FileName = GetFileNameFromOrigin(origin);
             LoadTask = Load();
@@ -147,17 +147,17 @@ namespace IgniteView.Core
 
         #region Origin Bound Static Methods
 
-        public static Task<string> GetItem(string item, string origin) => new LocalStorage(origin).GetItem(item);
+        public static Task<string> GetItem(string item, string? origin) => new LocalStorage(origin).GetItem(item);
 
-        public static Task<Dictionary<string, string>> GetAllItems(string origin) => new LocalStorage(origin).GetAllItems();
+        public static Task<Dictionary<string, string>> GetAllItems(string? origin) => new LocalStorage(origin).GetAllItems();
 
-        public static Task<string[]> ListItems(string origin) => new LocalStorage(origin).GetItemList();
+        public static Task<string[]> ListItems(string? origin) => new LocalStorage(origin).GetItemList();
 
-        public static Task SetItem(string item, string value, string origin) => new LocalStorage(origin).SetItem(item, value);
+        public static Task SetItem(string item, string value, string? origin) => new LocalStorage(origin).SetItem(item, value);
 
-        public static Task RemoveItem(string item, string origin) => new LocalStorage(origin).RemoveItem(item);
+        public static Task RemoveItem(string item, string? origin) => new LocalStorage(origin).RemoveItem(item);
 
-        public static Task Clear(string origin) => new LocalStorage(origin).Clear();
+        public static Task Clear(string? origin) => new LocalStorage(origin).Clear();
 
         #endregion
 
@@ -166,37 +166,67 @@ namespace IgniteView.Core
         [Command("igniteview_localstorage_get")]
         public static Task<string> GetItem(string item, WebWindow ctx)
         {
-            return ctx?.LocalStorage.GetItem(item) ?? GetItem(item, null);
+            if (ctx != null)
+            {
+                return ctx.LocalStorage.GetItem(item);
+            }
+
+            return GetItem(item, (string?)null);
         }
 
         [Command("igniteview_localstorage_get_all")]
         public static Task<Dictionary<string, string>> GetAllItems(WebWindow ctx)
         {
-            return ctx?.LocalStorage.GetAllItems() ?? GetAllItems(null);
+            if (ctx != null)
+            {
+                return ctx.LocalStorage.GetAllItems();
+            }
+
+            return GetAllItems((string?)null);
         }
 
         [Command("igniteview_localstorage_list")]
         public static Task<string[]> ListItems(WebWindow ctx)
         {
-            return ctx?.LocalStorage.GetItemList() ?? ListItems(null);
+            if (ctx != null)
+            {
+                return ctx.LocalStorage.GetItemList();
+            }
+
+            return ListItems((string?)null);
         }
 
         [Command("igniteview_localstorage_set")]
         public static Task SetItem(string item, string value, WebWindow ctx)
         {
-            return ctx?.LocalStorage.SetItem(item, value) ?? SetItem(item, value, null);
+            if (ctx != null)
+            {
+                return ctx.LocalStorage.SetItem(item, value);
+            }
+
+            return SetItem(item, value, (string?)null);
         }
 
         [Command("igniteview_localstorage_remove")]
         public static Task RemoveItem(string item, WebWindow ctx)
         {
-            return ctx?.LocalStorage.RemoveItem(item) ?? RemoveItem(item, null);
+            if (ctx != null)
+            {
+                return ctx.LocalStorage.RemoveItem(item);
+            }
+
+            return RemoveItem(item, (string?)null);
         }
 
         [Command("igniteview_localstorage_clear")]
         public static Task Clear(WebWindow ctx)
         {
-            return ctx?.LocalStorage.Clear() ?? Clear(null);
+            if (ctx != null)
+            {
+                return ctx.LocalStorage.Clear();
+            }
+
+            return Clear((string?)null);
         }
 
         #endregion
