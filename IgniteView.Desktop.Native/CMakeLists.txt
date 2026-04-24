@@ -8,35 +8,21 @@ endif()
 add_library(IgniteView.Desktop.Native SHARED)
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    CXX_STANDARD 23
-    CXX_EXTENSIONS OFF
-    CXX_STANDARD_REQUIRED ON
-)
-
-if(APPLE)
-    set_target_properties(${PROJECT_NAME} PROPERTIES
-        OBJCXX_STANDARD 23
-        OBJCXX_EXTENSIONS OFF
-        OBJCXX_STANDARD_REQUIRED ON
-    )
-endif()
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 23 CXX_EXTENSIONS OFF CXX_STANDARD_REQUIRED ON)
 
 if(UNIX AND NOT APPLE)
-    set(saucer_backend "Qt")
+    set(saucer_backend "Qt6")
 endif()
 
 set(saucer_serializer "Rflpp")
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 include(FetchContent)
-include(cmake/CPM.cmake)
 
-CPMAddPackage(
-  NAME           saucer
-  VERSION        8.0.5
-  GIT_TAG        v8.0.5
-  GIT_REPOSITORY "https://github.com/saucer/saucer"
+FetchContent_Declare(
+  saucer
+  GIT_REPOSITORY https://github.com/saucer/saucer
+  GIT_TAG        v6.0.1
 )
 
 FetchContent_MakeAvailable(saucer)

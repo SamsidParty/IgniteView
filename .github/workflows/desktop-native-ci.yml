@@ -109,13 +109,13 @@ jobs:
             runtime_folder: linux-arm64
             library_name: libIgniteView.Desktop.Native.so
           - runtime_id: osx-x64
-            runs_on: macos-26-intel
+            runs_on: macos-15-intel
             artifact_name: desktop-native-osx-x64
             runtime_folder: osx-x64
             library_name: libIgniteView.Desktop.Native.dylib
             osx_arch: x86_64
           - runtime_id: osx-arm64
-            runs_on: macos-26
+            runs_on: macos-14
             artifact_name: desktop-native-osx-arm64
             runtime_folder: osx-arm64
             library_name: libIgniteView.Desktop.Native.dylib
@@ -130,12 +130,6 @@ jobs:
         with:
           path: .cpm-cache
           key: cpm-${{ runner.os }}-${{ matrix.runtime_id }}-${{ hashFiles('IgniteView.Desktop.Native/CMakeLists.txt', 'IgniteView.Desktop.Native/cpm-package-lock.cmake') }}
-
-      - name: Setup NuGet CLI (Windows)
-        if: runner.os == 'Windows'
-        uses: NuGet/setup-nuget@v2
-        with:
-          nuget-version: latest
 
       - name: Install Linux native dependencies
         if: runner.os == 'Linux'
@@ -156,10 +150,6 @@ jobs:
         working-directory: IgniteView.Desktop.Native
         run: |
           set -euo pipefail
-
-          mkdir -p cmake
-          curl -fsSL -o cmake/CPM.cmake \
-            https://github.com/cpm-cmake/CPM.cmake/releases/download/v0.40.5/CPM.cmake
 
           output_dir="$GITHUB_WORKSPACE/native-output/${{ matrix.runtime_folder }}/native"
           cmake_args=(
@@ -218,7 +208,7 @@ jobs:
 
   pack-nuget:
     name: pack-nuget
-    runs-on: macos-26
+    runs-on: macos-14
     needs: [detect-changes, build-native]
     if: |
       always() &&
