@@ -38,3 +38,10 @@ if(APPLE)
 endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC saucer::saucer)
+# saucer v8 moved private headers (e.g. the NuGet WebView2.h bundled with the
+# Windows build, the Qt includes resolved by saucer's CPM config, and the Cocoa
+# bits on macOS) behind the `saucer::private` target. The stable module headers
+# we include from Main.cpp (`saucer/modules/stable/webview2.hpp`, `.../webkit.hpp`)
+# drag in those platform SDK headers, so we must link the private target to
+# inherit the include paths.
+target_link_libraries(${PROJECT_NAME} PRIVATE saucer::private)

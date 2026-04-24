@@ -115,7 +115,7 @@ jobs:
             library_name: libIgniteView.Desktop.Native.dylib
             osx_arch: x86_64
           - runtime_id: osx-arm64
-            runs_on: macos-14
+            runs_on: macos-26
             artifact_name: desktop-native-osx-arm64
             runtime_folder: osx-arm64
             library_name: libIgniteView.Desktop.Native.dylib
