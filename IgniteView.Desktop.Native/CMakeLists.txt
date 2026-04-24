@@ -22,7 +22,7 @@ include(FetchContent)
 FetchContent_Declare(
   saucer
   GIT_REPOSITORY https://github.com/saucer/saucer
-  GIT_TAG        v5.0.0
+  GIT_TAG        8ace837fbf6ce15e0a3aed45fa0d3e2b735110e8
 )
 
 FetchContent_MakeAvailable(saucer)
