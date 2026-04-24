@@ -19,10 +19,10 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 include(FetchContent)
 
-FetchContent_Declare(
-    saucer 
-    GIT_REPOSITORY "https://github.com/SamarthMP/saucer" 
-    GIT_BRANCH master
+CPMAddPackage(
+  NAME           saucer
+  VERSION        8.0.4
+  GIT_REPOSITORY "https://github.com/saucer/saucer"
 )
 
 FetchContent_MakeAvailable(saucer)
