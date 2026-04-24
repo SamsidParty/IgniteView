@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	 <VersionPrefix>2.2.2</VersionPrefix>
+	 <VersionPrefix>2.2.6</VersionPrefix>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
 	<Nullable>enable</Nullable>
@@ -17,7 +17,7 @@
 	<RepositoryUrl>https://github.com/SamsidParty/IgniteView</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
 	<PackageTags>file;picker;dialog;native;tooling;windows;macos;linux;arm64;x64</PackageTags>
-	<PackageReleaseNotes>Initial release</PackageReleaseNotes>
+	<PackageReleaseNotes>Use async instead of sync for file dialogs</PackageReleaseNotes>
 	<PackageLicenseFile>LICENSE</PackageLicenseFile>
 	<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
 	<AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>

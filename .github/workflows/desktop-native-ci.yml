@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - production
     tags:
       - v*
     paths:
@@ -11,6 +12,7 @@ on:
       - IgniteView.Core/**
       - IgniteView.Desktop/**
       - IgniteView.Desktop.Native/**
+      - IgniteView.FileDialogs/**
       - IgniteView.Scripts/**
       - LICENSE
       - README.md
@@ -20,6 +22,7 @@ on:
       - IgniteView.Core/**
       - IgniteView.Desktop/**
       - IgniteView.Desktop.Native/**
+      - IgniteView.FileDialogs/**
       - IgniteView.Scripts/**
       - LICENSE
       - README.md
@@ -224,10 +227,14 @@ jobs:
     name: pack-nuget
     runs-on: macos-14
     needs: [detect-changes, build-native]
+    # Only build and publish the final nupkgs from the production branch
+    # (or a tag push / manual dispatch targeting production). Native libs
+    # still build on every main/PR run so regressions are caught early.
     if: |
       always() &&
       needs.detect-changes.result == 'success' &&
-      (needs.build-native.result == 'success' || needs.build-native.result == 'skipped')
+      (needs.build-native.result == 'success' || needs.build-native.result == 'skipped') &&
+      (github.ref == 'refs/heads/production' || startsWith(github.ref, 'refs/tags/v'))
     permissions:
       contents: write
 
@@ -335,6 +342,18 @@ jobs:
           echo "Failed to push native library update after multiple attempts." >&2
           exit 1
 
+      # NOTE on the cross-package versioning trick:
+      # IgniteView.Desktop normally declares `<PackageReference Include="IgniteView.Core" />`,
+      # which would require Core to already be published to nuget.org for
+      # restore to succeed. We instead pack using the `Local Release`
+      # configuration, which swaps that PackageReference for a
+      # `<ProjectReference Include="..\IgniteView.Core\IgniteView.Core.csproj" />`.
+      # `dotnet pack` automatically translates that ProjectReference into a
+      # `<dependency id="IgniteView.Core" version="<current>" />` entry in the
+      # produced Desktop nuspec -- no network restore against nuget.org is
+      # required at pack time, and the consumer still pulls Core from nuget.org
+      # at install time. As long as we push Core first in the publish step
+      # below, the two packages line up on the same version.
       - name: Pack IgniteView.Core
         shell: bash
         run: |
@@ -355,9 +374,57 @@ jobs:
             -p:ContinuousIntegrationBuild=true \
             -p:GeneratePackageOnBuild=false
 
+      - name: Pack IgniteView.FileDialogs
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet pack IgniteView.FileDialogs/IgniteView.FileDialogs.csproj \
+            --configuration Release \
+            --output "$GITHUB_WORKSPACE/artifacts/nupkgs" \
+            -p:ContinuousIntegrationBuild=true \
+            -p:GeneratePackageOnBuild=false
+
       - name: Upload NuGet artifacts
         uses: actions/upload-artifact@v7
         with:
           name: igniteview-nupkgs
           path: artifacts/nupkgs/*.nupkg
           if-no-files-found: error
+
+      # Publish Core first so Desktop's declared dependency resolves on
+      # nuget.org by the time anyone installs Desktop. FileDialogs is
+      # independent and can go in any order. Skip packages that already
+      # exist on the feed at that version to keep re-runs idempotent.
+      - name: Push packages to NuGet.org
+        if: github.ref == 'refs/heads/production' || startsWith(github.ref, 'refs/tags/v')
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${NUGET_API_KEY:-}" ]]; then
+            echo "NUGET_API_KEY secret is not configured; skipping publish." >&2
+            exit 0
+          fi
+
+          pkg_dir="$GITHUB_WORKSPACE/artifacts/nupkgs"
+
+          push() {
+            local pattern="$1"
+            for pkg in $pkg_dir/$pattern; do
+              [[ -f "$pkg" ]] || continue
+              echo "Pushing $pkg"
+              dotnet nuget push "$pkg" \
+                --api-key "$NUGET_API_KEY" \
+                --source https://api.nuget.org/v3/index.json \
+                --skip-duplicate
+            done
+          }
+
+          # Order matters: Core must land on the feed before Desktop so that
+          # Desktop's dependency on the matching Core version resolves for end
+          # users.
+          push 'IgniteView.Core.*.nupkg'
+          push 'IgniteView.Desktop.*.nupkg'
+          push 'IgniteView.FileDialogs.*.nupkg'
