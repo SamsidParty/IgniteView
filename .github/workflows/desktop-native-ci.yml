@@ -1,0 +1,253 @@
+name: Desktop Native CI
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+    paths:
+      - .github/workflows/desktop-native-ci.yml
+      - IgniteView.Core/**
+      - IgniteView.Desktop/**
+      - IgniteView.Desktop.Native/**
+      - IgniteView.Scripts/**
+      - LICENSE
+      - README.md
+  pull_request:
+    paths:
+      - .github/workflows/desktop-native-ci.yml
+      - IgniteView.Core/**
+      - IgniteView.Desktop/**
+      - IgniteView.Desktop.Native/**
+      - IgniteView.Scripts/**
+      - LICENSE
+      - README.md
+  workflow_dispatch:
+
+concurrency:
+  group: desktop-native-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm-cache
+  DOTNET_VERSION: 9.0.x
+  NODE_VERSION: '22'
+  WINDOWS_LIBRARY_NAME: IgniteView.Desktop.Native.dll
+  LINUX_LIBRARY_NAME: libIgniteView.Desktop.Native.so
+  MAC_LIBRARY_NAME: libIgniteView.Desktop.Native.dylib
+
+jobs:
+  build-native:
+    name: native-${{ matrix.runtime_id }}
+    runs-on: ${{ matrix.runs_on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runtime_id: win-x64
+            runs_on: windows-latest
+            artifact_name: desktop-native-win-x64
+            runtime_folder: win-x64
+            library_name: IgniteView.Desktop.Native.dll
+            generator: Visual Studio 17 2022
+            arch: x64
+          - runtime_id: win-arm64
+            runs_on: windows-11-arm
+            artifact_name: desktop-native-win-arm64
+            runtime_folder: win-arm64
+            library_name: IgniteView.Desktop.Native.dll
+            generator: Visual Studio 17 2022
+            arch: ARM64
+          - runtime_id: linux-x64
+            runs_on: ubuntu-24.04
+            artifact_name: desktop-native-linux-x64
+            runtime_folder: linux-x64
+            library_name: libIgniteView.Desktop.Native.so
+          - runtime_id: linux-arm64
+            runs_on: ubuntu-24.04-arm
+            artifact_name: desktop-native-linux-arm64
+            runtime_folder: linux-arm64
+            library_name: libIgniteView.Desktop.Native.so
+          - runtime_id: osx-x64
+            runs_on: macos-15-intel
+            artifact_name: desktop-native-osx-x64
+            runtime_folder: osx-x64
+            library_name: libIgniteView.Desktop.Native.dylib
+            osx_arch: x86_64
+          - runtime_id: osx-arm64
+            runs_on: macos-14
+            artifact_name: desktop-native-osx-arm64
+            runtime_folder: osx-arm64
+            library_name: libIgniteView.Desktop.Native.dylib
+            osx_arch: arm64
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache CPM downloads
+        uses: actions/cache@v4
+        with:
+          path: .cpm-cache
+          key: cpm-${{ runner.os }}-${{ matrix.runtime_id }}-${{ hashFiles('IgniteView.Desktop.Native/CMakeLists.txt', 'IgniteView.Desktop.Native/cpm-package-lock.cmake') }}
+
+      - name: Install Linux native dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build pkg-config qt6-base-dev qt6-webengine-dev libgl1-mesa-dev
+
+      - name: Configure native build
+        shell: bash
+        working-directory: IgniteView.Desktop.Native
+        run: |
+          set -euo pipefail
+
+          output_dir="$GITHUB_WORKSPACE/native-output/${{ matrix.runtime_folder }}/native"
+          cmake_args=(
+            -S .
+            -B build
+            -DCMAKE_RUNTIME_OUTPUT_DIRECTORY="$output_dir"
+            -DCMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE="$output_dir"
+            -DCMAKE_LIBRARY_OUTPUT_DIRECTORY="$output_dir"
+            -DCMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE="$output_dir"
+            -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY="$output_dir"
+            -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE="$output_dir"
+          )
+
+          if [[ -n "${{ matrix.generator || '' }}" ]]; then
+            cmake_args+=(-G "${{ matrix.generator }}")
+          fi
+
+          if [[ -n "${{ matrix.arch || '' }}" ]]; then
+            cmake_args+=(-A "${{ matrix.arch }}")
+          else
+            cmake_args+=(-DCMAKE_BUILD_TYPE=Release)
+          fi
+
+          if [[ -n "${{ matrix.osx_arch || '' }}" ]]; then
+            cmake_args+=(-DCMAKE_OSX_ARCHITECTURES=${{ matrix.osx_arch }})
+          fi
+
+          cmake "${cmake_args[@]}"
+
+      - name: Build native library
+        shell: bash
+        working-directory: IgniteView.Desktop.Native
+        run: |
+          set -euo pipefail
+          cmake --build build --config Release --parallel
+
+      - name: Verify native output
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f "native-output/${{ matrix.runtime_folder }}/native/${{ matrix.library_name }}"
+
+      - name: Upload native artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: native-output/${{ matrix.runtime_folder }}
+          if-no-files-found: error
+
+  pack-nuget:
+    name: pack-nuget
+    runs-on: macos-14
+    needs: build-native
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: IgniteView.Core/src-vite/package-lock.json
+
+      - name: Download native artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: native-staging
+          pattern: desktop-native-*
+
+      - name: Refresh desktop iv2runtime from fresh native builds
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          desktop_runtime="IgniteView.Desktop/iv2runtime"
+          win_x64_artifact="native-staging/desktop-native-win-x64"
+          win_arm64_artifact="native-staging/desktop-native-win-arm64"
+          linux_x64_artifact="native-staging/desktop-native-linux-x64"
+          linux_arm64_artifact="native-staging/desktop-native-linux-arm64"
+          osx_x64_artifact="native-staging/desktop-native-osx-x64"
+          osx_arm64_artifact="native-staging/desktop-native-osx-arm64"
+
+          rm -rf \
+            "$desktop_runtime/win-x64" \
+            "$desktop_runtime/win-arm64" \
+            "$desktop_runtime/linux-x64" \
+            "$desktop_runtime/linux-arm64" \
+            "$desktop_runtime/osx-universal"
+
+          mkdir -p \
+            "$desktop_runtime/win-x64/native" \
+            "$desktop_runtime/win-arm64/native" \
+            "$desktop_runtime/linux-x64/native" \
+            "$desktop_runtime/linux-arm64/native" \
+            "$desktop_runtime/osx-universal/native"
+
+          cp "$win_x64_artifact/native/$WINDOWS_LIBRARY_NAME" "$desktop_runtime/win-x64/native/"
+          cp "$win_arm64_artifact/native/$WINDOWS_LIBRARY_NAME" "$desktop_runtime/win-arm64/native/"
+          cp "$linux_x64_artifact/native/$LINUX_LIBRARY_NAME" "$desktop_runtime/linux-x64/native/"
+          cp "$linux_arm64_artifact/native/$LINUX_LIBRARY_NAME" "$desktop_runtime/linux-arm64/native/"
+
+          lipo -create \
+            "$osx_x64_artifact/native/$MAC_LIBRARY_NAME" \
+            "$osx_arm64_artifact/native/$MAC_LIBRARY_NAME" \
+            -output "$desktop_runtime/osx-universal/native/$MAC_LIBRARY_NAME"
+
+          test -f "$desktop_runtime/win-x64/native/$WINDOWS_LIBRARY_NAME"
+          test -f "$desktop_runtime/win-arm64/native/$WINDOWS_LIBRARY_NAME"
+          test -f "$desktop_runtime/linux-x64/native/$LINUX_LIBRARY_NAME"
+          test -f "$desktop_runtime/linux-arm64/native/$LINUX_LIBRARY_NAME"
+          test -f "$desktop_runtime/osx-universal/native/$MAC_LIBRARY_NAME"
+
+      - name: Pack IgniteView.Core
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet pack IgniteView.Core/IgniteView.Core.csproj \
+            --configuration "Local Release" \
+            --output "$GITHUB_WORKSPACE/artifacts/nupkgs" \
+            -p:ContinuousIntegrationBuild=true \
+            -p:GeneratePackageOnBuild=false
+
+      - name: Pack IgniteView.Desktop
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet pack IgniteView.Desktop/IgniteView.Desktop.csproj \
+            --configuration "Local Release" \
+            --output "$GITHUB_WORKSPACE/artifacts/nupkgs" \
+            -p:ContinuousIntegrationBuild=true \
+            -p:GeneratePackageOnBuild=false
+
+      - name: Upload NuGet artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: igniteview-nupkgs
+          path: artifacts/nupkgs/*.nupkg
+          if-no-files-found: error
