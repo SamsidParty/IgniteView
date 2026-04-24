@@ -109,13 +109,13 @@ jobs:
             runtime_folder: linux-arm64
             library_name: libIgniteView.Desktop.Native.so
           - runtime_id: osx-x64
-            runs_on: macos-15-intel
+            runs_on: macos-26-intel
             artifact_name: desktop-native-osx-x64
             runtime_folder: osx-x64
             library_name: libIgniteView.Desktop.Native.dylib
             osx_arch: x86_64
           - runtime_id: osx-arm64
-            runs_on: macos-14
+            runs_on: macos-26
             artifact_name: desktop-native-osx-arm64
             runtime_folder: osx-arm64
             library_name: libIgniteView.Desktop.Native.dylib
@@ -171,9 +171,6 @@ jobs:
             -DCMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE="$output_dir"
             -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY="$output_dir"
             -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE="$output_dir"
-            # AppleClang 16 (Xcode 16) is fine for our sources, but saucer's CMake
-            # gate demands AppleClang >= 17 which only ships with Xcode 26.
-            -Dsaucer_no_compiler_version_check=ON
           )
 
           if [[ -n "${{ matrix.generator || '' }}" ]]; then
@@ -221,7 +218,7 @@ jobs:
 
   pack-nuget:
     name: pack-nuget
-    runs-on: macos-14
+    runs-on: macos-26
     needs: [detect-changes, build-native]
     if: |
       always() &&
