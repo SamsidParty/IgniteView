@@ -44,9 +44,9 @@ namespace IgniteView.Core
             {
                 origin = "default";
             }
-            if (origin.StartsWith("http:"))
+            else if (Uri.TryCreate(origin, UriKind.Absolute, out var originUri) && !string.IsNullOrEmpty(originUri.Host))
             {
-                origin = (new Uri(origin)).Host;
+                origin = originUri.Host;
             }
             if (origin == "localhost" || origin == "127.0.0.1")
             {
@@ -145,42 +145,58 @@ namespace IgniteView.Core
 
         #endregion
 
+        #region Origin Bound Static Methods
+
+        public static Task<string> GetItem(string item, string origin) => new LocalStorage(origin).GetItem(item);
+
+        public static Task<Dictionary<string, string>> GetAllItems(string origin) => new LocalStorage(origin).GetAllItems();
+
+        public static Task<string[]> ListItems(string origin) => new LocalStorage(origin).GetItemList();
+
+        public static Task SetItem(string item, string value, string origin) => new LocalStorage(origin).SetItem(item, value);
+
+        public static Task RemoveItem(string item, string origin) => new LocalStorage(origin).RemoveItem(item);
+
+        public static Task Clear(string origin) => new LocalStorage(origin).Clear();
+
+        #endregion
+
         #region Interop Methods
 
         [Command("igniteview_localstorage_get")]
-        public static async Task<string> GetItem(string item, WebWindow ctx)
+        public static Task<string> GetItem(string item, WebWindow ctx)
         {
-            return await ctx.LocalStorage.GetItem(item);
+            return ctx?.LocalStorage.GetItem(item) ?? GetItem(item, null);
         }
 
         [Command("igniteview_localstorage_get_all")]
-        public static async Task<Dictionary<string, string>> GetAllItems(WebWindow ctx)
+        public static Task<Dictionary<string, string>> GetAllItems(WebWindow ctx)
         {
-            return await ctx.LocalStorage.GetAllItems();
+            return ctx?.LocalStorage.GetAllItems() ?? GetAllItems(null);
         }
 
         [Command("igniteview_localstorage_list")]
-        public static async Task<string[]> ListItems(WebWindow ctx)
+        public static Task<string[]> ListItems(WebWindow ctx)
         {
-            return await ctx.LocalStorage.GetItemList();
+            return ctx?.LocalStorage.GetItemList() ?? ListItems(null);
         }
 
         [Command("igniteview_localstorage_set")]
-        public static async Task SetItem(string item, string value, WebWindow ctx)
+        public static Task SetItem(string item, string value, WebWindow ctx)
         {
-            await ctx.LocalStorage.SetItem(item, value);
+            return ctx?.LocalStorage.SetItem(item, value) ?? SetItem(item, value, null);
         }
 
         [Command("igniteview_localstorage_remove")]
-        public static async Task RemoveItem(string item, WebWindow ctx)
+        public static Task RemoveItem(string item, WebWindow ctx)
         {
-            await ctx.LocalStorage.RemoveItem(item);
+            return ctx?.LocalStorage.RemoveItem(item) ?? RemoveItem(item, null);
         }
 
         [Command("igniteview_localstorage_clear")]
-        public static async Task Clear(WebWindow ctx)
+        public static Task Clear(WebWindow ctx)
         {
-            await ctx.LocalStorage.Clear();
+            return ctx?.LocalStorage.Clear() ?? Clear(null);
         }
 
         #endregion
