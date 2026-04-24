@@ -131,6 +131,12 @@ jobs:
           path: .cpm-cache
           key: cpm-${{ runner.os }}-${{ matrix.runtime_id }}-${{ hashFiles('IgniteView.Desktop.Native/CMakeLists.txt', 'IgniteView.Desktop.Native/cpm-package-lock.cmake') }}
 
+      - name: Setup NuGet CLI (Windows)
+        if: runner.os == 'Windows'
+        uses: NuGet/setup-nuget@v2
+        with:
+          nuget-version: latest
+
       - name: Install Linux native dependencies
         if: runner.os == 'Linux'
         run: |
@@ -144,12 +150,6 @@ jobs:
           version: '6.8.1'
           modules: 'qtwebengine qtwebchannel qtpositioning'
           cache: true
-
-      - name: Select modern Xcode (macOS)
-        if: runner.os == 'macOS'
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
 
       - name: Configure native build
         shell: bash
@@ -167,6 +167,9 @@ jobs:
             -DCMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE="$output_dir"
             -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY="$output_dir"
             -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE="$output_dir"
+            # AppleClang 16 (Xcode 16) is fine for our sources, but saucer's CMake
+            # gate demands AppleClang >= 17 which only ships with Xcode 26.
+            -Dsaucer_no_compiler_version_check=ON
           )
 
           if [[ -n "${{ matrix.generator || '' }}" ]]; then
