@@ -6,6 +6,11 @@
 #include <filesystem>
 #include <string>
 #include <string_view>
+#include <memory>
+#include <optional>
+#include <utility>
+
+#include <coco/stray/stray.hpp>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -47,24 +52,36 @@ static std::filesystem::path utf8_to_path(const char* s) {
         reinterpret_cast<const char8_t*>(sv.data() + sv.size()));
 }
 
-std::shared_ptr<saucer::application> App;
-std::vector<std::shared_ptr<saucer::smartview<saucer::default_serializer>>> WindowList;
-std::vector<CommandBridgeCallback> CommandBridgeList;
-
 // Per-window saved state used to restore the window after leaving fullscreen.
 struct FullscreenState {
     bool active = false;
     bool was_maximized = false;
-    saucer::window_decoration decoration = saucer::window_decoration::full;
-    std::pair<int, int> position{0, 0};
-    std::pair<int, int> size{0, 0};
+    saucer::window::decoration decoration = saucer::window::decoration::full;
+    saucer::position position{0, 0};
+    saucer::size size{0, 0};
 };
-std::vector<FullscreenState> FullscreenStateList;
 
-static void ensure_fullscreen_slot(int index) {
-    if (static_cast<int>(FullscreenStateList.size()) <= index) {
-        FullscreenStateList.resize(index + 1);
-    }
+struct WebWindowEntry {
+    std::shared_ptr<saucer::window> window;
+    std::optional<saucer::smartview> webview;
+    CommandBridgeCallback commandBridge{nullptr};
+    FullscreenState fullscreen{};
+    bool alive{false};
+};
+
+// App is heap-allocated because saucer::application is move-only and has
+// `operator&` deleted; we need a stable pointer to pass to saucer::window::create.
+std::unique_ptr<saucer::application> App;
+
+// Each entry is heap-allocated so references captured by exposed functions remain
+// valid even when the vector grows.
+std::vector<std::unique_ptr<WebWindowEntry>> WindowList;
+
+static WebWindowEntry* entry_at(int index) {
+    if (index < 0 || index >= (int)WindowList.size()) { return nullptr; }
+    auto* entry = WindowList[index].get();
+    if (entry == nullptr || !entry->alive) { return nullptr; }
+    return entry;
 }
 
 
@@ -75,188 +92,230 @@ extern "C" {
         std::string preloadToRun(preloadScript, strlen(preloadScript));
         auto pathToSet = utf8_to_path(path);
 
-        auto window = std::shared_ptr{ App->make<saucer::smartview<saucer::default_serializer>>(saucer::preferences{
-            .application = App,
-            .persistent_cookies = true,
-                .hardware_acceleration = true,
-            .storage_path = pathToSet
-        }) };
-        WindowList.push_back(window);
-        CommandBridgeList.push_back(commandBridge);
-        int windowIndex = WindowList.size() - 1;
-        ensure_fullscreen_slot(windowIndex);
+        auto window_result = saucer::window::create(App.get());
+        if (!window_result.has_value()) {
+            return -1;
+        }
+        auto window = std::move(window_result.value());
 
-        #if __APPLE__
-        MacEnableAcrylic(window->webview::native().webview, window->window::native().window);
-        #endif
-        
-        if (!preloadToRun.empty()) {
-            window->inject({
-                .code = preloadToRun,
-                .time = saucer::load_time::creation,
-                .permanent = true,
-            }); 
+        saucer::webview::options webview_opts{
+            .window = window,
+            .persistent_cookies = true,
+            .hardware_acceleration = true,
+            .storage_path = pathToSet,
+        };
+
+        auto webview_result = saucer::smartview::create(webview_opts);
+        if (!webview_result.has_value()) {
+            return -1;
         }
 
-        window->set_url(urlToSet);
-        window->expose("igniteview_commandbridge", [windowIndex](std::string param)
+        auto entry = std::make_unique<WebWindowEntry>();
+        entry->window = window;
+        entry->webview.emplace(std::move(webview_result.value()));
+        entry->commandBridge = commandBridge;
+        entry->alive = true;
+
+        WindowList.push_back(std::move(entry));
+        int windowIndex = static_cast<int>(WindowList.size()) - 1;
+        auto* entryPtr = WindowList[windowIndex].get();
+
+        #if __APPLE__
+        MacEnableAcrylic(entryPtr->webview->native().webview, entryPtr->window->native().window);
+        #endif
+
+        if (!preloadToRun.empty()) {
+            entryPtr->webview->inject({
+                .code = preloadToRun,
+                .run_at = saucer::script::time::creation,
+                .clearable = false,
+            });
+        }
+
+        entryPtr->webview->set_url(urlToSet);
+        entryPtr->webview->expose("igniteview_commandbridge", [windowIndex](std::string param)
             {
-                CommandBridgeList[windowIndex](param.c_str());
+                auto* e = entry_at(windowIndex);
+                if (e == nullptr || e->commandBridge == nullptr) { return; }
+                e->commandBridge(param.c_str());
             });
 
         return windowIndex;
     }
 
     EXPORT void ShowWebWindow(int index) {
-        if (WindowList[index] == nullptr) { return; }
+        auto* e = entry_at(index);
+        if (e == nullptr) { return; }
 
-        WindowList[index]->show();
+        e->window->show();
 
         #ifdef _WIN32
-        WindowList[index]->webview::native().controller->put_IsVisible(true);
-        SetForegroundWindow(WindowList[index]->window::native().hwnd);
+        e->webview->native().controller->put_IsVisible(true);
+        SetForegroundWindow(e->window->native().hwnd);
         #endif
     }
 
     EXPORT void HideWebWindow(int index) {
-        if (WindowList[index] == nullptr) { return; }
+        auto* e = entry_at(index);
+        if (e == nullptr) { return; }
 
-        WindowList[index]->set_minimized(true);
+        e->window->set_minimized(true);
 
         #ifdef _WIN32
-        WindowList[index]->webview::native().controller->put_IsVisible(false);
-        ICoreWebView2_3* webView2_3 = static_cast<ICoreWebView2_3*>(WindowList[index]->webview::native().webview);
+        e->webview->native().controller->put_IsVisible(false);
+        ICoreWebView2_3* webView2_3 = static_cast<ICoreWebView2_3*>(e->webview->native().webview);
         webView2_3->TrySuspend(nullptr);
         #endif
     }
 
     EXPORT void CloseWebWindow(int index) {
-        if (WindowList[index] == nullptr) { return; }
+        auto* e = entry_at(index);
+        if (e == nullptr) { return; }
 
-        WindowList[index]->close();
-        WindowList[index].reset();
-        WindowList[index] = nullptr;
+        e->window->close();
+        e->webview.reset();
+        e->window.reset();
+        e->alive = false;
     }
 
-    EXPORT void ExecuteJavaScriptOnWebWindow(int index, char* javascriptCode) {  
-        if (WindowList[index] == nullptr) { return; }  
+    EXPORT void ExecuteJavaScriptOnWebWindow(int index, char* javascriptCode) {
+        auto* e = entry_at(index);
+        if (e == nullptr) { return; }
         std::string codeToExecute(javascriptCode, strlen(javascriptCode));
-        WindowList[index]->webview::execute(codeToExecute);
+        // Call webview::execute (cstring_view) directly; smartview::execute is a
+        // consteval format_string template and cannot accept a runtime string.
+        static_cast<saucer::webview&>(*e->webview).execute(codeToExecute);
     }
 
     EXPORT void SetWebWindowBounds(int index, int w, int h, int minW, int minH, int maxW, int maxH) {
-        if (WindowList[index] == nullptr) { return; }
-        
+        auto* e = entry_at(index);
+        if (e == nullptr) { return; }
+
         #if __APPLE__
         // On macOS, calling set_size will animate the resizing, which we don't want
         // So first use the NSWindow API to instantly resize first
-        MacDirectResize(WindowList[index]->window::native().window, w, h);
+        MacDirectResize(e->window->native().window, w, h);
         #endif
-        
-        WindowList[index]->set_size(w, h);
-        WindowList[index]->set_min_size(minW, minH);
-        WindowList[index]->set_max_size(maxW, maxH);
+
+        e->window->set_size(saucer::size{w, h});
+        e->window->set_min_size(saucer::size{minW, minH});
+        e->window->set_max_size(saucer::size{maxW, maxH});
 
         if (minW == maxW && minH == maxH) { // Detect locked window bounds
-            WindowList[index]->set_resizable(false);
+            e->window->set_resizable(false);
 
             // Don't enforce min and max size when bounds are locked
-            WindowList[index]->set_min_size(0, 0);
-            WindowList[index]->set_max_size(9999, 9999);
+            e->window->set_min_size(saucer::size{0, 0});
+            e->window->set_max_size(saucer::size{9999, 9999});
         }
         else {
-            WindowList[index]->set_resizable(true);
+            e->window->set_resizable(true);
         }
     }
 
     EXPORT void SetWebWindowTitle(int index, const char* title) {
-        if (WindowList[index] == nullptr) { return; }
+        auto* e = entry_at(index);
+        if (e == nullptr) { return; }
         std::string titleToSet(title, strlen(title));
-        WindowList[index]->set_title(titleToSet);
+        e->window->set_title(titleToSet);
     }
-    
+
     EXPORT void SetWebWindowTitleBar(int index, bool visible) {
-        if (WindowList[index] == nullptr) { return; }
+        auto* e = entry_at(index);
+        if (e == nullptr) { return; }
 
         if (visible) {
-            WindowList[index]->set_decoration(saucer::window_decoration::full);
+            e->window->set_decorations(saucer::window::decoration::full);
         }
         else {
-            WindowList[index]->set_decoration(saucer::window_decoration::partial);
+            e->window->set_decorations(saucer::window::decoration::partial);
         }
     }
 
     EXPORT void SetWebWindowIcon(int index, const char* iconPath) {
-        if (WindowList[index] == nullptr) { return; }
+        auto* e = entry_at(index);
+        if (e == nullptr) { return; }
 
         auto strIconPath = utf8_to_path(iconPath);
-        saucer::icon icon = saucer::icon::from(strIconPath).value();
-        WindowList[index]->set_icon(icon);
+        auto icon_result = saucer::icon::from(strIconPath);
+        if (!icon_result.has_value()) { return; }
+        e->window->set_icon(icon_result.value());
     }
 
     EXPORT void SetWebWindowURL(int index, const char* url) {
-        if (WindowList[index] == nullptr) { return; }
+        auto* e = entry_at(index);
+        if (e == nullptr) { return; }
 
         std::string urlToSet(url, strlen(url));
-        WindowList[index]->set_url(urlToSet);
+        e->webview->set_url(urlToSet);
     }
 
     EXPORT void SetWebWindowDark(int index, bool isDark) {
-        if (WindowList[index] == nullptr) { return; }
+        auto* e = entry_at(index);
+        if (e == nullptr) { return; }
 
-        WindowList[index]->set_force_dark_mode(isDark);
+        // Renamed from `set_force_dark_mode` to `set_force_dark` in saucer v7.
+        e->webview->set_force_dark(isDark);
     }
 
     EXPORT void SetWebWindowDevToolsEnabled(int index, bool enableDevTools) {
-        if (WindowList[index] == nullptr) { return; }
+        auto* e = entry_at(index);
+        if (e == nullptr) { return; }
 
-        WindowList[index]->set_dev_tools(enableDevTools);
+        e->webview->set_dev_tools(enableDevTools);
     }
 
     EXPORT const char* GetWebWindowTitle(int index) {
-        if (WindowList[index] == nullptr) { return ""; }
+        auto* e = entry_at(index);
+        if (e == nullptr) { return ""; }
 
-        auto title = WindowList[index]->title();
+        auto title = e->window->title();
         auto titlePtr = strdup(title.c_str()); // This is freed by the C# code
         return (const char*)titlePtr;
     }
 
     EXPORT const bool GetWebWindowMaximized(int index) {
-        return WindowList[index]->maximized();
+        auto* e = entry_at(index);
+        if (e == nullptr) { return false; }
+        return e->window->maximized();
     }
 
     EXPORT const void SetWebWindowMaximized(int index, bool isMaximized) {
-        WindowList[index]->set_maximized(isMaximized);
+        auto* e = entry_at(index);
+        if (e == nullptr) { return; }
+        e->window->set_maximized(isMaximized);
     }
 
     EXPORT const void* GetWebWindowHandle(int index) {
-        if (WindowList[index] == nullptr) { return 0; }
+        auto* e = entry_at(index);
+        if (e == nullptr) { return 0; }
 
         #ifdef _WIN32
-        return WindowList[index]->window::native().hwnd;
+        return e->window->native().hwnd;
+        #else
+        // Non-Windows platforms do not yet expose a stable handle through this API.
+        return nullptr;
         #endif
-
-        return &index;
     }
 
     EXPORT const bool GetWebWindowFullscreen(int index) {
-        if (index < 0 || index >= (int)WindowList.size() || WindowList[index] == nullptr) { return false; }
-        ensure_fullscreen_slot(index);
-        return FullscreenStateList[index].active;
+        auto* e = entry_at(index);
+        if (e == nullptr) { return false; }
+        return e->fullscreen.active;
     }
 
     EXPORT void SetWebWindowFullscreen(int index, bool fullscreen) {
-        if (index < 0 || index >= (int)WindowList.size() || WindowList[index] == nullptr) { return; }
-        ensure_fullscreen_slot(index);
-        auto& state = FullscreenStateList[index];
-        auto& window = WindowList[index];
+        auto* e = entry_at(index);
+        if (e == nullptr) { return; }
+        auto& state = e->fullscreen;
+        auto& window = e->window;
 
         if (fullscreen == state.active) { return; }
 
         if (fullscreen) {
             // Save pre-fullscreen state so we can restore to the same monitor/position on exit.
             state.was_maximized = window->maximized();
-            state.decoration = window->decoration();
+            state.decoration = window->decorations();
             state.position = window->position();
             state.size = window->size();
 
@@ -280,16 +339,16 @@ extern "C" {
                 window->set_maximized(false);
             }
 
-            window->set_decoration(saucer::window_decoration::none);
-            window->set_position(target.position.first, target.position.second);
-            window->set_size(target.size.first, target.size.second);
+            window->set_decorations(saucer::window::decoration::none);
+            window->set_position(target.position);
+            window->set_size(target.size);
 
             state.active = true;
         } else {
             // Restore the original decoration first so the frame sizing applies cleanly.
-            window->set_decoration(state.decoration);
-            window->set_position(state.position.first, state.position.second);
-            window->set_size(state.size.first, state.size.second);
+            window->set_decorations(state.decoration);
+            window->set_position(state.position);
+            window->set_size(state.size);
             if (state.was_maximized) {
                 window->set_maximized(true);
             }
@@ -299,13 +358,25 @@ extern "C" {
 
     EXPORT void CreateApp(const char* appID) {
         std::string appIDToSet(appID, strlen(appID));
-        App = saucer::application::init({
+        auto app_result = saucer::application::create({
             .id = appIDToSet,
         });
+        if (!app_result.has_value()) {
+            return;
+        }
+        // saucer::application is move-only; heap-allocate so we keep a stable pointer.
+        App = std::unique_ptr<saucer::application>(
+            new saucer::application(std::move(app_result.value())));
     }
 
     EXPORT void RunApp() {
-        App->run();
+        if (!App) { return; }
+        // saucer v7+ requires a start coroutine. Windows are already created via
+        // NewWebWindow before this call, so the start coroutine just waits for the
+        // last window to close (which resolves `app->finish()`).
+        App->run([](saucer::application* app) -> coco::stray {
+            co_await app->finish();
+        });
     }
 
     EXPORT void Free(void* ptr) {

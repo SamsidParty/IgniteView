@@ -11,7 +11,8 @@ target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 23 CXX_EXTENSIONS OFF CXX_STANDARD_REQUIRED ON)
 
 if(UNIX AND NOT APPLE)
-    set(saucer_backend "Qt6")
+    # saucer v8 dropped Qt5 support and renamed the `Qt6` backend to `Qt`.
+    set(saucer_backend "Qt")
 endif()
 
 set(saucer_serializer "Rflpp")
@@ -22,7 +23,7 @@ include(FetchContent)
 FetchContent_Declare(
   saucer
   GIT_REPOSITORY https://github.com/saucer/saucer
-  GIT_TAG        8ace837fbf6ce15e0a3aed45fa0d3e2b735110e8
+  GIT_TAG        v8.0.5
 )
 
 FetchContent_MakeAvailable(saucer)
