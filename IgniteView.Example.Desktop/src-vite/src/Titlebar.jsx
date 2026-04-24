@@ -22,6 +22,9 @@ function WindowButtons() {
             <button onClick={window.hide}>
                 <svg width="24" height="24" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.997 13H20a1 1 0 1 0 0-2H3.997a1 1 0 1 0 0 2Z" fill="currentColor" /></svg>
             </button>
+            <button onClick={window.igniteView.toggleFullscreen} title="Toggle fullscreen">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 3H22V9H20V5H16V3H20ZM4 3H8V5H4V9H2V3H4ZM20 19V15H22V21H16V19H20ZM4 19H8V21H2V15H4V19Z"></path></svg>
+            </button>
             <button onClick={window.toggleMaximize}>
                 {
                     isMaximized ?

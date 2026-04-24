@@ -66,6 +66,58 @@ namespace IgniteView.Core
 
         #endregion
 
+        #region Window Fullscreen
+
+        /// <summary>
+        /// Gets or sets whether the window is in fullscreen mode.
+        /// Entering fullscreen displays the window borderless on its current monitor
+        /// and remembers the original position/size so exiting restores it.
+        /// </summary>
+        public virtual bool IsFullscreen { get; set; }
+
+        /// <summary>
+        /// Enters fullscreen mode on the monitor the window is currently on
+        /// </summary>
+        public virtual WebWindow EnterFullscreen()
+        {
+            IsFullscreen = true;
+            return this;
+        }
+
+        /// <summary>
+        /// Exits fullscreen mode, restoring the original window position and size
+        /// </summary>
+        public virtual WebWindow ExitFullscreen()
+        {
+            IsFullscreen = false;
+            return this;
+        }
+
+        /// <summary>
+        /// Toggles fullscreen mode
+        /// </summary>
+        public virtual WebWindow ToggleFullscreen()
+        {
+            IsFullscreen = !IsFullscreen;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the fullscreen state of this window
+        /// </summary>
+        public WebWindow WithFullscreen(bool isFullscreen)
+        {
+            IsFullscreen = isFullscreen;
+            return this;
+        }
+
+        /// <summary>
+        /// Makes this window start in fullscreen mode
+        /// </summary>
+        public WebWindow WithFullscreen() => WithFullscreen(true);
+
+        #endregion
+
         #region Window Title
 
         /// <summary>
