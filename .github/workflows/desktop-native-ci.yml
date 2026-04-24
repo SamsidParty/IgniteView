@@ -87,10 +87,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Cache CPM downloads
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .cpm-cache
           key: cpm-${{ runner.os }}-${{ matrix.runtime_id }}-${{ hashFiles('IgniteView.Desktop.Native/CMakeLists.txt', 'IgniteView.Desktop.Native/cpm-package-lock.cmake') }}
@@ -99,7 +99,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake ninja-build pkg-config qt6-base-dev qt6-webengine-dev libgl1-mesa-dev
+          sudo apt-get install -y cmake ninja-build pkg-config gcc-14 g++-14 qt6-base-dev qt6-webengine-dev libgl1-mesa-dev
 
       - name: Configure native build
         shell: bash
@@ -129,6 +129,13 @@ jobs:
             cmake_args+=(-DCMAKE_BUILD_TYPE=Release)
           fi
 
+          if [[ "$RUNNER_OS" == "Linux" ]]; then
+            cmake_args+=(
+              -DCMAKE_C_COMPILER=gcc-14
+              -DCMAKE_CXX_COMPILER=g++-14
+            )
+          fi
+
           if [[ -n "${{ matrix.osx_arch || '' }}" ]]; then
             cmake_args+=(-DCMAKE_OSX_ARCHITECTURES=${{ matrix.osx_arch }})
           fi
@@ -149,7 +156,7 @@ jobs:
           test -f "native-output/${{ matrix.runtime_folder }}/native/${{ matrix.library_name }}"
 
       - name: Upload native artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.artifact_name }}
           path: native-output/${{ matrix.runtime_folder }}
@@ -162,22 +169,22 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
           cache-dependency-path: IgniteView.Core/src-vite/package-lock.json
 
       - name: Download native artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: native-staging
           pattern: desktop-native-*
@@ -246,7 +253,7 @@ jobs:
             -p:GeneratePackageOnBuild=false
 
       - name: Upload NuGet artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: igniteview-nupkgs
           path: artifacts/nupkgs/*.nupkg

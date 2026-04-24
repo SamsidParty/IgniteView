@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.25)
 project(IgniteView.Desktop.Native LANGUAGES CXX C)
 
+if(APPLE)
+    enable_language(OBJCXX)
+endif()
+
 add_library(IgniteView.Desktop.Native SHARED)
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
@@ -24,4 +28,9 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(saucer)
 
 target_sources(IgniteView.Desktop.Native PUBLIC Main.cpp MacHelper.h)
+
+if(APPLE)
+    target_sources(IgniteView.Desktop.Native PRIVATE MacHelper.mm)
+endif()
+
 target_link_libraries(${PROJECT_NAME} PUBLIC saucer::saucer)
