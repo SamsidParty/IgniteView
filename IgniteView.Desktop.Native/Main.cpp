@@ -53,19 +53,10 @@ static std::filesystem::path utf8_to_path(const char* s) {
 }
 
 // Per-window saved state used to restore the window after leaving fullscreen.
-struct FullscreenState {
-    bool active = false;
-    bool was_maximized = false;
-    saucer::window::decoration decoration = saucer::window::decoration::full;
-    saucer::position position{0, 0};
-    saucer::size size{0, 0};
-};
-
 struct WebWindowEntry {
     std::shared_ptr<saucer::window> window;
     std::optional<saucer::smartview> webview;
     CommandBridgeCallback commandBridge{nullptr};
-    FullscreenState fullscreen{};
     bool alive{false};
 };
 
@@ -301,59 +292,15 @@ extern "C" {
     EXPORT const bool GetWebWindowFullscreen(int index) {
         auto* e = entry_at(index);
         if (e == nullptr) { return false; }
-        return e->fullscreen.active;
+        return e->window->fullscreen();
     }
 
     EXPORT void SetWebWindowFullscreen(int index, bool fullscreen) {
         auto* e = entry_at(index);
         if (e == nullptr) { return; }
-        auto& state = e->fullscreen;
-        auto& window = e->window;
-
-        if (fullscreen == state.active) { return; }
-
-        if (fullscreen) {
-            // Save pre-fullscreen state so we can restore to the same monitor/position on exit.
-            state.was_maximized = window->maximized();
-            state.decoration = window->decorations();
-            state.position = window->position();
-            state.size = window->size();
-
-            // Pick the screen that currently contains the window (falls back to first screen).
-            auto current_screen = window->screen();
-            saucer::screen target{};
-            if (current_screen.has_value()) {
-                target = current_screen.value();
-            } else {
-                auto screens = App->screens();
-                if (!screens.empty()) {
-                    target = screens.front();
-                } else {
-                    // No screen information available; bail out rather than produce a zero-sized window.
-                    return;
-                }
-            }
-
-            // Restore from maximized first — toggling decoration while maximized misbehaves on some platforms.
-            if (state.was_maximized) {
-                window->set_maximized(false);
-            }
-
-            window->set_decorations(saucer::window::decoration::none);
-            window->set_position(target.position);
-            window->set_size(target.size);
-
-            state.active = true;
-        } else {
-            // Restore the original decoration first so the frame sizing applies cleanly.
-            window->set_decorations(state.decoration);
-            window->set_position(state.position);
-            window->set_size(state.size);
-            if (state.was_maximized) {
-                window->set_maximized(true);
-            }
-            state.active = false;
-        }
+        // Use saucer's native fullscreen so the compositor (e.g. KDE Wayland) grants
+        // a real fullscreen surface that covers panels/taskbars.
+        e->window->set_fullscreen(fullscreen);
     }
 
     EXPORT void CreateApp(const char* appID) {
