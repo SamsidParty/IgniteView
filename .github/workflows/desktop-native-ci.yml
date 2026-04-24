@@ -99,7 +99,15 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake ninja-build pkg-config gcc-14 g++-14 qt6-base-dev qt6-webengine-dev libgl1-mesa-dev
+          sudo apt-get install -y cmake ninja-build pkg-config gcc-14 g++-14 libgl1-mesa-dev libglx-dev libxkbcommon-dev libfontconfig1-dev libfreetype-dev libx11-dev libx11-xcb-dev libxcb1-dev libxcb-cursor-dev libxcb-glx0-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-render-util0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-util-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-xkb-dev libxkbcommon-x11-dev libdbus-1-dev libnss3-dev libasound2-dev
+
+      - name: Install Qt (Linux)
+        if: runner.os == 'Linux'
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.1'
+          modules: 'qtwebengine qtwebchannel qtpositioning'
+          cache: true
 
       - name: Configure native build
         shell: bash

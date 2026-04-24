@@ -31,6 +31,9 @@ target_sources(IgniteView.Desktop.Native PUBLIC Main.cpp MacHelper.h)
 
 if(APPLE)
     target_sources(IgniteView.Desktop.Native PRIVATE MacHelper.mm)
+    # Main.cpp pulls in saucer's webkit module header on Apple, which transitively
+    # includes Objective-C types (NSString, etc). Compile it as Objective-C++.
+    set_source_files_properties(Main.cpp PROPERTIES LANGUAGE OBJCXX)
 endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC saucer::saucer)
