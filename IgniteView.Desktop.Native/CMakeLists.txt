@@ -8,7 +8,19 @@ endif()
 add_library(IgniteView.Desktop.Native SHARED)
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
-set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 23 CXX_EXTENSIONS OFF CXX_STANDARD_REQUIRED ON)
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    CXX_STANDARD 23
+    CXX_EXTENSIONS OFF
+    CXX_STANDARD_REQUIRED ON
+)
+
+if(APPLE)
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        OBJCXX_STANDARD 23
+        OBJCXX_EXTENSIONS OFF
+        OBJCXX_STANDARD_REQUIRED ON
+    )
+endif()
 
 if(UNIX AND NOT APPLE)
     set(saucer_backend "Qt")
@@ -22,7 +34,8 @@ include(cmake/CPM.cmake)
 
 CPMAddPackage(
   NAME           saucer
-  VERSION        8.0.4
+  VERSION        8.0.5
+  GIT_TAG        v8.0.5
   GIT_REPOSITORY "https://github.com/saucer/saucer"
 )
 
