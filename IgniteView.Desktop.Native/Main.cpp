@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <filesystem>
+#include <memory>
 #include <string>
 #include <string_view>
 
@@ -48,7 +49,7 @@ static std::filesystem::path utf8_to_path(const char* s) {
 }
 
 std::shared_ptr<saucer::application> App;
-std::vector<std::shared_ptr<saucer::smartview<saucer::default_serializer>>> WindowList;
+std::vector<std::shared_ptr<saucer::smartview>> WindowList;
 std::vector<CommandBridgeCallback> CommandBridgeList;
 
 // Per-window saved state used to restore the window after leaving fullscreen.
@@ -75,7 +76,7 @@ extern "C" {
         std::string preloadToRun(preloadScript, strlen(preloadScript));
         auto pathToSet = utf8_to_path(path);
 
-        auto window = std::shared_ptr{ App->make<saucer::smartview<saucer::default_serializer>>(saucer::preferences{
+        auto window = std::shared_ptr{ App->make<saucer::smartview>(saucer::preferences{
             .application = App,
             .persistent_cookies = true,
                 .hardware_acceleration = true,
