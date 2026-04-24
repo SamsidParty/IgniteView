@@ -18,6 +18,7 @@ set(saucer_serializer "Rflpp")
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 include(FetchContent)
+include(cmake/CPM.cmake)
 
 CPMAddPackage(
   NAME           saucer
