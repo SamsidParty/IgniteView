@@ -41,8 +41,44 @@ env:
   MAC_LIBRARY_NAME: libIgniteView.Desktop.Native.dylib
 
 jobs:
+  detect-changes:
+    name: detect-changes
+    runs-on: ubuntu-24.04
+    outputs:
+      native: ${{ steps.filter.outputs.native }}
+      should_build: ${{ steps.decide.outputs.should_build }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 2
+
+      - name: Detect native source changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            native:
+              - 'IgniteView.Desktop.Native/**'
+              - '.github/workflows/desktop-native-ci.yml'
+
+      - name: Decide whether to build natives
+        id: decide
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]] \
+             || [[ "${{ github.ref }}" == refs/tags/* ]] \
+             || [[ "${{ steps.filter.outputs.native }}" == "true" ]]; then
+            echo "should_build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_build=false" >> "$GITHUB_OUTPUT"
+          fi
+
   build-native:
     name: native-${{ matrix.runtime_id }}
+    needs: detect-changes
+    if: needs.detect-changes.outputs.should_build == 'true'
     runs-on: ${{ matrix.runs_on }}
     strategy:
       fail-fast: false
@@ -173,11 +209,20 @@ jobs:
   pack-nuget:
     name: pack-nuget
     runs-on: macos-14
-    needs: build-native
+    needs: [detect-changes, build-native]
+    if: |
+      always() &&
+      needs.detect-changes.result == 'success' &&
+      (needs.build-native.result == 'success' || needs.build-native.result == 'skipped')
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          ref: ${{ github.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
@@ -192,12 +237,14 @@ jobs:
           cache-dependency-path: IgniteView.Core/src-vite/package-lock.json
 
       - name: Download native artifacts
+        if: needs.build-native.result == 'success'
         uses: actions/download-artifact@v8
         with:
           path: native-staging
           pattern: desktop-native-*
 
       - name: Refresh desktop iv2runtime from fresh native builds
+        if: needs.build-native.result == 'success'
         shell: bash
         run: |
           set -euo pipefail
@@ -239,6 +286,40 @@ jobs:
           test -f "$desktop_runtime/linux-x64/native/$LINUX_LIBRARY_NAME"
           test -f "$desktop_runtime/linux-arm64/native/$LINUX_LIBRARY_NAME"
           test -f "$desktop_runtime/osx-universal/native/$MAC_LIBRARY_NAME"
+
+      - name: Commit refreshed native libraries to main
+        if: |
+          needs.build-native.result == 'success' &&
+          github.event_name == 'push' &&
+          github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add IgniteView.Desktop/iv2runtime
+
+          if git diff --cached --quiet; then
+            echo "No native library changes to commit."
+            exit 0
+          fi
+
+          git commit -m "ci: refresh desktop native libraries [skip ci]"
+
+          # Rebase on top of any commits pushed while we were building, then push.
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then
+              echo "Pushed native library update."
+              exit 0
+            fi
+            echo "Push failed (attempt $attempt), pulling with rebase and retrying..."
+            git pull --rebase origin main
+          done
+
+          echo "Failed to push native library update after multiple attempts." >&2
+          exit 1
 
       - name: Pack IgniteView.Core
         shell: bash

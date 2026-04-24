@@ -51,7 +51,9 @@ include/divisible/*
 
 build/**/*
 build_mac/**/*
+build_macintel/**/*
 build_linux/**/*
+build_linuxarm/**/*
 build_winarm/**/*
 
 include/*
