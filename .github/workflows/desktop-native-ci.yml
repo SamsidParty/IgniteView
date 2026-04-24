@@ -145,6 +145,12 @@ jobs:
           modules: 'qtwebengine qtwebchannel qtpositioning'
           cache: true
 
+      - name: Select modern Xcode (macOS)
+        if: runner.os == 'macOS'
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
       - name: Configure native build
         shell: bash
         working-directory: IgniteView.Desktop.Native
