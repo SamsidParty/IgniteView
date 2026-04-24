@@ -82,7 +82,7 @@ extern "C" {
         std::string preloadToRun(preloadScript, strlen(preloadScript));
         auto pathToSet = utf8_to_path(path);
 
-        auto hostWindow = saucer::window::create(&App.value());
+        auto hostWindow = saucer::window::create(std::addressof(App.value()));
         if (!hostWindow.has_value()) { return -1; }
 
         auto webview = saucer::smartview::create({
