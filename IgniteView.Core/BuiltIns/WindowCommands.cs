@@ -83,5 +83,29 @@ namespace IgniteView.Core
         {
             window.WithMaximized(!window.IsMaximized);
         }
+
+        [Command("igniteview_window_enter_fullscreen")]
+        public static void EnterFullscreen(WebWindow window)
+        {
+            window.EnterFullscreen();
+        }
+
+        [Command("igniteview_window_exit_fullscreen")]
+        public static void ExitFullscreen(WebWindow window)
+        {
+            window.ExitFullscreen();
+        }
+
+        [Command("igniteview_window_toggle_fullscreen")]
+        public static void ToggleFullscreen(WebWindow window)
+        {
+            window.ToggleFullscreen();
+        }
+
+        [Command("igniteview_window_is_fullscreen")]
+        public static bool IsFullscreen(WebWindow window)
+        {
+            return window.IsFullscreen;
+        }
     }
 }
