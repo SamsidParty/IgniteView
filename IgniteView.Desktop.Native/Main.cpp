@@ -3,6 +3,9 @@
 #include <saucer/window.hpp>
 #include <iostream>
 #include <vector>
+#include <filesystem>
+#include <string>
+#include <string_view>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -33,6 +36,17 @@ int main() {
 
 typedef void(__stdcall *CommandBridgeCallback)(const char*);
 
+// Converts a UTF8 encoded C string coming from the C# side into a std::filesystem::path
+static std::filesystem::path utf8_to_path(const char* s) {
+    if (s == nullptr) {
+        return {};
+    }
+    std::string_view sv(s);
+    return std::filesystem::path(
+        reinterpret_cast<const char8_t*>(sv.data()),
+        reinterpret_cast<const char8_t*>(sv.data() + sv.size()));
+}
+
 std::shared_ptr<saucer::application> App;
 std::vector<std::shared_ptr<saucer::smartview<saucer::default_serializer>>> WindowList;
 std::vector<CommandBridgeCallback> CommandBridgeList;
@@ -43,7 +57,7 @@ extern "C" {
 
         std::string urlToSet(url, strlen(url));
         std::string preloadToRun(preloadScript, strlen(preloadScript));
-        std::string pathToSet(path, strlen(path));
+        auto pathToSet = utf8_to_path(path);
 
         auto window = std::shared_ptr{ App->make<saucer::smartview<saucer::default_serializer>>(saucer::preferences{
             .application = App,
@@ -158,7 +172,7 @@ extern "C" {
     EXPORT void SetWebWindowIcon(int index, const char* iconPath) {
         if (WindowList[index] == nullptr) { return; }
 
-        std::string strIconPath(iconPath, strlen(iconPath));
+        auto strIconPath = utf8_to_path(iconPath);
         saucer::icon icon = saucer::icon::from(strIconPath).value();
         WindowList[index]->set_icon(icon);
     }
