@@ -1,3 +1,5 @@
+import "./main";
+
 type IgniteViewCommandArgument = unknown;
 type IgniteViewCommandResult<TResult = unknown> = Promise<TResult> | string | undefined;
 type IgniteViewHostCommandResult<TResult = unknown> = Promise<TResult> | undefined;

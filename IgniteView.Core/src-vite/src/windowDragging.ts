@@ -1,3 +1,5 @@
+import "./main";
+
 window.igniteView.dragWindow = (event: Event): void => {
     const targetElement = event.target;
 
