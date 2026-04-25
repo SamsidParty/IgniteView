@@ -78,12 +78,8 @@ namespace IgniteView.Core
         {
             if (ctx.Request.Url != null)
             {
-                var dynamicScriptData = ScriptManager.CombinedScriptData;
-
-                // LocalStorage
                 var origin = ctx.Request.Headers.Get("Origin") ?? "default";
-                var localStorage = await (new LocalStorage(origin)).GetAllItems();
-                dynamicScriptData += "\n" + (new JSFunctionCall("window?._localStorage?.hydrate?.", localStorage)).ToString();
+                var dynamicScriptData = await ScriptManager.GetCombinedScriptDataForOrigin(origin);
 
                 var bytes = Encoding.UTF8.GetBytes(dynamicScriptData);
                 ctx.Response.ContentLength = bytes.Length;

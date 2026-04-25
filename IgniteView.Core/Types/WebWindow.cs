@@ -245,6 +245,12 @@ namespace IgniteView.Core
 
                 // When the URL changes, so does the host for the local storage
                 this.LocalStorage = new LocalStorage(this);
+
+                // If not served from the local server, we need to manually inject the preload scripts
+                if (!URL.StartsWith(CurrentAppManager.CurrentServerManager.LocalBaseURL))
+                {
+                    this.ExecuteJavaScript(ScriptManager.GetCombinedScriptDataForOrigin(URL).Result);
+                }
             }
         }
 

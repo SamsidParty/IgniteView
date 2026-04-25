@@ -49,6 +49,13 @@ namespace IgniteView.Core
             }
         }
 
+        public static async Task<string> GetCombinedScriptDataForOrigin(string origin) {
+            var dynamicScriptData = ScriptManager.CombinedScriptData;
+            var localStorage = await (new LocalStorage(origin)).GetAllItems();
+            dynamicScriptData += "\n" + (new JSFunctionCall("window?._localStorage?.hydrate?.", localStorage)).ToString();
+            return dynamicScriptData;
+        }
+
         /// <summary>
         /// Registers a script to load as soon as any WebWindow loads.
         /// This function MUST be called BEFORE any WebWindows are created.
