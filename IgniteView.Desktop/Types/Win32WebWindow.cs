@@ -71,7 +71,6 @@ namespace IgniteView.Desktop
 
         public enum WindowBackgroundMode
         {
-            Disabled = 0,
             Mica = 2,
             Acrylic = 3,
             DarkMica = 4,
@@ -120,35 +119,66 @@ namespace IgniteView.Desktop
         /// <summary>
         /// Experimental; Native win32 window background mode
         /// </summary>
-        public WindowBackgroundMode BackgroundMode = WindowBackgroundMode.Mica;
+        private WindowBackgroundMode _backgroundMode = WindowBackgroundMode.Mica;
+
+        /// <summary>
+        /// Experimental; Native win32 window background mode. Use AcrylicBackground to enable or disable it.
+        /// </summary>
+        public WindowBackgroundMode BackgroundMode
+        {
+            get => _backgroundMode;
+            set
+            {
+                _backgroundMode = value;
+                ApplyWindowBackground(NativeHandle);
+            }
+        }
+
+        public override bool AcrylicBackground
+        {
+            get => base.AcrylicBackground;
+            set
+            {
+                base.AcrylicBackground = value;
+                ApplyWindowBackground(NativeHandle);
+            }
+        }
 
         #endregion
 
-        void EnableMica(IntPtr hwnd)
+        void SetAccentPolicy(IntPtr hwnd, AccentState state)
         {
-            if (!IsWindows11) { return; }
+            var accent = new AccentPolicy();
+            var accentStructSize = Marshal.SizeOf(accent);
+            accent.AccentState = state;
 
-            int enable = (int)BackgroundMode < 5 ? (int)BackgroundMode : 0;
-            DwmSetWindowAttribute(hwnd, 38, ref enable, Marshal.SizeOf(typeof(int)));
+            var accentPtr = Marshal.AllocHGlobal(accentStructSize);
+            Marshal.StructureToPtr(accent, accentPtr, false);
 
-            if (BackgroundMode == WindowBackgroundMode.BlurBehind)
+            var data = new WindowCompositionAttributeData();
+            data.Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY;
+            data.SizeOfData = accentStructSize;
+            data.Data = accentPtr;
+
+            SetWindowCompositionAttribute(hwnd, ref data);
+
+            Marshal.FreeHGlobal(accentPtr);
+        }
+
+        void ApplyWindowBackground(IntPtr hwnd)
+        {
+            if (hwnd == IntPtr.Zero) { return; }
+
+            if (IsWindows11)
             {
-                var accent = new AccentPolicy();
-                var accentStructSize = Marshal.SizeOf(accent);
-                accent.AccentState = AccentState.ACCENT_ENABLE_BLURBEHIND;
-
-                var accentPtr = Marshal.AllocHGlobal(accentStructSize);
-                Marshal.StructureToPtr(accent, accentPtr, false);
-
-                var data = new WindowCompositionAttributeData();
-                data.Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY;
-                data.SizeOfData = accentStructSize;
-                data.Data = accentPtr;
-
-                SetWindowCompositionAttribute(hwnd, ref data);
-
-                Marshal.FreeHGlobal(accentPtr);
+                const int dwmsbtNone = 1;
+                int enable = AcrylicBackground && BackgroundMode != WindowBackgroundMode.BlurBehind ? (int)BackgroundMode : dwmsbtNone;
+                DwmSetWindowAttribute(hwnd, 38, ref enable, Marshal.SizeOf(typeof(int)));
             }
+
+            SetAccentPolicy(hwnd, AcrylicBackground && BackgroundMode == WindowBackgroundMode.BlurBehind
+                ? AccentState.ACCENT_ENABLE_BLURBEHIND
+                : AccentState.ACCENT_DISABLED);
         }
 
         /// <summary>
@@ -214,7 +244,7 @@ namespace IgniteView.Desktop
             }
 
             base.Show();
-            EnableMica(NativeHandle);
+            ApplyWindowBackground(NativeHandle);
             return this;
         }
     }

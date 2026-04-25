@@ -6,20 +6,35 @@
 #include <WebKit/WKWebView.h>
 #include <WebKit/WKWebViewConfiguration.h>
 
-EXPORT void MacEnableAcrylic(void* webviewHandle, void* windowHandle) {
+static NSString* IgniteViewAcrylicBackgroundIdentifier = @"IgniteViewAcrylicBackground";
+
+EXPORT void MacSetAcrylic(void* webviewHandle, void* windowHandle, bool enabled) {
     auto* webview = static_cast<WKWebView*>(webviewHandle);
     auto* window = static_cast<NSWindow*>(windowHandle);
 
-    window.appearance = [NSAppearance appearanceNamed:NSAppearanceNameVibrantLight];
-    window.titlebarAppearsTransparent = true;
-    [webview setValue:[NSNumber numberWithBool:YES] forKey:@"drawsTransparentBackground"];
+    window.appearance = enabled ? [NSAppearance appearanceNamed:NSAppearanceNameVibrantLight] : nil;
+    window.titlebarAppearsTransparent = enabled;
+    [webview setValue:[NSNumber numberWithBool:enabled] forKey:@"drawsTransparentBackground"];
 
     Class vibrantClass = NSClassFromString(@"NSVisualEffectView");
-    if (vibrantClass) {
+    if (enabled && vibrantClass) {
+        for (NSView* subview in window.contentView.subviews) {
+            if ([subview.identifier isEqualToString:IgniteViewAcrylicBackgroundIdentifier]) {
+                return;
+            }
+        }
+
         NSVisualEffectView* vibrant = [[vibrantClass alloc] initWithFrame:window.contentView.bounds];
+        vibrant.identifier = IgniteViewAcrylicBackgroundIdentifier;
         [vibrant setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
         [vibrant setBlendingMode:NSVisualEffectBlendingModeBehindWindow];
         [window.contentView addSubview:vibrant positioned:NSWindowBelow relativeTo:nil];
+    } else if (!enabled) {
+        for (NSView* subview in window.contentView.subviews) {
+            if ([subview.identifier isEqualToString:IgniteViewAcrylicBackgroundIdentifier]) {
+                [subview removeFromSuperview];
+            }
+        }
     }
 }
 

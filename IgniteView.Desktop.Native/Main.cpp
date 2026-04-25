@@ -38,6 +38,16 @@ int main() {
 #include "MacHelper.h"
 #endif
 
+#ifdef __linux__
+#include <saucer/modules/stable/qt.hpp>
+
+#include <dlfcn.h>
+#include <QRegion>
+#include <QWebEnginePage>
+#include <QWindow>
+#include <QWidget>
+#endif
+
 
 
 typedef void(__stdcall *CommandBridgeCallback)(const char*);
@@ -89,6 +99,7 @@ struct WebWindowEntry {
     std::shared_ptr<saucer::window> window;
     std::optional<saucer::smartview> webview;
     CommandBridgeCallback commandBridge{nullptr};
+    bool acrylicBackground{false};
     bool alive{false};
 };
 
@@ -105,6 +116,81 @@ static WebWindowEntry* entry_at(int index) {
     auto* entry = WindowList[index].get();
     if (entry == nullptr || !entry->alive) { return nullptr; }
     return entry;
+}
+
+#ifdef __linux__
+using EnableBlurBehindFn = void (*)(QWindow*, bool, const QRegion&);
+
+static EnableBlurBehindFn kde_enable_blur_behind() {
+    static auto* function = []() -> EnableBlurBehindFn {
+        for (auto* libraryName : {"libKF6WindowSystem.so.6", "libKF5WindowSystem.so.5"}) {
+            auto* library = dlopen(libraryName, RTLD_LAZY | RTLD_LOCAL);
+            if (library == nullptr) { continue; }
+
+            auto* symbol = dlsym(library, "_ZN14KWindowEffects16enableBlurBehindEP7QWindowbRK7QRegion");
+            if (symbol != nullptr) {
+                return reinterpret_cast<EnableBlurBehindFn>(symbol);
+            }
+        }
+
+        return nullptr;
+    }();
+
+    return function;
+}
+
+static void set_qt_widget_transparent(QWidget* widget, bool enabled) {
+    if (widget == nullptr) { return; }
+
+    widget->setAttribute(Qt::WA_TranslucentBackground, enabled);
+    widget->setAttribute(Qt::WA_NoSystemBackground, enabled);
+    widget->setAttribute(Qt::WA_OpaquePaintEvent, false);
+    widget->setAutoFillBackground(!enabled);
+    widget->setStyleSheet(enabled ? "background: transparent; border: none;" : "");
+}
+
+static void set_linux_acrylic_background(WebWindowEntry* entry, bool enabled) {
+    if (entry == nullptr || !entry->webview.has_value()) { return; }
+
+    auto windowNative = entry->window->native();
+    auto webviewNative = entry->webview->native();
+    auto* window = windowNative.window;
+    auto* webview = webviewNative.webview;
+
+    set_qt_widget_transparent(window, enabled);
+    set_qt_widget_transparent(window != nullptr ? window->centralWidget() : nullptr, enabled);
+    set_qt_widget_transparent(webview, enabled);
+
+    if (webview != nullptr && webview->page() != nullptr) {
+        webview->page()->setBackgroundColor(enabled ? Qt::transparent : Qt::white);
+    }
+
+    if (window != nullptr && window->windowHandle() != nullptr) {
+        if (auto* enableBlurBehind = kde_enable_blur_behind()) {
+            enableBlurBehind(window->windowHandle(), enabled, QRegion{});
+        }
+    }
+}
+#endif
+
+static void set_acrylic_background(WebWindowEntry* entry, bool enabled) {
+    if (entry == nullptr || !entry->webview.has_value()) { return; }
+    entry->acrylicBackground = enabled;
+
+    const auto background = enabled
+        ? saucer::color{.r = 0, .g = 0, .b = 0, .a = 0}
+        : saucer::color{.r = 255, .g = 255, .b = 255, .a = 255};
+
+    entry->window->set_background(background);
+    entry->webview->set_background(background);
+
+    #if __linux__
+    set_linux_acrylic_background(entry, enabled);
+    #endif
+
+    #if __APPLE__
+    MacSetAcrylic(entry->webview->native().webview, entry->window->native().window, enabled);
+    #endif
 }
 
 
@@ -125,7 +211,9 @@ extern "C" {
         saucer::webview::options webview_opts{
             .window = window,
             .persistent_cookies = true,
+            #ifndef __linux__
             .hardware_acceleration = true,
+            #endif
             .storage_path = pathToSet,
             .browser_flags = std::move(browserFlagsToSet),
         };
@@ -144,10 +232,6 @@ extern "C" {
         WindowList.push_back(std::move(entry));
         int windowIndex = static_cast<int>(WindowList.size()) - 1;
         auto* entryPtr = WindowList[windowIndex].get();
-
-        #if __APPLE__
-        MacEnableAcrylic(entryPtr->webview->native().webview, entryPtr->window->native().window);
-        #endif
 
         if (!preloadToRun.empty()) {
             entryPtr->webview->inject({
@@ -174,10 +258,18 @@ extern "C" {
 
         e->window->show();
 
+        #ifdef __linux__
+        set_acrylic_background(e, e->acrylicBackground);
+        #endif
+
         #ifdef _WIN32
         e->webview->native().controller->put_IsVisible(true);
         SetForegroundWindow(e->window->native().hwnd);
         #endif
+    }
+
+    EXPORT void SetWebWindowAcrylic(int index, bool enabled) {
+        set_acrylic_background(entry_at(index), enabled);
     }
 
     EXPORT void HideWebWindow(int index) {

@@ -26,6 +26,10 @@ namespace IgniteView.Core
                 localStyles = (List<StyleRule>)customStyleRules;
             }
 
+            var acrylicBackground = ctx.SharedContext.TryGetValue("AcrylicBackground", out var acrylicBackgroundObj)
+                && acrylicBackgroundObj is bool acrylicBackgroundValue
+                && acrylicBackgroundValue;
+
             // System font stack
             if (PlatformManager.HasPlatformHint("xbox")) {
                 systemStyles.Add(new StyleRule("--system-font", "Bahnschrift, segoe ui, sans-serif"));
@@ -41,18 +45,31 @@ namespace IgniteView.Core
             else if (PlatformManager.HasPlatformHint("macos")) {
                 ApplyStylesFromJSON(systemStyles, "macos");
             }
-            else if (PlatformManager.HasPlatformHint("kde") && File.Exists("/bin/kreadconfig5")) { // KDE Plasma
-                try {
-                    // Get the styles from the current KDE color scheme
-                    systemStyles.Add(new StyleRule("--system-accent", ReadKDEColor("Colors:Button", "ForegroundLink")));
-                    systemStyles.Add(new StyleRule("--system-accent-foreground", ReadKDEColor("Colors:Button", "BackgroundNormal")));
-                    systemStyles.Add(new StyleRule("--system-body", ReadKDEColor("Colors:Window", "BackgroundNormal")));
-                    systemStyles.Add(new StyleRule("--system-background", ReadKDEColor("Colors:Window", "BackgroundNormal")));
-                    systemStyles.Add(new StyleRule("--system-background2", ReadKDEColor("Colors:View", "BackgroundNormal")));
-                    systemStyles.Add(new StyleRule("--system-foreground", ReadKDEColor("Colors:Window", "ForegroundNormal")));
-                    systemStyles.Add(new StyleRule("--system-outline", ReadKDEColor("Colors:View", "ForegroundInactive", 0.2f)));
+            else if (PlatformManager.HasPlatformHint("linux")) {
+                if (acrylicBackground) {
+                    systemStyles.Add(new StyleRule("--system-body", "transparent"));
                 }
-                catch {
+
+                if (PlatformManager.HasPlatformHint("kde") && File.Exists("/bin/kreadconfig5")) { // KDE Plasma
+                    try {
+                        // Get the styles from the current KDE color scheme
+                        systemStyles.Add(new StyleRule("--system-accent", ReadKDEColor("Colors:Button", "ForegroundLink")));
+                        systemStyles.Add(new StyleRule("--system-accent-foreground", ReadKDEColor("Colors:Button", "BackgroundNormal")));
+
+                        if (!acrylicBackground) {
+                            systemStyles.Add(new StyleRule("--system-body", ReadKDEColor("Colors:Window", "BackgroundNormal", 0.5f)));
+                        }
+
+                        systemStyles.Add(new StyleRule("--system-background", ReadKDEColor("Colors:Window", "BackgroundNormal")));
+                        systemStyles.Add(new StyleRule("--system-background2", ReadKDEColor("Colors:View", "BackgroundNormal")));
+                        systemStyles.Add(new StyleRule("--system-foreground", ReadKDEColor("Colors:Window", "ForegroundNormal")));
+                        systemStyles.Add(new StyleRule("--system-outline", ReadKDEColor("Colors:View", "ForegroundInactive", 0.2f)));
+                    }
+                    catch {
+                        ApplyStylesFromJSON(systemStyles);
+                    }
+                }
+                else {
                     ApplyStylesFromJSON(systemStyles);
                 }
             }

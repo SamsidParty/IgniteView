@@ -2,6 +2,6 @@
 
 #define EXPORT extern "C"
 
-EXPORT void MacEnableAcrylic(void* webview, void* window);
+EXPORT void MacSetAcrylic(void* webview, void* window, bool enabled);
 EXPORT bool MacIsDark();
 EXPORT void MacDirectResize(void* window, int width, int height);

@@ -52,6 +52,9 @@ namespace IgniteView.Desktop
         protected static extern void SetWebWindowDevToolsEnabled(int index, bool devToolsEnabled);
 
         [DllImport(InteropHelper.DLLName)]
+        protected static extern void SetWebWindowAcrylic(int index, bool enabled);
+
+        [DllImport(InteropHelper.DLLName)]
         protected static extern void SetWebWindowBounds(int index, int w, int h, int minW, int minH, int maxW, int maxH);
 
         [DllImport(InteropHelper.DLLName, CharSet = CharSet.Unicode)]
@@ -83,6 +86,21 @@ namespace IgniteView.Desktop
         public override string URL { get => base.URL; set { base.URL = value; SetWebWindowURL(WindowIndex, Marshal.StringToCoTaskMemUTF8(base.URL)); } }
         public override IntPtr NativeHandle { get => GetWebWindowHandle(WindowIndex); }
         protected override bool TitleBarVisible { get => false; set => SetWebWindowTitleBar(WindowIndex, value); }
+        private bool _acrylicBackground = true;
+
+        /// <summary>
+        /// Gets or sets whether the native desktop window uses a transparent/acrylic-style background.
+        /// </summary>
+        public virtual bool AcrylicBackground
+        {
+            get => _acrylicBackground;
+            set
+            {
+                _acrylicBackground = value;
+                SharedContext["AcrylicBackground"] = value;
+                ApplyNativeAcrylicBackground(value);
+            }
+        }
 
         public override WindowBounds Bounds { 
             get => base.Bounds;
@@ -105,6 +123,18 @@ namespace IgniteView.Desktop
         {
             var commandString = Marshal.PtrToStringUTF8(param);
             ExecuteCommand(commandString);
+        }
+
+        void ApplyNativeAcrylicBackground(bool enabled)
+        {
+            try
+            {
+                SetWebWindowAcrylic(WindowIndex, enabled);
+            }
+            catch (EntryPointNotFoundException)
+            {
+                // Older platform runtime binaries do not expose this optional background hook.
+            }
         }
 
         #endregion
@@ -161,6 +191,8 @@ namespace IgniteView.Desktop
 
             // Enable dev tools if debug mode
             SetWebWindowDevToolsEnabled(WindowIndex, DebugMode.IsDebugMode);
+            SharedContext["AcrylicBackground"] = _acrylicBackground;
+            ApplyNativeAcrylicBackground(_acrylicBackground);
         }
     }
 }

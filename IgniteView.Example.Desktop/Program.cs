@@ -25,10 +25,14 @@ namespace IgniteView.Example.Desktop
                 .WithSharedContext("Test", "Hello, world")
                 .With((w) =>
                 {
-                    // Cool acrylic effect on Windows 11
-                    if (w.GetType() == typeof(Win32WebWindow))
+                    if (w is DesktopWebWindow desktopWindow)
                     {
-                        ((Win32WebWindow)w).BackgroundMode = Win32WebWindow.WindowBackgroundMode.Mica;
+                        desktopWindow.AcrylicBackground = true;
+                    }
+
+                    if (w is Win32WebWindow win32Window)
+                    {
+                        win32Window.BackgroundMode = Win32WebWindow.WindowBackgroundMode.Mica;
                     }
                 })
                 .Show();

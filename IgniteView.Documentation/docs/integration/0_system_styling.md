@@ -26,7 +26,7 @@ button {
 
 ## Window Backgrounds and Acrylic
 
-Windows and macOS both support blurred windows, and using them with IgniteView is easy:
+Windows, macOS, and Linux compositors can use transparent windows for acrylic-style backgrounds, and using them with IgniteView is easy:
 
 ```css
 body, html {
@@ -34,7 +34,9 @@ body, html {
 }
 ```
 
-By default, this will use [mica](https://learn.microsoft.com/en-us/windows/apps/design/style/mica) on Windows, [vibrancy](https://developer.apple.com/documentation/UIKit/UIVibrancyEffect) on macOS, and a solid background based on the color scheme on other systems.
+By default, this will use [mica](https://learn.microsoft.com/en-us/windows/apps/design/style/mica) on Windows, [vibrancy](https://developer.apple.com/documentation/UIKit/UIVibrancyEffect) on macOS, and compositor-backed transparency on Linux where the desktop environment supports it.
+
+You can disable the transparent native background on any desktop platform through `DesktopWebWindow.AcrylicBackground`. Windows also exposes `Win32WebWindow.BackgroundMode` for choosing the specific DWM material.
 
 ## Other Exposed Colors
 
