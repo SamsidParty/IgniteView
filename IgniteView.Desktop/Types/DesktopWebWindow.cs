@@ -132,7 +132,9 @@ namespace IgniteView.Desktop
 
         public override void ExecuteJavaScript(string scriptData)
         {
-            ExecuteJavaScriptOnWebWindow(WindowIndex, Marshal.StringToCoTaskMemUTF8(JavaScriptConverter.WrapCode(scriptData)));
+            var ptr = Marshal.StringToCoTaskMemUTF8(JavaScriptConverter.WrapCode(scriptData));
+            try { ExecuteJavaScriptOnWebWindow(WindowIndex, ptr); }
+            finally { Marshal.FreeCoTaskMem(ptr); }
             base.ExecuteJavaScript(scriptData);
         }
 
