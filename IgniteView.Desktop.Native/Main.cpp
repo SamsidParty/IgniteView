@@ -170,17 +170,10 @@ extern "C" {
     }
 
     EXPORT void ExecuteJavaScriptOnWebWindow(int index, char* javascriptCode) {
-        if (javascriptCode == nullptr || App == nullptr) { return; }
-        // Own the string for the lifetime of the dispatched task: saucer's execute()
-        // takes a non-owning cstring_view and posts to the UI thread, so a local
-        // std::string would dangle when called from a non-UI thread.
+        auto* e = entry_at(index);
+        if (e == nullptr || javascriptCode == nullptr) { return; }
         std::string codeToExecute(javascriptCode, strlen(javascriptCode));
-        App->invoke(
-            [index, code = std::move(codeToExecute)]() mutable {
-                auto* e = entry_at(index);
-                if (e == nullptr) { return; }
-                static_cast<saucer::webview&>(*e->webview).execute(code);
-            });
+        static_cast<saucer::webview&>(*e->webview).execute(codeToExecute);
     }
 
     EXPORT void SetWebWindowBounds(int index, int w, int h, int minW, int minH, int maxW, int maxH) {
