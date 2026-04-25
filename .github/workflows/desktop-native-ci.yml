@@ -227,14 +227,14 @@ jobs:
     name: pack-nuget
     runs-on: macos-14
     needs: [detect-changes, build-native]
-    # Only build and publish the final nupkgs from the production branch
-    # (or a tag push / manual dispatch targeting production). Native libs
-    # still build on every main/PR run so regressions are caught early.
+    # This job always runs (when its deps succeed) so that fresh native libs
+    # built on `main` are committed back to the repo. The actual pack +
+    # publish-to-NuGet steps below are individually gated to the `production`
+    # branch (or a v* tag), so only releases get pushed to nuget.org.
     if: |
       always() &&
       needs.detect-changes.result == 'success' &&
-      (needs.build-native.result == 'success' || needs.build-native.result == 'skipped') &&
-      (github.ref == 'refs/heads/production' || startsWith(github.ref, 'refs/tags/v'))
+      (needs.build-native.result == 'success' || needs.build-native.result == 'skipped')
     permissions:
       contents: write
 
@@ -355,6 +355,7 @@ jobs:
       # at install time. As long as we push Core first in the publish step
       # below, the two packages line up on the same version.
       - name: Pack IgniteView.Core
+        if: github.ref == 'refs/heads/production' || startsWith(github.ref, 'refs/tags/v')
         shell: bash
         run: |
           set -euo pipefail
@@ -365,6 +366,7 @@ jobs:
             -p:GeneratePackageOnBuild=false
 
       - name: Pack IgniteView.Desktop
+        if: github.ref == 'refs/heads/production' || startsWith(github.ref, 'refs/tags/v')
         shell: bash
         run: |
           set -euo pipefail
@@ -375,6 +377,7 @@ jobs:
             -p:GeneratePackageOnBuild=false
 
       - name: Pack IgniteView.FileDialogs
+        if: github.ref == 'refs/heads/production' || startsWith(github.ref, 'refs/tags/v')
         shell: bash
         run: |
           set -euo pipefail
@@ -385,6 +388,7 @@ jobs:
             -p:GeneratePackageOnBuild=false
 
       - name: Upload NuGet artifacts
+        if: github.ref == 'refs/heads/production' || startsWith(github.ref, 'refs/tags/v')
         uses: actions/upload-artifact@v7
         with:
           name: igniteview-nupkgs
