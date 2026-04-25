@@ -19,7 +19,7 @@ namespace IgniteView.Desktop
         #region Native Imports
 
         [DllImport(InteropHelper.DLLName, CharSet = CharSet.Unicode)]
-        protected static extern int NewWebWindow(IntPtr url, CommandBridgeCallback commandBridge, IntPtr preloadScript, IntPtr path);
+        protected static extern int NewWebWindow(IntPtr url, CommandBridgeCallback commandBridge, IntPtr preloadScript, IntPtr path, IntPtr browserFlags);
 
         [DllImport(InteropHelper.DLLName)]
         protected static extern void ShowWebWindow(int index);
@@ -142,8 +142,22 @@ namespace IgniteView.Desktop
 
         public DesktopWebWindow() : base() {
             CommandExecuteRequested = new CommandBridgeCallback(OnCommandExecuteRequested);
+            var url = Marshal.StringToCoTaskMemUTF8(URL);
+            var preloadScript = Marshal.StringToCoTaskMemUTF8("");
             var appPath = Marshal.StringToCoTaskMemUTF8(Path.Join(CurrentAppManager.CurrentIdentity.AppDataPath, "DesktopNative"));
-            WindowIndex = NewWebWindow(Marshal.StringToCoTaskMemUTF8(URL), CommandExecuteRequested, Marshal.StringToCoTaskMemUTF8(""), appPath);
+            var browserFlags = Marshal.StringToCoTaskMemUTF8(string.Join('\n', CurrentAppManager.BrowserFlags));
+
+            try
+            {
+                WindowIndex = NewWebWindow(url, CommandExecuteRequested, preloadScript, appPath, browserFlags);
+            }
+            finally
+            {
+                Marshal.FreeCoTaskMem(url);
+                Marshal.FreeCoTaskMem(preloadScript);
+                Marshal.FreeCoTaskMem(appPath);
+                Marshal.FreeCoTaskMem(browserFlags);
+            }
 
             // Enable dev tools if debug mode
             SetWebWindowDevToolsEnabled(WindowIndex, DebugMode.IsDebugMode);

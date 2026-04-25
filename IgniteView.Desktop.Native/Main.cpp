@@ -3,6 +3,7 @@
 #include <saucer/window.hpp>
 #include <iostream>
 #include <vector>
+#include <set>
 #include <filesystem>
 #include <string>
 #include <string_view>
@@ -52,6 +53,37 @@ static std::filesystem::path utf8_to_path(const char* s) {
         reinterpret_cast<const char8_t*>(sv.data() + sv.size()));
 }
 
+static std::set<std::string> parse_browser_flags(const char* s) {
+    std::set<std::string> flags;
+
+    if (s == nullptr) {
+        return flags;
+    }
+
+    std::string_view source(s);
+    std::size_t start = 0;
+
+    while (start <= source.size()) {
+        auto end = source.find('\n', start);
+        if (end == std::string_view::npos) {
+            end = source.size();
+        }
+
+        auto flag = source.substr(start, end - start);
+        if (!flag.empty()) {
+            flags.emplace(flag);
+        }
+
+        if (end == source.size()) {
+            break;
+        }
+
+        start = end + 1;
+    }
+
+    return flags;
+}
+
 // Per-window saved state used to restore the window after leaving fullscreen.
 struct WebWindowEntry {
     std::shared_ptr<saucer::window> window;
@@ -77,11 +109,12 @@ static WebWindowEntry* entry_at(int index) {
 
 
 extern "C" {
-    EXPORT int NewWebWindow(const char* url, CommandBridgeCallback commandBridge, const char* preloadScript, const char* path) {
+    EXPORT int NewWebWindow(const char* url, CommandBridgeCallback commandBridge, const char* preloadScript, const char* path, const char* browserFlags) {
 
         std::string urlToSet(url, strlen(url));
         std::string preloadToRun(preloadScript, strlen(preloadScript));
         auto pathToSet = utf8_to_path(path);
+        auto browserFlagsToSet = parse_browser_flags(browserFlags);
 
         auto window_result = saucer::window::create(App.get());
         if (!window_result.has_value()) {
@@ -94,6 +127,7 @@ extern "C" {
             .persistent_cookies = true,
             .hardware_acceleration = true,
             .storage_path = pathToSet,
+            .browser_flags = std::move(browserFlagsToSet),
         };
 
         auto webview_result = saucer::smartview::create(webview_opts);

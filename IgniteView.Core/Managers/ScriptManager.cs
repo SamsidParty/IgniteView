@@ -79,11 +79,7 @@ namespace IgniteView.Core
         /// <param name="scriptContent">The raw script data</param>
         public void RegisterPreloadScriptFromString(string scriptContent)
         {
-            if (AppManager.Instance.OpenWindows.Count > 0)
-            {
-                throw new InvalidOperationException("Registering preload scripts must happen BEFORE any windows are created.");
-            }
-
+            AppManager.Instance.EnsureBeforeFirstWindowCreated("Registering preload scripts");
             StaticPreloadScripts.Add(scriptContent);
         }
 
@@ -94,11 +90,7 @@ namespace IgniteView.Core
         /// <param name="scriptContent">The raw script data</param>
         public void RegisterPreloadScriptFromFunction(Func<string> preloadFunction)
         {
-            if (AppManager.Instance.OpenWindows.Count > 0)
-            {
-                throw new InvalidOperationException("Registering preload scripts must happen BEFORE any windows are created.");
-            }
-
+            AppManager.Instance.EnsureBeforeFirstWindowCreated("Registering preload scripts");
             DynamicPreloadScripts.Add(preloadFunction);
         }
     }
