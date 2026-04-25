@@ -87,14 +87,14 @@ namespace IgniteView.Core
             catch { }
 
             Cache ??= new ConcurrentDictionary<string, string>();
-            Host?.CallFunction("window._localStorage.hydrate", Cache);
+            Host?.CallFunction("window?._localStorage?.hydrate?.", Cache);
         }
 
         public async Task Save()
         {
             await LoadTask;
             await Storage.WriteAllText(FileName, JsonConvert.SerializeObject(Cache));
-            Host?.CallFunction("window._localStorage.hydrate", Cache);
+            Host?.CallFunction("window?._localStorage?.hydrate?.", Cache);
         }
 
         public async Task<string> GetItem(string itemName)
