@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
@@ -24,18 +23,21 @@ namespace IgniteView.Core
         public List<WebWindow> OpenWindows = new();
         public WebWindow? MainWindow;
 
-        private readonly BrowserFlagList browserFlags;
+        private List<string> _BrowserFlags = new();
 
         /// <summary>
         /// Browser flags passed to the native webview/browser runtime.
         /// This list MUST be configured BEFORE any WebWindows are created.
         /// </summary>
-        public IList<string> BrowserFlags
+        public List<string> BrowserFlags
         {
-            get => browserFlags;
-            set => browserFlags.ReplaceAll(value);
+            get => _BrowserFlags;
+            set
+            {
+                EnsureBeforeFirstWindowCreated("Configuring browser flags");
+                _BrowserFlags = value ?? throw new ArgumentNullException(nameof(value));
+            }
         }
-
         public static int LastWindowID = 0;
         public static int MainThreadID = 0;
 
@@ -72,7 +74,6 @@ namespace IgniteView.Core
         /// </summary>
         public AppManager(AppIdentity identity)
         {
-            browserFlags = new BrowserFlagList(this);
             Instance = this;
             MainThreadID = Thread.CurrentThread.ManagedThreadId;
 
@@ -192,57 +193,6 @@ namespace IgniteView.Core
             if (MainWindow != null)
             {
                 throw new InvalidOperationException($"{action} must happen BEFORE any windows are created.");
-            }
-        }
-
-        private sealed class BrowserFlagList : Collection<string>
-        {
-            private readonly AppManager appManager;
-
-            public BrowserFlagList(AppManager appManager)
-            {
-                this.appManager = appManager;
-            }
-
-            public void ReplaceAll(IEnumerable<string> items)
-            {
-                if (items == null)
-                {
-                    throw new ArgumentNullException(nameof(items));
-                }
-
-                var replacementItems = items.ToList();
-                appManager.EnsureBeforeFirstWindowCreated("Configuring browser flags");
-
-                Items.Clear();
-                foreach (var item in replacementItems)
-                {
-                    Items.Add(item);
-                }
-            }
-
-            protected override void InsertItem(int index, string item)
-            {
-                appManager.EnsureBeforeFirstWindowCreated("Configuring browser flags");
-                base.InsertItem(index, item);
-            }
-
-            protected override void SetItem(int index, string item)
-            {
-                appManager.EnsureBeforeFirstWindowCreated("Configuring browser flags");
-                base.SetItem(index, item);
-            }
-
-            protected override void RemoveItem(int index)
-            {
-                appManager.EnsureBeforeFirstWindowCreated("Configuring browser flags");
-                base.RemoveItem(index);
-            }
-
-            protected override void ClearItems()
-            {
-                appManager.EnsureBeforeFirstWindowCreated("Configuring browser flags");
-                base.ClearItems();
             }
         }
     }
