@@ -251,7 +251,11 @@ extern "C" {
             e->window->set_decorations(saucer::window::decoration::full);
         }
         else {
+            #ifdef __linux__
+            e->window->set_decorations(saucer::window::decoration::none);
+            #else
             e->window->set_decorations(saucer::window::decoration::partial);
+            #endif
         }
     }
 
