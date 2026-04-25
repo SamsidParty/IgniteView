@@ -24,6 +24,13 @@ FetchContent_Declare(
   saucer
   GIT_REPOSITORY https://github.com/saucer/saucer
   GIT_TAG        v8.0.5
+  # Workaround for upstream saucer bug where the Qt backend constructs
+  # QWebEnginePage without the persistent profile, breaking persistent cookies
+  # and storage on Linux. See cmake/patch_saucer_qt_cookies.cmake.
+  PATCH_COMMAND  ${CMAKE_COMMAND}
+                 -DSAUCER_SRC=<SOURCE_DIR>
+                 -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/patch_saucer_qt_cookies.cmake
+  UPDATE_DISCONNECTED TRUE
 )
 
 FetchContent_MakeAvailable(saucer)
