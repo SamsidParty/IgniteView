@@ -22,7 +22,6 @@ namespace IgniteView.Core
 
         public List<WebWindow> OpenWindows = new();
         public WebWindow? MainWindow;
-
         private List<string> _BrowserFlags = new();
 
         /// <summary>
