@@ -100,12 +100,14 @@ struct WebWindowEntry {
     std::optional<saucer::smartview> webview;
     CommandBridgeCallback commandBridge{nullptr};
     bool acrylicBackground{false};
+    bool closeRequestedFromApi{false};
     bool alive{false};
 };
 
 // App is heap-allocated because saucer::application is move-only and has
 // `operator&` deleted; we need a stable pointer to pass to saucer::window::create.
 std::unique_ptr<saucer::application> App;
+bool QuitOnLastWindowClosed{true};
 
 // Each entry is heap-allocated so references captured by exposed functions remain
 // valid even when the vector grows.
@@ -116,6 +118,25 @@ static WebWindowEntry* entry_at(int index) {
     auto* entry = WindowList[index].get();
     if (entry == nullptr || !entry->alive) { return nullptr; }
     return entry;
+}
+
+static bool has_alive_windows() {
+    for (const auto& entry : WindowList) {
+        if (entry != nullptr && entry->alive) { return true; }
+    }
+
+    return false;
+}
+
+static void cleanup_window_entry(int index) {
+    if (index < 0 || index >= (int)WindowList.size()) { return; }
+
+    auto* entry = WindowList[index].get();
+    if (entry == nullptr) { return; }
+
+    entry->alive = false;
+    entry->webview.reset();
+    entry->window.reset();
 }
 
 #ifdef __linux__
@@ -233,6 +254,26 @@ extern "C" {
         int windowIndex = static_cast<int>(WindowList.size()) - 1;
         auto* entryPtr = WindowList[windowIndex].get();
 
+        entryPtr->window->on<saucer::window::event::closed>({{.func = [windowIndex]
+        {
+            auto* e = entry_at(windowIndex);
+            if (e == nullptr) { return; }
+
+            bool closeRequestedFromApi = e->closeRequestedFromApi;
+            e->alive = false;
+
+            if (App) {
+                App->post([windowIndex, closeRequestedFromApi]
+                {
+                    cleanup_window_entry(windowIndex);
+
+                    if (QuitOnLastWindowClosed && !closeRequestedFromApi && !has_alive_windows() && App) {
+                        App->quit();
+                    }
+                });
+            }
+        }, .clearable = false}});
+
         if (!preloadToRun.empty()) {
             entryPtr->webview->inject({
                 .code = preloadToRun,
@@ -289,10 +330,9 @@ extern "C" {
         auto* e = entry_at(index);
         if (e == nullptr) { return; }
 
+        e->closeRequestedFromApi = true;
         e->window->close();
-        e->webview.reset();
-        e->window.reset();
-        e->alive = false;
+        cleanup_window_entry(index);
     }
 
     EXPORT void ExecuteJavaScriptOnWebWindow(int index, char* javascriptCode) {
@@ -435,6 +475,7 @@ extern "C" {
         std::string appIDToSet(appID, strlen(appID));
         auto app_result = saucer::application::create({
             .id = appIDToSet,
+            .quit_on_last_window_closed = false,
         });
         if (!app_result.has_value()) {
             return;
