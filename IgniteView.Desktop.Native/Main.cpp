@@ -331,8 +331,16 @@ extern "C" {
         if (e == nullptr) { return; }
 
         e->closeRequestedFromApi = true;
-        e->window->close();
-        cleanup_window_entry(index);
+
+        if (App) {
+            App->post([index]
+            {
+                auto* entry = entry_at(index);
+                if (entry == nullptr) { return; }
+
+                entry->window->close();
+            });
+        }
     }
 
     EXPORT void ExecuteJavaScriptOnWebWindow(int index, char* javascriptCode) {
