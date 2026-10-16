@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +23,8 @@ namespace IgniteView.Core
             }
             else if (value.IsNumeric())
             {
-                return value.ToString();
+                // InvariantCulture so emitted JS uses '.'; a comma-locale "0,5" would corrupt injected numbers.
+                return Convert.ToString(value, CultureInfo.InvariantCulture);
             }
             else if (value is Array)
             {

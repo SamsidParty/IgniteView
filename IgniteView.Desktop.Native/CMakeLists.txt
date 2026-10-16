@@ -27,9 +27,15 @@ FetchContent_Declare(
   # Workaround for upstream saucer bug where the Qt backend constructs
   # QWebEnginePage without the persistent profile, breaking persistent cookies
   # and storage on Linux. See cmake/patch_saucer_qt_cookies.cmake.
+  # It also creates a separate profile per webview on the same storage path,
+  # which leaves every window after the first blank and grows memory without
+  # bound. See cmake/patch_saucer_qt_shared_profile.cmake.
   PATCH_COMMAND  ${CMAKE_COMMAND}
                  -DSAUCER_SRC=<SOURCE_DIR>
                  -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/patch_saucer_qt_cookies.cmake
+         COMMAND ${CMAKE_COMMAND}
+                 -DSAUCER_SRC=<SOURCE_DIR>
+                 -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/patch_saucer_qt_shared_profile.cmake
   UPDATE_DISCONNECTED TRUE
 )
 
