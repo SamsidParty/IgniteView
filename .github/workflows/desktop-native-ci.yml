@@ -92,14 +92,14 @@ jobs:
             artifact_name: desktop-native-win-x64
             runtime_folder: win-x64
             library_name: IgniteView.Desktop.Native.dll
-            generator: Visual Studio 17 2022
+            generator: Visual Studio 18 2026
             arch: x64
           - runtime_id: win-arm64
             runs_on: windows-11-arm
             artifact_name: desktop-native-win-arm64
             runtime_folder: win-arm64
             library_name: IgniteView.Desktop.Native.dll
-            generator: Visual Studio 17 2022
+            generator: Visual Studio 18 2026
             arch: ARM64
           - runtime_id: linux-x64
             runs_on: ubuntu-24.04
